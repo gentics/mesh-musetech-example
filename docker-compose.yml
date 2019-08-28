@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+  mesh:
+    image: gentics/mesh:0.27.2
+    container_name: mesh-server-dm
+    environment:
+      - MESH_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - MESH_ELASTICSEARCH_START_EMBEDDED=false
+      - MESH_AUTH_KEYSTORE_PASS=changeme
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./data:/graphdb
+      - ./uploads:/uploads
+      - ./keystore:/keystore
+    ulimits:
+      nofile:
+        soft: 20000
+        hard: 40000
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+    container_name: mesh-elasticsearch-dm
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - '127.0.0.1:9200:9200'
+    volumes:
+    - ./es:/usr/share/elasticsearch/data
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      memlock:
+        soft: -1
+        hard: -1
+
+  app:
+    build: ./app
+    ports:
+      - '3000:3000'
+   
+

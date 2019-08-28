@@ -1,0 +1,140 @@
+{
+    "exponates": [
+        {
+            "name_en": "Dampfmaschine",
+            "name_de": "Steamengine",
+            "description_en": "The mother of all machines. You see here one of the oldest conserved steam engines.",
+            "description_de": "Sie ist die Mutter aller Maschinen. Hier sehen Sie eine der ältesten erhaltenen Dampfmaschinen.",
+            "image": "steamengine.jpg",
+            "image_license": "Creative Commons Attribution-Share Alike 4.0 International",
+            "image_attribution": "1971markus@wikipedia.de",
+            "image_source": "https://commons.wikimedia.org/wiki/File:Dampfmaschine,_Saigerh%C3%BCtte_Gr%C3%BCnthal_(3).jpg#/media/File:Dampfmaschine,_Saigerh%C3%BCtte_Gr%C3%BCnthal_(6).jpg"
+        },
+        {
+            "name_de": "Dampflokomotive",
+            "name_en": "Steam locomotive",
+            "description_de": "Eine der großen Impulse in der Geschichte der Infrastruktur stellt die dampfbetriebene Lokomotive dar, die den Schienenverkehr seit Mitte des 18. Jahrhunderts revolutionierte.",
+            "description_en": "A major impact in the history of infrastructure has been made by the steam-powered locomotive which revolutionized rail traffic since mid-18th century.",
+            "image_license": "Free",
+            "image_attribution": "None",
+            "image_source": "https://pixabay.com/de/photos/dampflok-lok-dampflokomotive-4272091/"
+        },
+        {
+            "name_de": "Bügeleisen",
+            "name_en": "Clothes iron",
+            "description_de": "Bereits zur Zeit der Han-Dynastie glättete man im alten China mit so genannten Pfanneneisen Gewänder. Knapp zweitausend Jahre später wurde das Bügeleisen welches Sie vor sich sehen erfunden.",
+            "description_en": "Even during the time of the han-dynasty clothes were already ironed using so called flatiron. Nearly two thousand years later the iron which you see in front was invented."
+        },
+        {
+            "name_en": "Mummy",
+            "name_de": "Mumie",
+            "description_de": "Diese Mumie wurde zusammen mit ihrem Sarkophag im Tal der Könige in Ägypten 19xx gefunden.",
+            "description_en": "This mummy and its sarcophagus was found in 19xx in the valley of kings in egypt."
+        },
+        {
+            "name_de": "Schalen Atommodel",
+            "name_en": "Shell Atommodel",
+            "image_source": "https://commons.wikimedia.org/wiki/File:Gold_atom_model.jpg",
+            "image": "atom_model.jpg",
+            "image_license": "Creative Commons Attribution-Share Alike 4.0 International",
+            "description_de": "Es gibt viele verschiedene Atommodelle. Hier sehen sie ein Goldatom im Schalenmodell. Die Schalen bilden die Bereiche ab, in denen sich die Elektronen um den Kern bewegen.",
+            "description_en": "There are various atom models. Here you can see a gold atom using the shell model. The shells form the area in which the electrons move around the core."
+        },
+        {
+            "name_de": "Doppeldecker",
+            "name_en": "Biplane",
+            "image": "biplanes.jpg",
+            "image_license": "Creative Commons Attribution-Share Alike 4.0 International",
+            "image_attribution": "Creative Commons Attribution-Share Alike 4.0 International",
+            "image_source": "https://commons.wikimedia.org/wiki/File:Deutsches_Museum_-_aviation.jpg",
+            "description_de": "Das erste Flugzeug war ein Doppeldecker. In diesem Raum können Sie in die Geschichte der Luftfahrt eintauchen.",
+            "description_en": "The first airplane was a biplane. In this room you can discover the history of aviation."
+        },
+        {
+            "name_en": "SR-71 Blackbird",
+            "name_de": "SR-71 Blackbird",
+            "image:": "sr71_blackbird.jpg",
+            "image_source": "https://commons.wikimedia.org/wiki/File:SR71_blackbird3.jpg",
+            "image_attribution": "© Ad Meskens / Wikimedia Commons",
+            "description_de": "Mal eben in unter zwei Stunden von London nach New York fliegen? Mit der SR-71 Blackbird war dies möglich. Diesen und auch noch weitere Rekorde hält dieses einzigartige Flugzeug bis heute.\nAm Boden waren die Tanks der Blackbird nicht immer ganz dicht. Dies war kein Fehler sondern dadurch bedingt, dass sich das Flugzeug im Flug mit dreifacher Überschallgeschwindigkeit um bis zu 10 cm ausdehnte.",
+            "description_en": "Traveling from London to New York in just two hours? This was possible when flying the SR-71 blackbird. This and other records are still valid for this unique airplane. On the ground the tanks of the blackbird were often leaking. This was no fault of the plane. When in cruise at a speed of three times the sound the whole airplane expanded about 4 inches."
+        },
+        {
+            "name_de": "Bell Telefon",
+            "name_en": "Bell Telephone",
+            "image_source": "https://commons.wikimedia.org/wiki/File:Alexander_Graham_Bell%27s_big_box_telephone,_1876,_one_of_the_first_commercially_available_telephones_-_National_Museum_of_American_History_-_DSC06223.JPG",
+            "image": "telephone.jpg",
+            "image_license": "Creative Commons CC0 1.0 Universal Public Domain Dedication",
+            "description_de": "Hallo hallo, können Sie mich verstehen? - Keine Frage, die Sprachqualität hat sich bis heute deutlich verbessert. Vor Ihnen befindet sich eines der ersten Telefone welche im Jahr 1876 von Alexander Graham Bell erfunden wurde.",
+            "description_en": "Hello, hello, can you hear me? - No question the voice quality has improved by now. In front you see on of the first telephones which was invented in the year 1876 by Alexander Graham Bell."
+        },
+        {
+            "name_de": "Papyrus",
+            "name_en": "Papyrus",
+            "description_de": "Der Vorläufer des heutigen Papiers wurde im alten Ägypten erfunden und ermöglichte eine weitaus flexiblere Fertigung von Schrifttum im Vergleich zu Stein- oder Wachstafeln. Eines der berühmtesten erhaltenen Papyri ist das Ägyptische Totenbuch.",
+            "description_en": "The predecessor of today’s paper has been invented in ancient Egypt and enabled a much more flexible production of scripture compared to tablets made from stone or wax. One of the most famous papyri preserved is the Egyptian Book of the Dead.",
+            "image": "papyrus.jpg",
+            "image_license": "Public Domain"
+        },
+        {
+            "name_de": "Fotoaparat",
+            "image": "rolleiflex.jpg",
+            "image_attribution": "Alexander Andrews https://unsplash.com/@alex_andrews",
+            "image_source": "https://unsplash.com/photos/soLEw77Napo",
+            "description_de": "Bitte lächeln! -  Diese Rolleiflex Automat Model 3 wurde zwischen 1945 und 1949 in Deutschland produziert.",
+            "description_en": "Please smile! - This rolleiflex Automat Model 3 camera was produced in german between 1945 and 1949."
+        },
+        {
+            "name_de": "Raumanzug (NASA)",
+            "name_en": "Space Suite (NASA)",
+            "image": "spacesuite.jpg",
+            "image_source": "https://www.flickr.com/photos/brostad/3547772445/in/photolist-6pvg9r",
+            "image_license": "CC BY 2.0",
+            "image_attribution": "Bernt Rostad https://www.flickr.com/photos/brostad/",
+            "description_de": "Um dem menschlichen Körper den Aufenthalt im Weltraum zu ermöglichen wurde bereits seit den 1930er-Jahren ein spezieller Anzug entwickelt, den extremen Bedingungen dieser Umgebung zu widerstehen.",
+            "description_en": "To enable man floating in space the development of a special suit started in the 19th century able to resist the extreme extraterrestrial environment.",
+        },
+        {
+            "name_de": "Keilschrift",
+            "name_en": "Cuneiform",
+            "image_source": "https://www.flickr.com/photos/130842488@N03/18158295411",
+            "description_de": "Eine der ältesten bekannten Schriftformen ist die Keilschrift, die mehrheitlich im vorderen Orient bis mindestens ins 1. Jahrhundert n. Chr. genutzt wurde. Charakteristisch für die Keilschrift sind die geraden Striche als Grundelemente der einzelnen Zeichen.",
+            "description_en": "One of the oldest written forms known is the cuneiform script, mostly used in the middle east until at least the first century AD. Typical für the cuneiform are straight lines as the basic compounds of each symbol."
+        },
+        {
+            "name_de": "Feuerwehrpumpe",
+            "image": "feuerwehrpumpe.jpg",
+            "image_source": "https://commons.wikimedia.org/wiki/File:Bad_Berleburg_Feuerwehrpumpe.jpg",
+            "description_de": "Hier sehen Sie eine Feuerwehrpumpe aus dem Jarh 1860. Die Pumpe musste von zwei Personen von Hand bedient werden.",
+            "description_en": "Here you can see a fire fighter pump from the year 1860. The pump had to be driven by two people."
+        },
+        {
+            "name_de": "Dieselmotor",
+            "name_en": "Dieselengine",
+            "image": "dieselmotor.jpg",
+            "image_source": "https://de.wikipedia.org/wiki/Datei:Dieselmotor_vs.jpg",
+            "image_license": "CC BY-SA 3.0",
+            "image_attribution": "Flominator https://commons.wikimedia.org/wiki/User:Flominator",
+            "description_de": "Hier sehen Sie einen der ersten funktionsfähigen Dieselmotoren aus dem Jahr 1896.",
+            "description_en": "Here you can see one of the first working diesel engines from the year 1896."
+        },
+        {
+            "name_en": "Medium Mark A Whippet Tank",
+            "name_de": "Medium Mark A Whippet Panzer",
+            "image": "Mark-a-whippet-tank.jpg",
+            "image_source": "https://commons.wikimedia.org/wiki/File:Mark-a-whippet-tank.jpg",
+            "image_license": "Creative Commons Attribution-Share Alike 4.0 International",
+            "description_de": "Hier sehen Sie den Medium Mark A Whippet einen Britischen Panzer aus dem zweiten Weltkrieg.",
+            "description_en": "The tank you can see here is the Medium Mark A Whippet which was a British tank of the First World War."
+        },
+        {
+            "name_de": "Allosaurus",
+            "name_en": "Allosaurus",
+            "image": "allosaurus.jpg",
+            "image_source": "https://unsplash.com/photos/plLR9WlQMO4",
+            "description_de": "Keine Angst. Er will bestimmt nur Spielen. Dieser Allosaurier lebte im späten Jura vor ca. 150 millionen Jahren.",
+            "description_en": "Don’t worry. It just surely just wants to play. This allosaurus lived in the late Jurassic Period (around 150 million years ago) and was one of the first dinosaurs known to researchers.",
+            "image_attribution": "Photo by Adam Mathieu https://unsplash.com/@adam_mathieu?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        }
+    ]
+}
