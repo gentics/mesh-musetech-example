@@ -1,0 +1,16 @@
+{
+    "videos": [
+        {
+            "name": "British Museum - 19314.mp4",
+            "source": "https://pixabay.com/de/videos/british-museum-london-architektur-19314/"
+        },
+        {
+            "name": "Museum - 2265.mp4",
+            "source": "https://pixabay.com/de/videos/museum-engel-ausstellung-gold-2265/"
+        },
+        {
+            "name": "Milky Way - 10339.mp4",
+            "source":"https://pixabay.com/de/videos/milchstrasse-himmel-sternenhimmel-10339/",
+        }
+    ]
+}
