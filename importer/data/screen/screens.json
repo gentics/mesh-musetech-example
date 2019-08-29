@@ -1,0 +1,22 @@
+{
+    "screens": [
+        {
+            "id": "screen-1",
+            "location": "Haupteingang",
+            "description": "Screen für Events",
+            "contents": [
+                {
+                    "type": "promo"
+                },
+                {
+                    "type": "event",
+                    "title": "Title text",
+                    "teaser": "Teaser text",
+                    "location": "Location text",
+                    "start": "12:45",
+                    "duration": "45m"
+                }
+            ]
+        }
+    ]
+}

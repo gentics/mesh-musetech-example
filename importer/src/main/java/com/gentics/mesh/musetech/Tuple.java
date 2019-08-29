@@ -1,4 +1,4 @@
-package com.gentics.mesh;
+package com.gentics.mesh.musetech;
 
 public class Tuple<T, B> {
 	T a;

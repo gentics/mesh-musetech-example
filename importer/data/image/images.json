@@ -1,0 +1,76 @@
+{
+    "images": [
+        {
+            "name": "steamengine.jpg",
+            "license": "Creative Commons Attribution-Share Alike 4.0 International",
+            "attribution": "1971markus@wikipedia.de",
+            "source": "https://commons.wikimedia.org/wiki/File:Dampfmaschine,_Saigerh%C3%BCtte_Gr%C3%BCnthal_(3).jpg#/media/File:Dampfmaschine,_Saigerh%C3%BCtte_Gr%C3%BCnthal_(6).jpg"
+        },
+        {
+            "name": "steam-locomotive.jpg",
+            "license": "Free",
+            "attribution": "None",
+            "source": "https://pixabay.com/de/photos/dampflok-lok-dampflokomotive-4272091/"
+        },
+        {
+            "name": "atom_model.jpg",
+            "source": "https://commons.wikimedia.org/wiki/File:Gold_atom_model.jpg",
+            "license": "Creative Commons Attribution-Share Alike 4.0 International"
+        },
+        {
+            "name": "biplanes.jpg",
+            "license": "Creative Commons Attribution-Share Alike 4.0 International",
+            "attribution": "Creative Commons Attribution-Share Alike 4.0 International",
+            "source": "https://commons.wikimedia.org/wiki/File:Deutsches_Museum_-_aviation.jpg"
+        },
+        {
+            "name": "sr71_blackbird.jpg",
+            "source": "https://commons.wikimedia.org/wiki/File:SR71_blackbird3.jpg",
+            "attribution": "© Ad Meskens / Wikimedia Commons"
+        },
+        {
+            "name": "telephone.jpg",
+            "source": "https://commons.wikimedia.org/wiki/File:Alexander_Graham_Bell%27s_big_box_telephone,_1876,_one_of_the_first_commercially_available_telephones_-_National_Museum_of_American_History_-_DSC06223.JPG",
+            "license": "Creative Commons CC0 1.0 Universal Public Domain Dedication"
+        },
+        {
+            "name": "papyrus.jpg",
+            "license": "Public Domain"
+        },
+        {
+            "name": "rolleiflex.jpg",
+            "attribution": "Alexander Andrews https://unsplash.com/@alex_andrews",
+            "source": "https://unsplash.com/photos/soLEw77Napo"
+        },
+        {
+            "name": "spacesuite.jpg",
+            "source": "https://www.flickr.com/photos/brostad/3547772445/in/photolist-6pvg9r",
+            "license": "CC BY 2.0",
+            "attribution": "Bernt Rostad https://www.flickr.com/photos/brostad/"
+        },
+        {
+            "name": "keilschrift.jpg",
+            "source": "https://www.flickr.com/photos/130842488@N03/18158295411"
+        },
+        {
+            "name": "feuerwehrpumpe.jpg",
+            "source": "https://commons.wikimedia.org/wiki/File:Bad_Berleburg_Feuerwehrpumpe.jpg"
+        },
+        {
+            "name": "dieselmotor.jpg",
+            "source": "https://de.wikipedia.org/wiki/Datei:Dieselmotor_vs.jpg",
+            "license": "CC BY-SA 3.0",
+            "attribution": "Flominator https://commons.wikimedia.org/wiki/User:Flominator"
+        },
+        {
+            "name": "mark-a-whippet-tank.jpg",
+            "source": "https://commons.wikimedia.org/wiki/File:Mark-a-whippet-tank.jpg",
+            "license": "Creative Commons Attribution-Share Alike 4.0 International"
+        },
+        {
+            "name": "allosaurus.jpg",
+            "source": "https://unsplash.com/photos/plLR9WlQMO4",
+            "attribution": "Photo by Adam Mathieu https://unsplash.com/@adam_mathieu?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        }
+    ]
+}

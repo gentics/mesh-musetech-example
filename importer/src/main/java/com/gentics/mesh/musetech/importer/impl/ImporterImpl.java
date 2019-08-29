@@ -1,113 +1,67 @@
-package com.gentics.mesh;
+package com.gentics.mesh.musetech.importer.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.gentics.mesh.core.rest.micronode.MicronodeResponse;
 import com.gentics.mesh.core.rest.microschema.impl.MicroschemaCreateRequest;
-import com.gentics.mesh.core.rest.microschema.impl.MicroschemaResponse;
 import com.gentics.mesh.core.rest.node.NodeCreateRequest;
 import com.gentics.mesh.core.rest.node.NodeResponse;
 import com.gentics.mesh.core.rest.node.NodeUpdateRequest;
 import com.gentics.mesh.core.rest.node.field.impl.NodeFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.NumberFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.StringFieldImpl;
-import com.gentics.mesh.core.rest.node.field.list.NodeFieldList;
 import com.gentics.mesh.core.rest.node.field.list.impl.MicronodeFieldListImpl;
-import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListImpl;
-import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListItemImpl;
-import com.gentics.mesh.core.rest.project.ProjectCreateRequest;
 import com.gentics.mesh.core.rest.project.ProjectResponse;
-import com.gentics.mesh.core.rest.role.RolePermissionRequest;
 import com.gentics.mesh.core.rest.schema.impl.BinaryFieldSchemaImpl;
 import com.gentics.mesh.core.rest.schema.impl.ListFieldSchemaImpl;
 import com.gentics.mesh.core.rest.schema.impl.MicroschemaReferenceImpl;
 import com.gentics.mesh.core.rest.schema.impl.NodeFieldSchemaImpl;
 import com.gentics.mesh.core.rest.schema.impl.NumberFieldSchemaImpl;
 import com.gentics.mesh.core.rest.schema.impl.SchemaCreateRequest;
-import com.gentics.mesh.core.rest.schema.impl.SchemaResponse;
 import com.gentics.mesh.core.rest.schema.impl.StringFieldSchemaImpl;
+import com.gentics.mesh.musetech.Tuple;
+import com.gentics.mesh.musetech.model.exhibit.Exhibit;
+import com.gentics.mesh.musetech.model.exhibit.ExhibitContent;
+import com.gentics.mesh.musetech.model.exhibit.ExhibitList;
+import com.gentics.mesh.musetech.model.image.Image;
+import com.gentics.mesh.musetech.model.image.ImageList;
+import com.gentics.mesh.musetech.model.video.Video;
+import com.gentics.mesh.musetech.model.video.VideoList;
 import com.gentics.mesh.parameter.client.NodeParametersImpl;
-import com.gentics.mesh.rest.client.MeshRestClient;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.impl.MimeMapping;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-public class Importer {
+public class ImporterImpl extends AbstractImporter {
 
-	private static final Logger log = LoggerFactory.getLogger(Importer.class);
-
-	private static final String PROJECT_NAME = "demo";
+	private static final Logger log = LoggerFactory.getLogger(ImporterImpl.class);
 
 	private static final String SCREEN_EVENT_MICROSCHEMA_NAME = "ScreenEvent";
 
 	private static final String SCREEN_PROMO_MICROSCHEMA_NAME = "ScreenExhibitionPromo";
 
-	private Vertx vertx = Vertx.vertx();
-	private MeshRestClient client = MeshRestClient.create("localhost", 8080, false, vertx);
+	private final String projectName;
+	private final ExhibitList exhibitionList;
+	private final ImageList imageList;
+	private final VideoList videoList;
 
-	private Map<String, String> fileIdMap = new HashMap<>();
-
-	public Importer() {
-	}
-
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		new Importer().run();
-	}
-
-	private void run() throws FileNotFoundException, IOException {
-		client.setLogin("admin", "admin");
-		client.login().blockingGet();
-
-		long start = System.currentTimeMillis();
-		loadProject()
-			.flatMapCompletable(project -> {
-				return createMicroschemas().andThen(createSchemas())
-					.andThen(
-						createFolders(project))
-					.andThen(
-						grantPermissions(project));
-			})
-			.subscribe(() -> {
-				long dur = System.currentTimeMillis() - start;
-				System.out.println("Import done. Took: " + dur + "[ms]");
-			}, err -> {
-				err.printStackTrace();
-			});
-	}
-
-	private Completable grantPermissions(ProjectResponse project) {
-		return client.findRoles().toSingle().flatMapCompletable(list -> {
-			String roleUuid = list.getData().stream().filter(u -> u.getName().equals("anonymous")).map(u -> u.getUuid()).findFirst().get();
-			RolePermissionRequest request = new RolePermissionRequest();
-			request.setRecursive(true);
-			request.getPermissions().setRead(true);
-			request.getPermissions().setReadPublished(true);
-			return client.updateRolePermissions(roleUuid, "projects/" + project.getUuid(), request).toCompletable()
-				.andThen(client.updateRolePermissions(roleUuid, "schemas", request).toCompletable());
-		});
-	}
-
-	private Single<ProjectResponse> loadProject() {
-		return client.findProjectByName(PROJECT_NAME).toSingle().onErrorResumeNext(err -> {
-			ProjectCreateRequest request = new ProjectCreateRequest();
-			request.setName(PROJECT_NAME);
-			request.setSchemaRef("folder");
-			return client.createProject(request).toSingle();
-		});
+	public ImporterImpl(String projectName) throws IOException {
+		this.projectName = projectName;
+		this.exhibitionList = ExhibitList.load();
+		this.imageList = ImageList.load();
+		this.videoList = VideoList.load();
 	}
 
 	private Completable importScreens(NodeResponse folder) {
@@ -119,48 +73,44 @@ public class Importer {
 
 	private Completable importContents(NodeResponse folder) throws FileNotFoundException, IOException {
 		Set<Completable> operations = new HashSet<>();
-		ContentTransformer t = new ContentTransformer();
-		List<Tuple<Exhibition, Exhibition>> tu = t.transform();
-		for (Tuple<Exhibition, Exhibition> tup : tu) {
-			Exhibition de = tup.getA();
-			Exhibition en = tup.getB();
-			operations.add(createExhibition(folder.getUuid(), de, en).flatMapCompletable(tupl -> {
-				return translateExhibition(tupl.getA(), tupl.getB(), en);
+		for (Exhibit ex : exhibitionList.getExhibits()) {
+			operations.add(createExhibition(folder.getUuid(), ex, ex.getEnglish()).flatMapCompletable(tupl -> {
+				return translateExhibition(tupl.getA(), tupl.getB(), ex, ex.getGerman());
 			}));
 		}
 		return Completable.merge(operations);
 	}
 
-	private Completable translateExhibition(NodeResponse node, String audioFolderUuid, Exhibition ex) {
+	private Completable translateExhibition(NodeResponse node, String audioFolderUuid, Exhibit ex, ExhibitContent content) {
 		return Single.just(new NodeUpdateRequest()).flatMapCompletable(request -> {
-			request.setLanguage("en");
+			request.setLanguage("de");
 
 			List<Completable> contents = new ArrayList<>();
-			String audioUrl = ex.getAudio();
+			String audioUrl = content.getAudioName();
 			if (audioUrl != null) {
 				String filename = Paths.get(audioUrl).getFileName().toString();
 				contents.add(
 					createAudio(audioFolderUuid, "en", filename).doOnSuccess(audioResp -> {
 						log.info("Add audio reference {" + audioResp.getUuid() + "}");
 						request.getFields().put("audio", new NodeFieldImpl().setUuid(audioResp.getUuid()));
-					}).toCompletable());
+					}).ignoreElement());
 			}
 
-			String description = ex.getDescription();
-			String title = ex.getTitle();
-			String id = ex.getId();
+			String description = content.getDescription();
+			String name = content.getName();
+			// String id = ex.getId();
 			String publicNumber = ex.getPublicNumber();
-			request.getFields().put("title", new StringFieldImpl().setString(title));
+			request.getFields().put("name", new StringFieldImpl().setString(name));
 			request.getFields().put("description", new StringFieldImpl().setString(description));
-			request.getFields().put("id", new StringFieldImpl().setString(id));
+			// request.getFields().put("id", new StringFieldImpl().setString(id));
 			request.getFields().put("public_number", new StringFieldImpl().setString(publicNumber));
-			request.getFields().put("slug", new StringFieldImpl().setString(publicNumber + ":en"));
+			request.getFields().put("slug", new StringFieldImpl().setString(publicNumber + ":de"));
 
 			// Copy from first language
 			request.getFields().put("images", node.getFields().getNodeFieldList("images"));
 			request.getFields().put("title_image", node.getFields().getNodeField("title_image"));
 
-			return Completable.merge(contents).andThen(client.updateNode(PROJECT_NAME, node.getUuid(), request)
+			return Completable.merge(contents).andThen(client.updateNode(projectName, node.getUuid(), request)
 				.toCompletable()
 				.doOnComplete(() -> {
 					log.info("Updated exhibition {" + node.getUuid() + "/en}");
@@ -170,39 +120,39 @@ public class Importer {
 		});
 	}
 
-	private Single<Tuple<NodeResponse, String>> createExhibition(String folderUuid, Exhibition exDe, Exhibition exEn) {
+	private Single<Tuple<NodeResponse, String>> createExhibition(String folderUuid, Exhibit exhibit, ExhibitContent content) {
 		NodeCreateRequest request = new NodeCreateRequest();
-		request.setLanguage("de");
+		request.setLanguage("en");
 		request.setSchemaName("Exhibition");
 		request.setParentNodeUuid(folderUuid);
 
-		String description = exDe.getDescription();
-		String title = exDe.getTitle();
-		String id = exDe.getId();
-		String publicNumber = exDe.getPublicNumber();
+		String description = content.getDescription();
+		String name = content.getName();
+		// String id = exhibit.getId();
+		String publicNumber = exhibit.getPublicNumber();
 
-		request.getFields().put("title", new StringFieldImpl().setString(title));
+		request.getFields().put("name", new StringFieldImpl().setString(name));
 		request.getFields().put("description", new StringFieldImpl().setString(description));
-		request.getFields().put("id", new StringFieldImpl().setString(id));
+		// request.getFields().put("id", new StringFieldImpl().setString(id));
 		request.getFields().put("public_number", new StringFieldImpl().setString(publicNumber));
-		request.getFields().put("slug", new StringFieldImpl().setString(publicNumber + ":de"));
+		request.getFields().put("slug", new StringFieldImpl().setString(publicNumber + ":en"));
 
-		return client.createNode(PROJECT_NAME, request, new NodeParametersImpl().setLanguages("de"))
+		return client.createNode(projectName, request, new NodeParametersImpl().setLanguages("en"))
 			.toSingle()
 			.doOnSuccess(node -> {
-				log.info("Created exhibition {" + id + "} with uuid" + node.getUuid());
+				log.info("Created exhibition {" + publicNumber + "} with uuid" + node.getUuid());
 			})
 			.doOnError(err -> {
-				log.error("Error while creating exhibition {" + id + "}", err);
+				log.error("Error while creating exhibition {" + publicNumber + "}", err);
 			})
 			.flatMap(node -> {
 
-				Single<NodeResponse> imagesFolder = createFolder(node.getUuid(), "images", "Images");
-				Single<NodeResponse> audiosFolder = createFolder(node.getUuid(), "audios", "Audios");
+				Single<NodeResponse> imagesFolder = createFolder(node.getUuid(), "image", "Images");
+				Single<NodeResponse> audiosFolder = createFolder(node.getUuid(), "audio", "Audios");
 
 				Single<Tuple<NodeResponse, String>> tupS = Single.zip(imagesFolder, audiosFolder, (imgFolder, auFolder) -> {
 					Single<Tuple<NodeResponse, String>> td = storeAndUpdateRelatedContents(node.getUuid(), node.getLanguage(), node.getVersion(),
-						exDe, imgFolder, auFolder)
+						exhibit, exhibit.getEnglish(), imgFolder, auFolder)
 							.flatMap(nodeR -> {
 								return Single.just(Tuple.tuple(nodeR, auFolder.getUuid()));
 							});
@@ -213,59 +163,45 @@ public class Importer {
 
 	}
 
-	/**
-	 * 
-	 * @param uuid
-	 *            Uuid of the exhibition node
-	 * @param lang
-	 *            Language of the node
-	 * @param version
-	 *            Version of the exhibition node
-	 * @param ex
-	 *            Current exhibition
-	 * @param request
-	 * @param imgFolder
-	 * @param auFolder
-	 * @return
-	 */
-	private Single<NodeResponse> storeAndUpdateRelatedContents(String uuid, String lang, String version, Exhibition ex, NodeResponse imgFolder,
+	private Single<NodeResponse> storeAndUpdateRelatedContents(String uuid, String lang, String version, Exhibit ex, ExhibitContent content,
+		NodeResponse imgFolder,
 		NodeResponse auFolder) {
 		return Single.just(new NodeUpdateRequest()).flatMap(request -> {
 
 			List<Completable> contents = new ArrayList<>();
 
-			String audio = ex.getAudio();
+			String audio = content.getAudioName();
 			if (audio != null) {
 				String filename = Paths.get(audio).getFileName().toString();
 				contents.add(
 					createAudio(auFolder.getUuid(), "de", filename).doOnSuccess(audioResp -> {
 						log.info("Add audio reference {" + uuid + "}");
 						request.getFields().put("audio", new NodeFieldImpl().setUuid(audioResp.getUuid()));
-					}).toCompletable());
+					}).ignoreElement());
 			}
 
-			for (String image : ex.getImages()) {
-				contents.add(
-					createImage(imgFolder.getUuid(), image)
-						.doOnSuccess(imageResp -> {
-							log.info("Add images reference {" + uuid + "}");
-							NodeFieldListItemImpl item = new NodeFieldListItemImpl().setUuid(imageResp.getUuid());
-							NodeFieldList list = request.getFields().getNodeFieldList("images");
-							if (list == null) {
-								list = new NodeFieldListImpl();
-								request.getFields().put("images", list);
-							}
-							list.add(item);
-
-							String detailImage = ex.getTitleImage();
-							if (detailImage != null) {
-								if (detailImage.equals(image)) {
-									request.getFields().put("title_image", new NodeFieldImpl().setUuid(imageResp.getUuid()));
-								}
-							}
-
-						}).toCompletable());
-			}
+			// for (String image : ex.getImages()) {
+			// contents.add(
+			// createImage(imgFolder.getUuid(), image)
+			// .doOnSuccess(imageResp -> {
+			// log.info("Add images reference {" + uuid + "}");
+			// NodeFieldListItemImpl item = new NodeFieldListItemImpl().setUuid(imageResp.getUuid());
+			// NodeFieldList list = request.getFields().getNodeFieldList("images");
+			// if (exhibitionList == null) {
+			// exhibitionList = new NodeFieldListImpl();
+			// request.getFields().put("images", exhibitionList);
+			// }
+			// exhibitionList.add(item);
+			//
+			// String detailImage = ex.getTitleImage();
+			// if (detailImage != null) {
+			// if (detailImage.equals(image)) {
+			// request.getFields().put("title_image", new NodeFieldImpl().setUuid(imageResp.getUuid()));
+			// }
+			// }
+			//
+			// }).ignoreElement());
+			// }
 
 			return Completable.merge(contents).andThen(Single.just(request));
 		}).flatMap(request -> {
@@ -277,7 +213,7 @@ public class Importer {
 		log.info("Update exhibition {" + uuid + "}");
 		request.setLanguage(lang);
 		request.setVersion(version);
-		return client.updateNode(PROJECT_NAME, uuid, request, new NodeParametersImpl().setLanguages(lang)).toSingle()
+		return client.updateNode(projectName, uuid, request, new NodeParametersImpl().setLanguages(lang)).toSingle()
 			.doOnError(err -> {
 				log.error("Error while updating exhibition {" + uuid + "}", err);
 			})
@@ -286,37 +222,57 @@ public class Importer {
 			});
 	}
 
-	private Single<NodeResponse> createImage(String uuid, String url) {
-		String curl = url.replace("public/", "/");
-		String filename = Paths.get(url).getFileName().toString();
+	private Single<NodeResponse> createImage(String uuid, Image image) {
+		String name = image.getName();
+		String attr = image.getAttribution();
+		String license = image.getLicense();
+		String source = image.getSource();
+		File imageFile = new File("data/image/" + name);
+		if (!imageFile.exists()) {
+			return Single.error(new FileNotFoundException("Image " + name + " could not be found." + image.toJson()));
+		}
+		String filename = imageFile.getName();
 		NodeCreateRequest request = new NodeCreateRequest();
 		request.setLanguage("en");
 		request.setParentNodeUuid(uuid);
 		request.setSchemaName("Image");
 		request.getFields().put("filename", new StringFieldImpl().setString(filename));
-		return client.createNode(PROJECT_NAME, request).toSingle().flatMap(node -> {
+		request.getFields().put("license", new StringFieldImpl().setString(license));
+		request.getFields().put("source", new StringFieldImpl().setString(source));
+		request.getFields().put("attribution", new StringFieldImpl().setString(attr));
+
+		return client.createNode(projectName, request).toSingle().flatMap(node -> {
 			fileIdMap.put(filename, node.getUuid());
-			Buffer buffer = vertx.fileSystem().readFileBlocking("data/images/" + filename);
-			return client.updateNodeBinaryField(PROJECT_NAME, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", buffer, filename,
+			InputStream ins = new FileInputStream(imageFile);
+			long size = imageFile.length();
+			return client.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", ins, size, filename,
 				"image/jpeg").toSingle();
 		}).doOnError(err -> {
-			log.error("Error while creating image {" + curl + "} for node {" + uuid + "}");
+			log.error("Error while creating image {" + name + "} for node {" + uuid + "}");
 		}).doOnSuccess(node -> {
-			log.info("Created image {" + curl + "} with id {" + node.getUuid() + "}");
+			log.info("Created image {" + name + "} with id {" + node.getUuid() + "}");
 		});
 	}
 
-	private Single<NodeResponse> createVideo(String uuid, String filename) {
+	private Single<NodeResponse> createVideo(String uuid, Video video) {
+		String filename = video.getName();
+		String description = video.getDescription();
+
 		NodeCreateRequest request = new NodeCreateRequest();
 		request.setLanguage("en");
 		request.setParentNodeUuid(uuid);
 		request.setSchemaName("Video");
 		request.getFields().put("filename", new StringFieldImpl().setString(filename));
-		return client.createNode(PROJECT_NAME, request).toSingle().flatMap(node -> {
+		request.getFields().put("description", new StringFieldImpl().setString(description));
+
+		return client.createNode(projectName, request).toSingle().flatMap(node -> {
 			fileIdMap.put(filename, node.getUuid());
-			Buffer buffer = vertx.fileSystem().readFileBlocking("data/videos/" + filename);
+			File file = new File("data/video/" + filename);
+			InputStream ins = new FileInputStream(file);
+			long size = file.length();
 			String mimeType = MimeMapping.getMimeTypeForFilename(filename);
-			return client.updateNodeBinaryField(PROJECT_NAME, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", buffer, filename,
+
+			return client.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", ins, size, filename,
 				mimeType).toSingle();
 		}).doOnError(err -> {
 			log.error("Error while creating video {" + filename + "} for node {" + uuid + "}");
@@ -332,9 +288,12 @@ public class Importer {
 		request.setSchemaName("Audio");
 		request.getFields().put("filename", new StringFieldImpl().setString(filename));
 		String mimeType = MimeMapping.getMimeTypeForFilename(filename);
-		return client.createNode(PROJECT_NAME, request, new NodeParametersImpl().setLanguages(lang)).toSingle().flatMap(node -> {
-			Buffer buffer = vertx.fileSystem().readFileBlocking("data/audios/" + filename);
-			return client.updateNodeBinaryField(PROJECT_NAME, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", buffer, filename,
+
+		return client.createNode(projectName, request, new NodeParametersImpl().setLanguages(lang)).toSingle().flatMap(node -> {
+			File file = new File("data/audio/" + filename);
+			InputStream ins = new FileInputStream(file);
+			long size = file.length();
+			return client.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", ins, size, filename,
 				mimeType).toSingle();
 		}).doOnError(err -> {
 			log.error("Error while creating audio {" + filename + "} for node {" + uuid + "}");
@@ -344,11 +303,12 @@ public class Importer {
 
 	}
 
-	private Completable createFolders(ProjectResponse project) {
+	@Override
+	public Completable createFolders(ProjectResponse project) {
 		String uuid = project.getRootNode().getUuid();
 		Set<Completable> operations = new HashSet<>();
-		operations.add(createFolder(uuid, "images", "Bilder").flatMapCompletable(this::importImages));
-		operations.add(createFolder(uuid, "videos", "Videos").flatMapCompletable(this::importVideos));
+		operations.add(createFolder(uuid, "image", "Bilder").flatMapCompletable(this::importImages));
+		operations.add(createFolder(uuid, "video", "Videos").flatMapCompletable(this::importVideos));
 		operations.add(createFolder(uuid, "exhibitions", "Exhibitions").flatMapCompletable(this::importContents)
 			.andThen(createFolder(uuid, "screens", "Screens").flatMapCompletable(this::importScreens)));
 		return Completable.merge(operations);
@@ -356,22 +316,17 @@ public class Importer {
 
 	private Completable importImages(NodeResponse folder) {
 		Set<Completable> operations = new HashSet<>();
-		File imageFolder = new File("data/images");
-		for (File file : imageFolder.listFiles()) {
-			String filename = file.getName();
-			if (filename.startsWith("ausstellung_") || filename.startsWith("vrlab")) {
-				operations.add(createImage(folder.getUuid(), filename).toCompletable());
-			}
+
+		for (Image image : imageList.getImages()) {
+			operations.add(createImage(folder.getUuid(), image).ignoreElement());
 		}
 		return Completable.merge(operations);
 	}
 
 	private Completable importVideos(NodeResponse folder) {
 		Set<Completable> operations = new HashSet<>();
-		File imageFolder = new File("data/videos");
-		for (File file : imageFolder.listFiles()) {
-			String filename = file.getName();
-			operations.add(createVideo(folder.getUuid(), filename).toCompletable());
+		for (Video video : videoList.getVideos()) {
+			operations.add(createVideo(folder.getUuid(), video).ignoreElement());
 		}
 		return Completable.merge(operations);
 	}
@@ -383,12 +338,13 @@ public class Importer {
 		request.setSchemaName("folder");
 		request.getFields().put("name", new StringFieldImpl().setString(name));
 		request.getFields().put("slug", new StringFieldImpl().setString(slug));
-		return client.createNode(PROJECT_NAME, request).toSingle().doOnError(err -> {
+		return client.createNode(projectName, request).toSingle().doOnError(err -> {
 			log.error("Error while creating folder {" + name + "}", err);
 		});
 	}
 
-	private Completable createSchemas() {
+	@Override
+	public Completable createSchemas() {
 		Set<Completable> operations = new HashSet<>();
 		operations.add(createExhibitionSchema());
 		operations.add(createAudioSchema());
@@ -398,7 +354,8 @@ public class Importer {
 		return Completable.merge(operations);
 	}
 
-	private Completable createMicroschemas() {
+	@Override
+	public Completable createMicroschemas() {
 		Set<Completable> operations = new HashSet<>();
 		operations.add(createScreenEventMicroschema());
 		operations.add(createScreenExhibitionPromoMicroschema());
@@ -429,7 +386,7 @@ public class Importer {
 			"10:00", 45L, "Eingangshalle", "vrzone_001.jpg", "Die VR Zone im Museum.mp4"));
 		request.getFields().put("contents", contents);
 
-		return client.createNode(PROJECT_NAME, request).toCompletable().doOnComplete(() -> {
+		return client.createNode(projectName, request).toCompletable().doOnComplete(() -> {
 			log.info("Created screen 1");
 		}).doOnError(err -> {
 			log.error("Error while creating screen 1", err);
@@ -454,7 +411,7 @@ public class Importer {
 			"Blick in die Frühgeschichte der Luftfahrt mit vielen Original-Flugapparaten.", "ausstellung_Historische_Luftfahrt.jpg", null));
 		request.getFields().put("contents", contents);
 
-		return client.createNode(PROJECT_NAME, request).toCompletable().doOnComplete(() -> {
+		return client.createNode(projectName, request).toCompletable().doOnComplete(() -> {
 			log.info("Created screen 2");
 		}).doOnError(err -> {
 			log.error("Error while creating screen 2", err);
@@ -484,10 +441,10 @@ public class Importer {
 		request.addField(new StringFieldSchemaImpl().setName("location").setLabel("Ort"));
 		request.addField(new NodeFieldSchemaImpl().setAllowedSchemas("Image").setName("image").setLabel("Bild"));
 		request.addField(new NodeFieldSchemaImpl().setAllowedSchemas("Video").setName("video").setLabel("Video"));
-		return linkMicroschema(client.createMicroschema(request).toSingle());
+		return linkMicroschema(createOrUpdateMicroschema(request), projectName);
 	}
 
-	private MicronodeResponse createScreenPromo(String title, String teaser, String imageName, String videoName) {
+	public MicronodeResponse createScreenPromo(String title, String teaser, String imageName, String videoName) {
 		MicronodeResponse micronode = new MicronodeResponse().setMicroschema(new MicroschemaReferenceImpl().setName("ScreenExhibitionPromo"));
 		micronode.getFields().put("title", new StringFieldImpl().setString(title));
 		if (teaser != null) {
@@ -507,12 +464,12 @@ public class Importer {
 		request.setName(SCREEN_PROMO_MICROSCHEMA_NAME);
 		request.addField(new StringFieldSchemaImpl().setName("title").setLabel("Exhibition Titel"));
 		request.addField(new StringFieldSchemaImpl().setName("teaser").setLabel("Teaser"));
-		request.addField(new NodeFieldSchemaImpl().setAllowedSchemas("Image").setName("image").setLabel("Bild"));
+		request.addField(new NodeFieldSchemaImpl().setAllowedSchemas("Image").setName("image").setLabel("Image"));
 		request.addField(new NodeFieldSchemaImpl().setAllowedSchemas("Video").setName("video").setLabel("Video"));
-		return linkMicroschema(client.createMicroschema(request).toSingle());
+		return linkMicroschema(createOrUpdateMicroschema(request), projectName);
 	}
 
-	public Completable createScreenSchema() {
+	private Completable createScreenSchema() {
 		SchemaCreateRequest request = new SchemaCreateRequest();
 		request.setName("Screen");
 		request.setContainer(true);
@@ -521,23 +478,11 @@ public class Importer {
 		request.setContainer(false);
 		request.addField(new StringFieldSchemaImpl().setName("id").setLabel("Id"));
 		request.addField(new StringFieldSchemaImpl().setName("name").setLabel("Name"));
-		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Beschreibung"));
-		request.addField(new StringFieldSchemaImpl().setName("location").setLabel("Position"));
+		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Description"));
+		request.addField(new StringFieldSchemaImpl().setName("location").setLabel("Location"));
 		request.addField(new ListFieldSchemaImpl().setAllowedSchemas(SCREEN_EVENT_MICROSCHEMA_NAME, SCREEN_PROMO_MICROSCHEMA_NAME)
 			.setListType("micronode").setName("contents").setLabel("Inhalt"));
-		return linkSchema(client.createSchema(request).toSingle());
-	}
-
-	public Completable linkSchema(Single<SchemaResponse> schema) {
-		return schema.flatMapCompletable(response -> {
-			return client.assignSchemaToProject(PROJECT_NAME, response.getUuid()).toCompletable();
-		});
-	}
-
-	public Completable linkMicroschema(Single<MicroschemaResponse> schema) {
-		return schema.flatMapCompletable(response -> {
-			return client.assignMicroschemaToProject(PROJECT_NAME, response.getUuid()).toCompletable();
-		});
+		return linkSchema(createOrUpdateSchema(request), projectName);
 	}
 
 	private Completable createAudioSchema() {
@@ -546,11 +491,10 @@ public class Importer {
 		request.setContainer(false);
 		request.setSegmentField("binary");
 		request.setDisplayField("filename");
-		request.addField(new StringFieldSchemaImpl().setName("filename").setLabel("Dateiname"));
-		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Beschreibung"));
-		request.addField(new BinaryFieldSchemaImpl().setName("binary").setLabel("Datei"));
-
-		return linkSchema(client.createSchema(request).toSingle());
+		request.addField(new StringFieldSchemaImpl().setName("filename").setLabel("Filename"));
+		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Description"));
+		request.addField(new BinaryFieldSchemaImpl().setName("binary").setLabel("File"));
+		return linkSchema(createOrUpdateSchema(request), projectName);
 	}
 
 	private Completable createImageSchema() {
@@ -559,11 +503,13 @@ public class Importer {
 		request.setContainer(false);
 		request.setSegmentField("binary");
 		request.setDisplayField("filename");
-		request.addField(new StringFieldSchemaImpl().setName("filename").setLabel("Dateiname"));
-		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Beschreibung"));
-		request.addField(new BinaryFieldSchemaImpl().setName("binary").setLabel("Datei"));
-
-		return linkSchema(client.createSchema(request).toSingle());
+		request.addField(new StringFieldSchemaImpl().setName("filename").setLabel("Filename"));
+		request.addField(new StringFieldSchemaImpl().setName("license").setLabel("License"));
+		request.addField(new StringFieldSchemaImpl().setName("source").setLabel("Source"));
+		request.addField(new StringFieldSchemaImpl().setName("attribution").setLabel("Attribution"));
+		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Description"));
+		request.addField(new BinaryFieldSchemaImpl().setName("binary").setLabel("File"));
+		return linkSchema(createOrUpdateSchema(request), projectName);
 	}
 
 	private Completable createVideoSchema() {
@@ -572,11 +518,10 @@ public class Importer {
 		request.setContainer(false);
 		request.setSegmentField("binary");
 		request.setDisplayField("filename");
-		request.addField(new StringFieldSchemaImpl().setName("filename").setLabel("Dateiname"));
-		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Beschreibung"));
-		request.addField(new BinaryFieldSchemaImpl().setName("binary").setLabel("Datei"));
-
-		return linkSchema(client.createSchema(request).toSingle());
+		request.addField(new StringFieldSchemaImpl().setName("filename").setLabel("Filename"));
+		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Description"));
+		request.addField(new BinaryFieldSchemaImpl().setName("binary").setLabel("File"));
+		return linkSchema(createOrUpdateSchema(request), projectName);
 	}
 
 	private Completable createExhibitionSchema() {
@@ -584,17 +529,29 @@ public class Importer {
 		request.setName("Exhibition");
 		request.setDescription("Information on an exhibition");
 		request.setSegmentField("slug");
-		request.setDisplayField("title");
+		request.setDisplayField("name");
 		request.setContainer(true);
 		request.addField(new StringFieldSchemaImpl().setName("id").setLabel("Id"));
 		request.addField(new StringFieldSchemaImpl().setName("slug").setLabel("Slug"));
-		request.addField(new StringFieldSchemaImpl().setName("title").setLabel("Titel"));
-		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Bescreibung"));
-		request.addField(new StringFieldSchemaImpl().setName("public_number").setLabel("Öffentliche Nummer"));
-		request.addField(new NodeFieldSchemaImpl().setName("title_image").setLabel("Titel Bild"));
-		request.addField(new ListFieldSchemaImpl().setListType("node").setName("images").setLabel("Bilder"));
+		request.addField(new StringFieldSchemaImpl().setName("name").setLabel("Name"));
+		request.addField(new StringFieldSchemaImpl().setName("description").setLabel("Description"));
+		request.addField(new StringFieldSchemaImpl().setName("public_number").setLabel("Public number"));
+		request.addField(new NodeFieldSchemaImpl().setName("title_image").setLabel("Titel Image"));
+		request.addField(new ListFieldSchemaImpl().setListType("node").setName("images").setLabel("Images"));
 		request.addField(new NodeFieldSchemaImpl().setName("audio").setLabel("Audioguide"));
-		return linkSchema(client.createSchema(request).toSingle());
+		return linkSchema(createOrUpdateSchema(request), projectName);
+	}
+
+	@Override
+	public String projectName() {
+		return projectName;
+	}
+
+	@Override
+	public void purge() {
+		client.findProjectByName(projectName).toSingle().flatMap(p -> {
+			return client.deleteProject(p.getUuid()).toSingle();
+		}).ignoreElement().blockingAwait();
 	}
 
 }
