@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.gentics.mesh.core.rest.micronode.MicronodeResponse;
@@ -19,7 +20,10 @@ import com.gentics.mesh.core.rest.node.NodeUpdateRequest;
 import com.gentics.mesh.core.rest.node.field.impl.NodeFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.NumberFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.StringFieldImpl;
+import com.gentics.mesh.core.rest.node.field.list.NodeFieldList;
 import com.gentics.mesh.core.rest.node.field.list.impl.MicronodeFieldListImpl;
+import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListImpl;
+import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListItemImpl;
 import com.gentics.mesh.core.rest.project.ProjectResponse;
 import com.gentics.mesh.core.rest.schema.impl.BinaryFieldSchemaImpl;
 import com.gentics.mesh.core.rest.schema.impl.ListFieldSchemaImpl;
@@ -34,6 +38,9 @@ import com.gentics.mesh.musetech.model.exhibit.ExhibitContent;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitList;
 import com.gentics.mesh.musetech.model.image.Image;
 import com.gentics.mesh.musetech.model.image.ImageList;
+import com.gentics.mesh.musetech.model.screen.Screen;
+import com.gentics.mesh.musetech.model.screen.ScreenContent;
+import com.gentics.mesh.musetech.model.screen.ScreenList;
 import com.gentics.mesh.musetech.model.video.Video;
 import com.gentics.mesh.musetech.model.video.VideoList;
 import com.gentics.mesh.parameter.client.NodeParametersImpl;
@@ -56,18 +63,21 @@ public class ImporterImpl extends AbstractImporter {
 	private final ExhibitList exhibitionList;
 	private final ImageList imageList;
 	private final VideoList videoList;
+	private final ScreenList screenList;
 
 	public ImporterImpl(String projectName) throws IOException {
 		this.projectName = projectName;
 		this.exhibitionList = ExhibitList.load();
 		this.imageList = ImageList.load();
 		this.videoList = VideoList.load();
+		this.screenList = ScreenList.load();
 	}
 
 	private Completable importScreens(NodeResponse folder) {
 		Set<Completable> operations = new HashSet<>();
-		operations.add(createScreen1(folder));
-		operations.add(createScreen2(folder));
+		for (Screen screen : screenList.getScreens()) {
+			operations.add(createScreen(folder, screen));
+		}
 		return Completable.merge(operations);
 	}
 
@@ -180,33 +190,57 @@ public class ImporterImpl extends AbstractImporter {
 					}).ignoreElement());
 			}
 
-			// for (String image : ex.getImages()) {
-			// contents.add(
-			// createImage(imgFolder.getUuid(), image)
-			// .doOnSuccess(imageResp -> {
-			// log.info("Add images reference {" + uuid + "}");
-			// NodeFieldListItemImpl item = new NodeFieldListItemImpl().setUuid(imageResp.getUuid());
-			// NodeFieldList list = request.getFields().getNodeFieldList("images");
-			// if (exhibitionList == null) {
-			// exhibitionList = new NodeFieldListImpl();
-			// request.getFields().put("images", exhibitionList);
-			// }
-			// exhibitionList.add(item);
-			//
-			// String detailImage = ex.getTitleImage();
-			// if (detailImage != null) {
-			// if (detailImage.equals(image)) {
-			// request.getFields().put("title_image", new NodeFieldImpl().setUuid(imageResp.getUuid()));
-			// }
-			// }
-			//
-			// }).ignoreElement());
-			// }
+			// Iterate over all images and create them within the exhibit image folder
+			List<String> exhibitImageList = ex.getImages();
+			if (exhibitImageList == null) {
+				return Single.error(new RuntimeException("The exhibit {" + ex.getPublicNumber() + "} has no image list"));
+			}
+			for (String imageName : exhibitImageList) {
+				Image image = findImage(ex, imageName);
+				if (image == null) {
+					return Single.error(new RuntimeException("Could not find image with name {" + imageName + "}"));
+				}
+				contents.add(
+					createImage(imgFolder.getUuid(), image)
+						.doOnSuccess(imageResp -> {
+							// Now add node references for images to the exhibit fields
 
+							log.info("Adding images reference {" + uuid + "}");
+							NodeFieldListItemImpl item = new NodeFieldListItemImpl().setUuid(imageResp.getUuid());
+							NodeFieldList list = request.getFields().getNodeFieldList("images");
+							if (list == null) {
+								list = new NodeFieldListImpl();
+								request.getFields().put("images", list);
+							}
+							list.add(item);
+
+							String detailImage = ex.getTitleImage();
+							if (detailImage != null) {
+								if (detailImage.equals(image.getName())) {
+									log.info("Adding detail image reference {" + detailImage + "}");
+									request.getFields().put("title_image", new NodeFieldImpl().setUuid(imageResp.getUuid()));
+								}
+							} else {
+								log.error("Detail image {" + detailImage + "} could not be found.");
+							}
+
+						}).ignoreElement());
+
+			}
 			return Completable.merge(contents).andThen(Single.just(request));
 		}).flatMap(request -> {
 			return updateExhibition(uuid, lang, version, request);
 		});
+	}
+
+	private Image findImage(Exhibit ex, String imageName) {
+		Optional<Image> op = imageList.getImages().stream().filter(i -> i.getName().equals(imageName)).findFirst();
+		if (op.isPresent()) {
+			return op.get();
+		} else {
+			log.error("Could not find image for exhibit {" + ex.getPublicNumber() + "} {" + imageName + "}");
+		}
+		return null;
 	}
 
 	private Single<NodeResponse> updateExhibition(String uuid, String lang, String version, NodeUpdateRequest request) {
@@ -316,7 +350,6 @@ public class ImporterImpl extends AbstractImporter {
 
 	private Completable importImages(NodeResponse folder) {
 		Set<Completable> operations = new HashSet<>();
-
 		for (Image image : imageList.getImages()) {
 			operations.add(createImage(folder.getUuid(), image).ignoreElement());
 		}
@@ -326,7 +359,9 @@ public class ImporterImpl extends AbstractImporter {
 	private Completable importVideos(NodeResponse folder) {
 		Set<Completable> operations = new HashSet<>();
 		for (Video video : videoList.getVideos()) {
-			operations.add(createVideo(folder.getUuid(), video).ignoreElement());
+			if (video.getImportFlag()) {
+				operations.add(createVideo(folder.getUuid(), video).ignoreElement());
+			}
 		}
 		return Completable.merge(operations);
 	}
@@ -362,73 +397,70 @@ public class ImporterImpl extends AbstractImporter {
 		return Completable.merge(operations);
 	}
 
-	private Completable createScreen1(NodeResponse folder) {
+	private Completable createScreen(NodeResponse folder, Screen screen) {
 		NodeCreateRequest request = new NodeCreateRequest();
-		request.setLanguage("de");
+		request.setLanguage("en");
 		request.setParentNodeUuid(folder.getUuid());
 		request.setSchemaName("Screen");
-		request.getFields().put("id", new StringFieldImpl().setString("screen1"));
-		request.getFields().put("name", new StringFieldImpl().setString("Haupteingang"));
-		request.getFields().put("description", new StringFieldImpl().setString("Screen für Events"));
-		request.getFields().put("location", new StringFieldImpl().setString("Haupteingang"));
+		request.getFields().put("id", new StringFieldImpl().setString(screen.getId()));
+		request.getFields().put("name", new StringFieldImpl().setString(screen.getName()));
+		request.getFields().put("description", new StringFieldImpl().setString(screen.getDescription()));
+		request.getFields().put("location", new StringFieldImpl().setString(screen.getLocation()));
 
 		MicronodeFieldListImpl contents = new MicronodeFieldListImpl();
-		contents.getItems()
-			.add(createScreenPromo("ABC", "ABC: ", "ausstellung_test.jpg", null));
-
-		contents.getItems()
-			.add(createScreenPromo("Wissen Erleben", null, null, "Wissen Erleben.mp4"));
-
-		contents.getItems().add(createScreenEvent("Die VR Zone im Museum", "Abtauchen in den virtuellen Welten. "
-			+ "Im VRlab präsentieren wir computergenerierte Inhalte, die auf Objekten und inhaltlichen Schwerpunkten des Museums basieren. "
-			+ "Sie nutzen dazu eine VR-Brille. Mit Hilfe von zwei Controllern können Sie sich innerhalb der virtuellen Welt "
-			+ "über weite Entfernungen „beamen“ ein Informationsmenü bedienen oder mit Objekten arbeiten.",
-			"10:00", 45L, "Eingangshalle", "vrzone_001.jpg", "Die VR Zone im Museum.mp4"));
+		for (ScreenContent content : screen.getContents()) {
+			switch (content.getType()) {
+			case EVENT:
+				contents.getItems().add(createScreenEvent(content));
+				break;
+			case PROMO:
+				contents.getItems().add(createScreenPromo(content));
+				break;
+			default:
+				throw new RuntimeException("Unknown type {" + content.getType() + "}");
+			}
+		}
 		request.getFields().put("contents", contents);
 
 		return client.createNode(projectName, request).toCompletable().doOnComplete(() -> {
-			log.info("Created screen 1");
+			log.info("Created screen " + screen.getId());
 		}).doOnError(err -> {
-			log.error("Error while creating screen 1", err);
+			log.error("Error while creating screen " + screen.getId(), err);
 		});
 	}
 
-	private Completable createScreen2(NodeResponse folder) {
-		NodeCreateRequest request = new NodeCreateRequest();
-		request.setLanguage("de");
-		request.setParentNodeUuid(folder.getUuid());
-		request.setSchemaName("Screen");
-		request.getFields().put("id", new StringFieldImpl().setString("screen2"));
-		request.getFields().put("name", new StringFieldImpl().setString("Promo Screen"));
-		request.getFields().put("location", new StringFieldImpl().setString("Nebeneingang"));
-		request.getFields().put("description", new StringFieldImpl().setString("Screen für Exhibitions"));
-
-		MicronodeFieldListImpl contents = new MicronodeFieldListImpl();
-		contents.getItems()
-			.add(createScreenPromo("Test", "Test: Aus Ideen Erfolge machen", "ausstellung_Test.jpg", null));
-		contents.getItems().add(createScreenPromo("Astronomie", "Wissenschaft von den Sternen", "ausstellung_Astronomie.jpg", null));
-		contents.getItems().add(createScreenPromo("Historische Luftfahrt",
-			"Blick in die Frühgeschichte der Luftfahrt mit vielen Original-Flugapparaten.", "ausstellung_Historische_Luftfahrt.jpg", null));
-		request.getFields().put("contents", contents);
-
-		return client.createNode(projectName, request).toCompletable().doOnComplete(() -> {
-			log.info("Created screen 2");
-		}).doOnError(err -> {
-			log.error("Error while creating screen 2", err);
-		});
-	}
-
-	private MicronodeResponse createScreenEvent(String title, String teaser, String start, Long duration, String location, String imageName,
-		String videoName) {
+	private MicronodeResponse createScreenEvent(ScreenContent content) {
 		MicronodeResponse micronode = new MicronodeResponse().setMicroschema(new MicroschemaReferenceImpl().setName("ScreenEvent"));
-		micronode.getFields().put("title", new StringFieldImpl().setString(title));
-		micronode.getFields().put("teaser", new StringFieldImpl().setString(teaser));
-		micronode.getFields().put("start", new StringFieldImpl().setString(start));
-		micronode.getFields().put("duration", new NumberFieldImpl().setNumber(duration));
-		micronode.getFields().put("location", new StringFieldImpl().setString(location));
-		micronode.getFields().put("image", new NodeFieldImpl().setUuid(fileIdMap.get(imageName)));
-		micronode.getFields().put("video", new NodeFieldImpl().setUuid(fileIdMap.get(videoName)));
+		micronode.getFields().put("title", new StringFieldImpl().setString(content.getTitle()));
+		micronode.getFields().put("teaser", new StringFieldImpl().setString(content.getTeaser()));
+		micronode.getFields().put("start", new StringFieldImpl().setString(content.getStart()));
+		micronode.getFields().put("duration", new NumberFieldImpl().setNumber(content.getDuration()));
+		micronode.getFields().put("location", new StringFieldImpl().setString(content.getLocation()));
+
+		addMedia(micronode, content);
 		return micronode;
+	}
+
+	private void addMedia(MicronodeResponse micronode, ScreenContent content) {
+		String image = content.getImage();
+		if (image != null) {
+			String mappedImage = fileIdMap.get(content.getImage());
+			if (mappedImage != null) {
+				micronode.getFields().put("image", new NodeFieldImpl().setUuid(mappedImage));
+			} else {
+				log.error("Could not find image {" + image + "} Omitting image..");
+			}
+		}
+
+		String video = content.getVideo();
+		if (video != null) {
+			String mappedVideo = fileIdMap.get(content.getVideo());
+			if (mappedVideo != null) {
+				micronode.getFields().put("video", new NodeFieldImpl().setUuid(mappedVideo));
+			} else {
+				log.error("Could not find video {" + video + "} Omitting video..");
+			}
+		}
 	}
 
 	private Completable createScreenEventMicroschema() {
@@ -444,18 +476,13 @@ public class ImporterImpl extends AbstractImporter {
 		return linkMicroschema(createOrUpdateMicroschema(request), projectName);
 	}
 
-	public MicronodeResponse createScreenPromo(String title, String teaser, String imageName, String videoName) {
+	public MicronodeResponse createScreenPromo(ScreenContent content) {
 		MicronodeResponse micronode = new MicronodeResponse().setMicroschema(new MicroschemaReferenceImpl().setName("ScreenExhibitionPromo"));
-		micronode.getFields().put("title", new StringFieldImpl().setString(title));
-		if (teaser != null) {
-			micronode.getFields().put("teaser", new StringFieldImpl().setString(teaser));
+		micronode.getFields().put("title", new StringFieldImpl().setString(content.getTitle()));
+		if (content.getTeaser() != null) {
+			micronode.getFields().put("teaser", new StringFieldImpl().setString(content.getTeaser()));
 		}
-		if (imageName != null) {
-			micronode.getFields().put("image", new NodeFieldImpl().setUuid(fileIdMap.get(imageName)));
-		}
-		if (videoName != null) {
-			micronode.getFields().put("video", new NodeFieldImpl().setUuid(fileIdMap.get(videoName)));
-		}
+		addMedia(micronode, content);
 		return micronode;
 	}
 
@@ -551,7 +578,7 @@ public class ImporterImpl extends AbstractImporter {
 	public void purge() {
 		client.findProjectByName(projectName).toSingle().flatMap(p -> {
 			return client.deleteProject(p.getUuid()).toSingle();
-		}).ignoreElement().blockingAwait();
+		}).ignoreElement().onErrorComplete().blockingAwait();
 	}
 
 }

@@ -10,8 +10,8 @@
                 "name": "Dampfmaschine",
                 "description": "Sie ist die Mutter aller Maschinen. Hier sehen Sie eine der ältesten erhaltenen Dampfmaschinen."
             },
-            "titleImage": "steamengine.jpg",
-            "images": []
+            "images": ["steamengine.jpg"],
+            "titleImage": "steamengine.jpg"
         },
         {
             "public_number": "14E",
@@ -22,7 +22,9 @@
             "de": {
                 "name": "Dampflokomotive",
                 "description": "Eine der großen Impulse in der Geschichte der Infrastruktur stellt die dampfbetriebene Lokomotive dar, die den Schienenverkehr seit Mitte des 18. Jahrhunderts revolutionierte."
-            }
+            },
+            "images": [],
+            "titleImage": null
         },
         {
             "public_number": "15E",
@@ -33,7 +35,9 @@
             "de": {
                 "name": "Bügeleisen",
                 "description": "Bereits zur Zeit der Han-Dynastie glättete man im alten China mit so genannten Pfanneneisen Gewänder. Knapp zweitausend Jahre später wurde das Bügeleisen welches Sie vor sich sehen erfunden."
-            }
+            },
+            "images": [],
+            "titleImage": null
         },
         {
             "public_number": "16E",
@@ -44,7 +48,9 @@
             "de": {
                 "name": "Mumie",
                 "description": "Diese Mumie wurde zusammen mit ihrem Sarkophag im Tal der Könige in Ägypten 19xx gefunden."
-            }
+            },
+            "images": [],
+            "titleImage": null
         },
         {
             "public_number": "17E",
@@ -56,6 +62,7 @@
                 "name": "Schalen Atommodel",
                 "description": "Es gibt viele verschiedene Atommodelle. Hier sehen sie ein Goldatom im Schalenmodell. Die Schalen bilden die Bereiche ab, in denen sich die Elektronen um den Kern bewegen."
             },
+            "images": ["atom_model.jpg"],
             "titleImage": "atom_model.jpg"
         },
         {
@@ -68,7 +75,8 @@
                 "name": "Doppeldecker",
                 "description": "Das erste Flugzeug war ein Doppeldecker. In diesem Raum können Sie in die Geschichte der Luftfahrt eintauchen."
             },
-            "titleImage": "biplanes.jpg"
+            "titleImage": "biplanes.jpg",
+            "images": ["biplanes.jpg"]
         },
         {
             "public_number": "19E",
@@ -80,7 +88,8 @@
                 "name": "SR-71 Blackbird",
                 "description": "Mal eben in unter zwei Stunden von London nach New York fliegen? Mit der SR-71 Blackbird war dies möglich. Diesen und auch noch weitere Rekorde hält dieses einzigartige Flugzeug bis heute.\nAm Boden waren die Tanks der Blackbird nicht immer ganz dicht. Dies war kein Fehler sondern dadurch bedingt, dass sich das Flugzeug im Flug mit dreifacher Überschallgeschwindigkeit um bis zu 10 cm ausdehnte."
             },
-            "image:": "sr71_blackbird.jpg"
+            "images": ["sr71_blackbird.jpg"],
+            "titleImage:": "sr71_blackbird.jpg"
         },
         {
             "public_number": "20E",
@@ -92,6 +101,7 @@
                 "name": "Bell Telefon",
                 "description": "Hallo hallo, können Sie mich verstehen? - Keine Frage, die Sprachqualität hat sich bis heute deutlich verbessert. Vor Ihnen befindet sich eines der ersten Telefone welche im Jahr 1876 von Alexander Graham Bell erfunden wurde."
             },
+            "images": ["telephone.jpg"],
             "titleImage": "telephone.jpg"
         },
         {
@@ -104,6 +114,7 @@
                 "name": "Papyrus",
                 "description": "Der Vorläufer des heutigen Papiers wurde im alten Ägypten erfunden und ermöglichte eine weitaus flexiblere Fertigung von Schrifttum im Vergleich zu Stein- oder Wachstafeln. Eines der berühmtesten erhaltenen Papyri ist das Ägyptische Totenbuch."
             },
+            "images": ["papyrus.jpg"],
             "titleImage": "papyrus.jpg"
         },
         {
@@ -116,6 +127,7 @@
                 "name": "Fotoaparat",
                 "description": "Bitte lächeln! -  Diese Rolleiflex Automat Model 3 wurde zwischen 1945 und 1949 in Deutschland produziert."
             },
+            "images": ["rolleiflex.jpg"],
             "titleImage": "rolleiflex.jpg"
         },
         {
@@ -128,6 +140,7 @@
                 "name": "Raumanzug (NASA)",
                 "description": "Um dem menschlichen Körper den Aufenthalt im Weltraum zu ermöglichen wurde bereits seit den 1930er-Jahren ein spezieller Anzug entwickelt, den extremen Bedingungen dieser Umgebung zu widerstehen."
             },
+            "images": ["spacesuite.jpg"],
             "titleImage": "spacesuite.jpg"
         },
         {
@@ -139,7 +152,9 @@
             "de": {
                 "name": "Keilschrift",
                 "description": "Eine der ältesten bekannten Schriftformen ist die Keilschrift, die mehrheitlich im vorderen Orient bis mindestens ins 1. Jahrhundert n. Chr. genutzt wurde. Charakteristisch für die Keilschrift sind die geraden Striche als Grundelemente der einzelnen Zeichen."
-            }
+            },
+            "images": [],
+            "titleImage": null
         },
         {
             "public_number": "25E",
@@ -151,6 +166,7 @@
                 "name": "Feuerwehrpumpe",
                 "description": "Hier sehen Sie eine Feuerwehrpumpe aus dem Jarh 1860. Die Pumpe musste von zwei Personen von Hand bedient werden."
             },
+            "images": ["feuerwehrpumpe.jpg"],
             "titleImage": "feuerwehrpumpe.jpg"
         },
         {
@@ -163,6 +179,7 @@
                 "name": "Dieselmotor",
                 "description": "Hier sehen Sie einen der ersten funktionsfähigen Dieselmotoren aus dem Jahr 1896."
             },
+            "images": ["dieselmotor.jpg"],
             "titleImage": "dieselmotor.jpg"
         },
         {
@@ -175,7 +192,8 @@
                 "name": "Medium Mark A Whippet Panzer",
                 "description": "Hier sehen Sie den Medium Mark A Whippet einen Britischen Panzer aus dem zweiten Weltkrieg."
             },
-            "titleImage": "Mark-a-whippet-tank.jpg"
+            "images": ["mark-a-whippet-tank.jpg"],
+            "titleImage": "mark-a-whippet-tank.jpg"
         },
         {
             "public_number": "568E",
@@ -187,6 +205,7 @@
                 "name": "Allosaurus",
                 "description": "Keine Angst. Er will bestimmt nur Spielen. Dieser Allosaurier lebte im späten Jura vor ca. 150 millionen Jahren."
             },
+            "images": ["allosaurus.jpg"],
             "titleImage": "allosaurus.jpg"
         }
     ]

@@ -2,19 +2,41 @@
     "screens": [
         {
             "id": "screen-1",
-            "location": "Haupteingang",
-            "description": "Screen für Events",
+            "location": "Main Hall",
+            "name": "Main Screen",
+            "description": "Screen for events",
             "contents": [
                 {
-                    "type": "promo"
+                    "type": "PROMO",
+                    "title": "ABC",
+                    "teaser": "ABCD",
+                    "image": "ausstellung_test.jpg",
+                    "video": "Wissen Erleben.mp4"
                 },
                 {
-                    "type": "event",
+                    "type": "EVENT",
                     "title": "Title text",
                     "teaser": "Teaser text",
                     "location": "Location text",
                     "start": "12:45",
-                    "duration": "45m"
+                    "duration": 45,
+                    "image": "vrzone_001.jpg",
+                    "video": "Die VR Zone im Museum.mp4"
+                }
+            ]
+        },
+        {
+            "id": "screen-2",
+            "name": "Grand Hall Screen 1",
+            "location": "Grand Hall",
+            "description": "Promo screen",
+            "contents": [
+                {
+                    "type": "PROMO",
+                    "title": "ABC",
+                    "teaser": "ABCD",
+                    "image": "ausstellung_test.jpg",
+                    "video": "Wissen Erleben.mp4"
                 }
             ]
         }
