@@ -4,7 +4,7 @@
             "public_number": "13E",
             "en": {
                 "name": "Steamengine",
-                "description": "The mother of all machines. You see here one of the oldest conserved steam engines."
+                "description": "The mother of all machines. Here you can see one of the oldest conserved steam engines."
             },
             "de": {
                 "name": "Dampfmaschine",
@@ -16,8 +16,8 @@
         {
             "public_number": "14E",
             "en": {
-                "name": "Steam locomotive",
-                "description": "A major impact in the history of infrastructure has been made by the steam-powered locomotive which revolutionized rail traffic since mid-18th century."
+                "name": "Steam Locomotive",
+                "description": "A major impact on the history of infrastructure has been made by the steam-powered locomotive, which revolutionized rail traffic since mid-18th century."
             },
             "de": {
                 "name": "Dampflokomotive",
@@ -29,8 +29,8 @@
         {
             "public_number": "15E",
             "en": {
-                "name": "Clothes iron",
-                "description": "Even during the time of the han-dynasty clothes were already ironed using so called flatiron. Nearly two thousand years later the iron which you see in front was invented."
+                "name": "Flatiron",
+                "description": "Even during the time of the han-dynasty clothes were already ironed using so called flatiron. Nearly two thousand years later the iron, which you see in front was invented."
             },
             "de": {
                 "name": "Bügeleisen",
@@ -43,7 +43,7 @@
             "public_number": "16E",
             "en": {
                 "name": "Mummy",
-                "description": "This mummy and its sarcophagus was found in 19xx in the valley of kings in egypt."
+                "description": "This mummy and its sarcophagus were found in 19xx in the valley of kings in egypt."
             },
             "de": {
                 "name": "Mumie",
@@ -55,8 +55,8 @@
         {
             "public_number": "17E",
             "en": {
-                "name": "Shell Atommodel",
-                "description": "There are various atom models. Here you can see a gold atom using the shell model. The shells form the area in which the electrons move around the core."
+                "name": "Shell Model of an Atom",
+                "description": "There are various atomic models. Here you can see a gold atom using the shell model. The shells form the area in which the electrons move around the core."
             },
             "de": {
                 "name": "Schalen Atommodel",
@@ -82,7 +82,7 @@
             "public_number": "19E",
             "en": {
                 "name": "SR-71 Blackbird",
-                "description": "Traveling from London to New York in just two hours? This was possible when flying the SR-71 blackbird. This and other records are still valid for this unique airplane. On the ground the tanks of the blackbird were often leaking. This was no fault of the plane. When in cruise at a speed of three times the sound the whole airplane expanded about 4 inches."
+                "description": "Traveling from London to New York in just two hours? This was possible with the SR-71 Blackbird. This and other records are still held by this unique airplane. On the ground the fuel tanks of the Blackbird were not always leakproof. This was no defect, but caused by the fact that at a cruising velocity of three times the speed of sound, the whole airplane expanded by up to 4 inches."
             },
             "de": {
                 "name": "SR-71 Blackbird",
@@ -95,7 +95,7 @@
             "public_number": "20E",
             "en": {
                 "name": "Bell Telephone",
-                "description": "Hello, hello, can you hear me? - No question the voice quality has improved by now. In front you see on of the first telephones which was invented in the year 1876 by Alexander Graham Bell."
+                "description": "Hello, hello, can you hear me? - No doubt the voice quality has improved by now. In front you see one of the first telephones, which was invented in the year 1876 by Alexander Graham Bell."
             },
             "de": {
                 "name": "Bell Telefon",
@@ -121,7 +121,7 @@
             "public_number": "22E",
             "en": {
                 "name": "Fotocamera",
-                "description": "Please smile! - This rolleiflex Automat Model 3 camera was produced in german between 1945 and 1949."
+                "description": "Please smile! - This Rolleiflex Automat Model 3 camera was produced in Germany between 1945 and 1949."
             },
             "de": {
                 "name": "Fotoaparat",
@@ -134,7 +134,7 @@
             "public_number": "23E",
             "en": {
                 "name": "Space Suite (NASA)",
-                "description": "To enable man floating in space the development of a special suit started in the 19th century able to resist the extreme extraterrestrial environment."
+                "description": "To enable the human body to float in space, special suits, able to resist the extreme conditions in this enviornment, have already been developed since the 1930ies."
             },
             "de": {
                 "name": "Raumanzug (NASA)",
@@ -147,7 +147,7 @@
             "public_number": "24E",
             "en": {
                 "name": "Cuneiform",
-                "description": "One of the oldest written forms known is the cuneiform script, mostly used in the middle east until at least the first century AD. Typical für the cuneiform are straight lines as the basic compounds of each symbol."
+                "description": "One of the oldest known forms of writing is the cuneiform script. It was mostly used in the middle east until at least the first century AD. Typical for the cuneiform are straight lines as the basic compounds of each symbol."
             },
             "de": {
                 "name": "Keilschrift",
@@ -159,7 +159,7 @@
         {
             "public_number": "25E",
             "en": {
-                "name": "Firefighter pump",
+                "name": "Firefighter Pump",
                 "description": "Here you can see a fire fighter pump from the year 1860. The pump had to be driven by two people."
             },
             "de": {
@@ -186,7 +186,7 @@
             "public_number": "213E",
             "en": {
                 "name": "Medium Mark A Whippet Tank",
-                "description": "The tank you can see here is the Medium Mark A Whippet which was a British tank of the First World War."
+                "description": "The tank you can see here is the Medium Mark A Whippet, which was a British tank of the First World War."
             },
             "de": {
                 "name": "Medium Mark A Whippet Panzer",
@@ -199,7 +199,7 @@
             "public_number": "568E",
             "en": {
                 "name": "Allosaurus",
-                "description": "Don’t worry. It just surely just wants to play. This allosaurus lived in the late Jurassic Period (around 150 million years ago) and was one of the first dinosaurs known to researchers."
+                "description": "Don’t worry. It surely just wants to play. This allosaurus lived in the late Jurassic Period (around 150 million years ago) and was one of the first dinosaurs known to researchers."
             },
             "de": {
                 "name": "Allosaurus",
