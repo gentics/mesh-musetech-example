@@ -10,14 +10,14 @@ import config from '../config.json';
 
 const i18n = {
   en: {
-    disclaimer: "This site represents a <i>#musetech</i> demo which was build as a showcase example.<br/> Feel free to explore this site, audio guide, digital signage area and the <a href=\"https://getmesh.io/blog/muse-tech\">corresponding blogposts</a>.<br/><br/> You can reach us on <a href=\"https://twitter.com/genticsmesh/\">Twitter</a>, <a href=\"https://gitter.im/gentics/mesh\">Gitter Chat</a> of via <a href=\"mailto:mesh@gentics.com?subject=musetech.getmesh.io\">Mail</a> if you have questions about the demo and how a headless CMS can empower your content.",
+    disclaimer: "This site represents a <i>#musetech</i> demo which was build as a showcase example.<br/> Feel free to explore this site, audio guide, digital signage area and the <a href=\"https://getmesh.io/blog/muse-tech-2\">corresponding blogposts</a>.<br/><br/> You can reach us on <a href=\"https://twitter.com/genticsmesh/\">Twitter</a>, <a href=\"https://gitter.im/gentics/mesh\">Gitter Chat</a> of via <a href=\"mailto:mesh@gentics.com?subject=musetech.getmesh.io\">Mail</a> if you have questions about the demo and how a headless CMS can empower your content.",
     from: "From",
     hours: "Our hours",
     admission: "Admission",
     to: "To"
   },
   de: {
-    disclaimer: "Diese Seite stellt eine #Musetech Demo dar. Sie enthält eine Auswahl von Austellungen, einen Audio Guide und einen Digital Signage Bereich. Den dazugehörigen Blogpost können sie hier <a href=\"https://getmesh.io/blog/muse-tech\">lesen</a> um mehr über die Demo zu erfahren. <br/><br/> Sie können uns ausserdem auf <a href=\"https://twitter.com/genticsmesh/\">Twitter</a>, <a href=\"https://gitter.im/gentics/mesh\">Gitter Chat</a> oder via <a href=\"mailto:mesh@gentics.com?subject=musetech.getmesh.io\">Mail</a> erreichen wenn Sie Fragen zu dieser Demo haben.",
+    disclaimer: "Diese Seite stellt eine #Musetech Demo dar. Sie enthält eine Auswahl von Austellungen, einen Audio Guide und einen Digital Signage Bereich. Den dazugehörigen Blogpost können sie hier <a href=\"https://getmesh.io/blog/muse-tech-2\">lesen</a> um mehr über die Demo zu erfahren. <br/><br/> Sie können uns ausserdem auf <a href=\"https://twitter.com/genticsmesh/\">Twitter</a>, <a href=\"https://gitter.im/gentics/mesh\">Gitter Chat</a> oder via <a href=\"mailto:mesh@gentics.com?subject=musetech.getmesh.io\">Mail</a> erreichen wenn Sie Fragen zu dieser Demo haben.",
     from: "Von",
     hours: "Unsere Öffnungszeiten",
     admission: "Preise",
