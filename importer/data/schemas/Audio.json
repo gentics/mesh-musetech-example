@@ -1,0 +1,27 @@
+{
+	"name": "Audio",
+	"displayField": "filename",
+	"segmentField": "binary",
+	"urlFields": [],
+	"container": false,
+	"fields": [
+		{
+			"name": "filename",
+			"label": "Filename",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "description",
+			"label": "Description",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "binary",
+			"label": "File",
+			"required": false,
+			"type": "binary"
+		}
+	]
+}

@@ -1,0 +1,23 @@
+{
+	"name": "OpeningHour",
+	"fields": [
+		{
+			"name": "days",
+			"label": "Days",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "from",
+			"label": "From",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "to",
+			"label": "To",
+			"required": true,
+			"type": "string"
+		}
+	]
+}

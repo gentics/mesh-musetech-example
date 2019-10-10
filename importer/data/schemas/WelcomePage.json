@@ -1,0 +1,51 @@
+{
+	"name": "WelcomePage",
+	"displayField": "title",
+	"segmentField": "slug",
+	"container": false,
+	"fields": [
+		{
+			"name": "slug",
+			"label": "Slug",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "title",
+			"label": "Title",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "intro",
+			"label": "Intro Label",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "text",
+			"label": "Intro Text",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "museum",
+			"label": "Museum Info",
+			"required": false,
+			"type": "micronode",
+			"allow": [
+				"MuseumInfo"
+			]
+		},
+		{
+			"name": "openinghours",
+			"label": "Opening Hours",
+			"required": false,
+			"listType": "micronode",
+			"type": "list",
+			"allow": [
+				"OpeningHour"
+			]
+		}
+	]
+}

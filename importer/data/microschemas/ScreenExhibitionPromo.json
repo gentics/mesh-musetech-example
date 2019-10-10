@@ -1,0 +1,35 @@
+{
+	"name": "ScreenExhibitionPromo",
+	"fields": [
+		{
+			"name": "title",
+			"label": "Exhibition Titel",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "teaser",
+			"label": "Teaser",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "image",
+			"label": "Image",
+			"required": false,
+			"type": "node",
+			"allow": [
+				"Image"
+			]
+		},
+		{
+			"name": "video",
+			"label": "Video",
+			"required": false,
+			"type": "node",
+			"allow": [
+				"Video"
+			]
+		}
+	]
+}

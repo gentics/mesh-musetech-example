@@ -1,0 +1,29 @@
+{
+	"name": "AdmissionInfo",
+	"fields": [
+		{
+			"name": "title",
+			"label": "Title",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "price",
+			"label": "Price",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "icon",
+			"label": "Icon",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "description",
+			"label": "Description",
+			"required": true,
+			"type": "string"
+		}
+	]
+}

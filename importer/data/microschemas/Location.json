@@ -1,0 +1,24 @@
+{
+	"name": "Location",
+	"fields": [
+		{
+			"name": "building",
+			"label": "Building",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "level",
+			"label": "Level",
+			"required": false,
+			"elasticsearch": {},
+			"type": "number"
+		},
+		{
+			"name": "section",
+			"label": "Section",
+			"required": false,
+			"type": "string"
+		}
+	]
+}

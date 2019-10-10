@@ -1,0 +1,40 @@
+{
+	"name": "Curator",
+	"displayField": "email",
+	"container": true,
+	"fields": [
+		{
+			"name": "email",
+			"label": "E-Mail",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "title",
+			"label": "Title",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "firstname",
+			"label": "Firstname",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "lastname",
+			"label": "Lastname",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "image",
+			"label": "Image",
+			"required": false,
+			"type": "node",
+			"allow": [
+				"Image"
+			]
+		}
+	]
+}

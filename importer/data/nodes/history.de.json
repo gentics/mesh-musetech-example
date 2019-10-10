@@ -1,0 +1,56 @@
+{
+    "uuid": "1c51487f8e8043c291487f8e8053c2c1",
+    "language": "de",
+    "schema": {
+        "name": "HistoryPage"
+    },
+    "fields": {
+        "slug": "geschichte",
+        "title": "Geschichte",
+        "headline": "Geschichte des Museum",
+        "intro": "Eine Reise durch die Zeit",
+        "timeline": [
+            {
+                "fields": {
+                    "time": "1608-1725",
+                    "subheading": "Unsere bescheidenen Anfänge",
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                },
+                "microschema": {
+                    "name": "HistoryEpisode"
+                }
+            },
+            {
+                "fields": {
+                    "time": "1810-1863",
+                    "subheading": "Anfangszeit",
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                },
+                "microschema": {
+                    "name": "HistoryEpisode"
+                }
+            },
+            {
+                "fields": {
+                    "time": "1871-1912",
+                    "subheading": "Öffentliche Arbeit",
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                },
+                "microschema": {
+                    "name": "HistoryEpisode"
+                }
+            },
+            {
+                "fields": {
+                    "time": "1912-1953",
+                    "subheading": "Erweiterung",
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                },
+                "microschema": {
+                    "name": "HistoryEpisode"
+                }
+            }
+        ],
+        "ending": "Neue Abendteuer warten"
+    }
+}

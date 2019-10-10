@@ -1,0 +1,32 @@
+{
+	"name": "HistoryEpisode",
+	"fields": [
+		{
+			"name": "time",
+			"label": "Time",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "subheading",
+			"label": "Sub Heading",
+			"required": true,
+			"type": "string"
+		},
+		{
+			"name": "text",
+			"label": "Text",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "image",
+			"label": "Image",
+			"required": false,
+			"type": "node",
+			"allow": [
+				"Image"
+			]
+		}
+	]
+}

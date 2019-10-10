@@ -1,0 +1,43 @@
+{
+	"name": "Screen",
+	"displayField": "name",
+	"segmentField": "id",
+	"container": false,
+	"fields": [
+		{
+			"name": "id",
+			"label": "Id",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "name",
+			"label": "Name",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "description",
+			"label": "Description",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "location",
+			"label": "Location",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "contents",
+			"label": "Inhalt",
+			"required": false,
+			"listType": "micronode",
+			"type": "list",
+			"allow": [
+				"ScreenEvent",
+				"ScreenExhibitionPromo"
+			]
+		}
+	]
+}

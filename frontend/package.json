@@ -1,0 +1,46 @@
+{
+  "name": "mesh-musetech-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "bootstrap": "^4.3.1",
+    "dompurify": "^1.0.11",
+    "lorem-ipsum": "^2.0.3",
+    "react": "^16.7.0-alpha.0",
+    "react-bootstrap": "^1.0.0-beta.12",
+    "react-cookie-consent": "^2.5.0",
+    "react-dom": "^16.7.0-alpha.0",
+    "react-ga": "^2.6.0",
+    "react-hook-shared-state": "^0.0.2",
+    "react-router-bootstrap": "^0.25.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.1",
+    "react-slick": "^0.25.2",
+    "slick-carousel": "^1.8.1",
+    "vertx3-eventbus-client": "^3.5.4"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "react-scripts start",
+    "clean-cra-sw": "rm -f build/precache-manifest.*.js && rm -f build/service-worker.js",
+    "build-sw": "node ./src/sw-build.js",
+    "build": "react-scripts build && yarn build-sw && yarn clean-cra-sw",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "workbox-build": "^4.3.1"
+  }
+}

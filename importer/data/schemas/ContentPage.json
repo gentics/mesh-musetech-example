@@ -1,0 +1,32 @@
+{
+	"name": "ContentPage",
+	"displayField": "title",
+	"segmentField": "slug",
+	"container": false,
+	"fields": [
+		{
+			"name": "slug",
+			"label": "Slug",
+			"type": "string",
+			"required": true
+		},
+		{
+			"name": "title",
+			"label": "Title",
+			"type": "string",
+			"required": true
+		},
+		{
+			"name": "intro",
+			"label": "Intro",
+			"type": "string",
+			"required": false
+		},
+		{
+			"name": "text",
+			"label": "Text",
+			"type": "string",
+			"required": false
+		}
+	]
+}

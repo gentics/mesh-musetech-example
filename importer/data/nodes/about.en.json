@@ -1,0 +1,12 @@
+{
+  "uuid": "fd58237c79d64bf198237c79d6bbf107",
+  "language": "en",
+  "schema": {
+    "name": "ContentPage"
+  },
+  "fields": {
+    "slug": "about",
+    "title": "About us",
+    "intro": "About us"
+  }
+}

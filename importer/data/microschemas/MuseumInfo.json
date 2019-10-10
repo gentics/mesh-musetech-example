@@ -1,0 +1,35 @@
+{
+	"name": "MuseumInfo",
+	"fields": [
+		{
+			"name": "name",
+			"label": "",
+			"type": "string",
+			"required": true
+		},
+		{
+			"name": "email",
+			"label": "",
+			"type": "string",
+			"required": false
+		},
+		{
+			"name": "phone",
+			"label": "",
+			"type": "string",
+			"required": false
+		},
+		{
+			"name": "street",
+			"label": "",
+			"type": "string",
+			"required": false
+		},
+		{
+			"name": "city",
+			"label": "",
+			"type": "string",
+			"required": false
+		}
+	]
+}

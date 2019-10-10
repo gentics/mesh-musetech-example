@@ -1,0 +1,11 @@
+/videos
+node_modules
+/uploads
+/data
+/keystore
+/es
+
+.project
+.settings
+.classpath
+

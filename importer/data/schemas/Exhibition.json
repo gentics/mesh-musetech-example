@@ -1,0 +1,67 @@
+{
+	"name": "Exhibition",
+	"displayField": "name",
+	"segmentField": "slug",
+	"urlFields": [],
+	"container": true,
+	"fields": [
+		{
+			"name": "id",
+			"label": "Id",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "slug",
+			"label": "Slug",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "name",
+			"label": "Name",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "description",
+			"label": "Description",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "public_number",
+			"label": "Public number",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "title_image",
+			"label": "Titel Image",
+			"required": false,
+			"type": "node"
+		},
+		{
+			"name": "images",
+			"label": "Images",
+			"required": false,
+			"listType": "node",
+			"type": "list"
+		},
+		{
+			"name": "audio",
+			"label": "Audioguide",
+			"required": false,
+			"type": "node"
+		},
+		{
+			"name": "location",
+			"label": "Location",
+			"required": false,
+			"type": "micronode",
+			"allow": [
+				"Location"
+			]
+		}
+	]
+}

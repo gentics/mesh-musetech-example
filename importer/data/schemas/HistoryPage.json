@@ -1,0 +1,48 @@
+{
+	"name": "HistoryPage",
+	"displayField": "title",
+	"segmentField": "slug",
+	"container": false,
+	"fields": [
+		{
+			"name": "slug",
+			"label": "Slug",
+			"type": "string",
+			"required": true
+		},
+		{
+			"name": "title",
+			"label": "Title",
+			"type": "string",
+			"required": true
+		},
+		{
+			"name": "headline",
+			"label": "Headline",
+			"type": "string",
+			"required": false
+		},
+		{
+			"name": "intro",
+			"label": "Intro",
+			"type": "string",
+			"required": false
+		},
+		{
+			"name": "timeline",
+			"label": "Timeline",
+			"type": "list",
+			"required": false,
+			"listType": "micronode",
+			"allow": [
+				"HistoryEpisode"
+			]
+        },
+        {
+			"name": "ending",
+			"label": "Ending",
+			"type": "string",
+			"required": false
+		}
+	]
+}

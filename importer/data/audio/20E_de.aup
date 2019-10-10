@@ -1,0 +1,33 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="20E_de_data" version="1.3.0" audacityversion="2.2.2" sel0="0.0000000000" sel1="0.0000000000" vpos="0" h="0.0000000000" zoom="160.3333333333" rate="24000.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags/>
+	<wavetrack name="20E_de" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="48499">
+				<waveblock start="0">
+					<simpleblockfile filename="eff1fe84.au" len="48499" min="-1.0" max="0.974868" rms="0.091453"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Audio Track" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="24000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="48499">
+				<waveblock start="0">
+					<simpleblockfile filename="eff1fa6f.au" len="48499" min="-0.120276" max="0.112735" rms="0.027863"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="2.02079167" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1347">
+				<waveblock start="0">
+					<simpleblockfile filename="eff1f1b7.au" len="1347" min="-0.019099" max="0.032243" rms="0.002207"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

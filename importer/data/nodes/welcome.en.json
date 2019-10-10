@@ -1,0 +1,47 @@
+{
+  "uuid": "04b3035877634850b3035877634850b2",
+  "language": "en",
+  "schema": {
+    "name": "WelcomePage"
+  },
+  "fields": {
+    "slug": "welcome",
+    "title": "Welcome To Blackspring Museum of History!",
+    "intro": "Discover new worlds",
+    "text": "Lorem ipsum dolor sit amet consectetur.",
+    "museum": {
+      "fields": {
+        "name": "Blackspring Museum of History",
+        "email": "mesh@gentics.com",
+        "phone": "+43-688-555-41191",
+        "street": "Spring Street 42",
+        "city": "Blackspring"
+      },
+      "microschema": {
+        "name": "MuseumInfo"
+      }
+    },
+    "openinghours": [
+      {
+        "fields": {
+          "days": "Mo-Fr",
+          "from": "08:00",
+          "to": "17:30"
+        },
+        "microschema": {
+          "name": "OpeningHour"
+        }
+      },
+      {
+        "fields": {
+          "days": "Sa",
+          "from": "09:00",
+          "to": "16:00"
+        },
+        "microschema": {
+          "name": "OpeningHour"
+        }
+      }
+    ]
+  }
+}

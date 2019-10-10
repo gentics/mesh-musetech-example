@@ -1,0 +1,59 @@
+{
+  "uuid": "368a169e393346ee8a169e393326ee62",
+  "language": "en",
+  "schema": {
+    "name": "AdmissionPage"
+  },
+  "fields": {
+    "slug": "pricing",
+    "title": "Prices",
+    "intro": "Admission fees",
+    "headline": "",
+    "types": [
+      {
+        "fields": {
+            "title": "Children",
+            "price": "4,00 €",
+            "icon": "child",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+        },
+        "microschema": {
+            "name": "AdmissionInfo"
+        }
+      },
+      {
+        "fields": {
+            "title": "Adults",
+            "price": "12,00 €",
+            "icon": "user",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+        },
+        "microschema": {
+            "name": "AdmissionInfo"
+        }
+      },
+      {
+        "fields": {
+            "title": "Groups",
+            "price": "40,00 €",
+            "icon": "users",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+        },
+        "microschema": {
+            "name": "AdmissionInfo"
+        }
+      },
+      {
+        "fields": {
+            "title": "Disabled",
+            "price": "Free",
+            "icon": "wheelchair",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+        },
+        "microschema": {
+            "name": "AdmissionInfo"
+        }
+      }
+    ]
+  }
+}

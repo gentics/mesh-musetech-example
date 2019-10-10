@@ -1,0 +1,53 @@
+{
+	"name": "ScreenEvent",
+	"fields": [
+		{
+			"name": "title",
+			"label": "Event Titel",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "teaser",
+			"label": "Teaser",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "start",
+			"label": "Start",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "duration",
+			"label": "Dauer (min)",
+			"required": false,
+			"type": "number"
+		},
+		{
+			"name": "location",
+			"label": "Ort",
+			"required": false,
+			"type": "string"
+		},
+		{
+			"name": "image",
+			"label": "Bild",
+			"required": false,
+			"type": "node",
+			"allow": [
+				"Image"
+			]
+		},
+		{
+			"name": "video",
+			"label": "Video",
+			"required": false,
+			"type": "node",
+			"allow": [
+				"Video"
+			]
+		}
+	]
+}
