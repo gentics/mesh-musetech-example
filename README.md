@@ -4,10 +4,9 @@ This repository contains all the sources that were needed to build the [musetech
 
 ## Blogpost
 
-This demo project is covered by two blogposts:
+This demo project is covered by these blogposts:
 
-* Musetech: TODO LINK
-* Technical: TODO LINK
+* Technical: https://getmesh.io/blog/muse-tech-2/
 
 ## Project structure
 
@@ -41,25 +40,3 @@ The contents that were used in this project have different licenses. The license
 * Video: [Source List](importer/data/video/videos.json)
 * Text: All texts and descriptions are 
 * Audio: The audio guides that are part of this project have been generated using the text source.
-
-## TODO
-
-* links, license for texts
-* Review rights
-
-## Ideas
-
-* Add fake ticket shop connection
-* Add showcase video which highlights features of the demo (e.g. show screen usage)
-* Add reminders
-* Add tour information
-* Add current event info
-* Highlight exhibits in screen view
-* Mark specific exhibits to be shown in the screen
-* Add gallery support for exhibit views
-* Add paging to exhibit list view
-* Add dedicated TLD
-* Add fake screen image frame to screen list view (to better grasp the concept of the screens)
-* Add login and admin area to better divide the website features
-* Add information about current delays
-* Add draft/publish handling
