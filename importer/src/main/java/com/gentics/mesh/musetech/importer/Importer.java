@@ -38,14 +38,6 @@ public interface Importer {
 	Completable createFolders(ProjectResponse project);
 
 	/**
-	 * Import the contents.
-	 * 
-	 * @param project
-	 * @return
-	 */
-	Completable importNodes(ProjectResponse project);
-
-	/**
 	 * Publish the nodes in the project.
 	 * 
 	 * @param project
@@ -79,5 +71,7 @@ public interface Importer {
 	 * @return
 	 */
 	String projectName();
+
+	Completable importNodes(ProjectResponse project);
 
 }
