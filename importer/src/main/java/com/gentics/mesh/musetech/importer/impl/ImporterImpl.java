@@ -5,16 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.commons.io.FileUtils;
 
 import com.gentics.mesh.core.rest.micronode.MicronodeResponse;
 import com.gentics.mesh.core.rest.microschema.impl.MicroschemaCreateRequest;
@@ -33,8 +28,7 @@ import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListItemImpl;
 import com.gentics.mesh.core.rest.project.ProjectResponse;
 import com.gentics.mesh.core.rest.schema.impl.MicroschemaReferenceImpl;
 import com.gentics.mesh.core.rest.schema.impl.SchemaCreateRequest;
-import com.gentics.mesh.core.rest.user.NodeReference;
-import com.gentics.mesh.json.JsonUtil;
+import com.gentics.mesh.importer.helper.ImportUtils;
 import com.gentics.mesh.musetech.model.exhibit.Exhibit;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitContent;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitList;
@@ -50,7 +44,6 @@ import com.gentics.mesh.parameter.client.NodeParametersImpl;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.vertx.core.http.impl.MimeMapping;
 import io.vertx.core.logging.Logger;
@@ -78,9 +71,9 @@ public class ImporterImpl extends AbstractImporter {
 		this.imageList = ImageList.load();
 		this.videoList = VideoList.load();
 		this.screenList = ScreenList.load();
-		this.schemas = loadSchemas();
-		this.microschemas = loadMicroschemas();
-		this.nodes = loadNodes();
+		this.schemas = ImportUtils.loadSchemas("data/schemas");
+		this.microschemas = ImportUtils.loadMicroschemas("data/microschemas");
+		this.nodes = ImportUtils.loadNodes("data/nodes");
 	}
 
 	private Completable importScreens(NodeResponse folder) {
@@ -388,22 +381,6 @@ public class ImporterImpl extends AbstractImporter {
 	}
 
 	@Override
-	public Completable importNodes(ProjectResponse project) {
-		return Observable.fromIterable(nodes)
-			.map(node -> {
-				NodeReference nodeRef = new NodeReference();
-				nodeRef.setUuid(project.getRootNode().getUuid());
-				node.setParentNode(nodeRef);
-				return node;
-			})
-			.flatMapCompletable(node -> {
-				String uuid = node.getUuid();
-				NodeCreateRequest request = JsonUtil.readValue(node.toJson(), NodeCreateRequest.class);
-				return client.createNode(uuid, projectName, request).toCompletable();
-			});
-	}
-
-	@Override
 	public Completable createFolders(ProjectResponse project) {
 		String uuid = project.getRootNode().getUuid();
 		Set<Completable> operations = new HashSet<>();
@@ -458,20 +435,12 @@ public class ImporterImpl extends AbstractImporter {
 
 	@Override
 	public Completable createSchemas() {
-		return Observable.fromIterable(schemas)
-			.flatMapCompletable(schema -> {
-				log.info("Creating schema {" + schema.getName() + "}");
-				return linkSchema(createOrUpdateSchema(schema), projectName);
-			});
+		return ImportUtils.createSchemas(client, schemas, projectName);
 	}
 
 	@Override
 	public Completable createMicroschemas() {
-		return Observable.fromIterable(microschemas)
-			.flatMapCompletable(microschema -> {
-				log.info("Creating microschema {" + microschema.getName() + "}");
-				return linkMicroschema(createOrUpdateMicroschema(microschema), projectName);
-			});
+		return ImportUtils.createMicroschemas(client, microschemas, projectName);
 	}
 
 	private Completable createScreen(NodeResponse folder, Screen screen) {
@@ -557,58 +526,11 @@ public class ImporterImpl extends AbstractImporter {
 
 	@Override
 	public void purge() {
-		client.findProjectByName(projectName).toSingle().flatMap(p -> {
-			return client.deleteProject(p.getUuid()).toSingle();
-		}).ignoreElement().onErrorComplete().blockingAwait();
+		ImportUtils.purge(client, projectName);
 	}
 
-	private static List<SchemaCreateRequest> loadSchemas() throws IOException {
-		List<SchemaCreateRequest> schemas = Files.list(Paths.get("data/schemas"))
-			.filter(f -> f.toString().endsWith(".json"))
-			.map(f -> {
-				try {
-					log.info("Reading {" + f + "}");
-					return FileUtils.readFileToString(f.toFile());
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException("Could not read file {" + f + "}");
-				}
-			})
-			.map(json -> JsonUtil.readValue(json, SchemaCreateRequest.class))
-			.collect(Collectors.toList());
-		return schemas;
+	@Override
+	public Completable importNodes(ProjectResponse project) {
+		return ImportUtils.importNodes(client, nodes, project);
 	}
-
-	private static List<MicroschemaCreateRequest> loadMicroschemas() throws IOException {
-		List<MicroschemaCreateRequest> microschemas = Files.list(Paths.get("data/microschemas"))
-			.filter(f -> f.toString().endsWith(".json"))
-			.map(f -> {
-				try {
-					log.info("Reading {" + f + "}");
-					return FileUtils.readFileToString(f.toFile());
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException("Could not read file {" + f + "}");
-				}
-			})
-			.map(json -> JsonUtil.readValue(json, MicroschemaCreateRequest.class))
-			.collect(Collectors.toList());
-		return microschemas;
-	}
-
-	private static List<NodeResponse> loadNodes() throws IOException {
-		List<NodeResponse> nodes = Files.list(Paths.get("data/nodes"))
-			.filter(f -> f.toString().endsWith(".json"))
-			.map(f -> {
-				try {
-					return FileUtils.readFileToString(f.toFile());
-				} catch (Exception e) {
-					throw new RuntimeException("Could not read file {" + f + "}");
-				}
-			})
-			.map(json -> JsonUtil.readValue(json, NodeResponse.class))
-			.collect(Collectors.toList());
-		return nodes;
-	}
-
 }
