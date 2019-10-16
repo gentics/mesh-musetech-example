@@ -20,8 +20,8 @@ public class ImportRunner {
 	}
 
 	public ImportRunner(String[] args) throws IOException {
-		// boolean local = checkLocalArg(args);
-		boolean local = false;
+		boolean local = checkLocalArg(args);
+		//boolean local = false;
 		if (local) {
 			System.out.println("Running on localhost");
 			importer = new ImporterImpl("localhost", 8080, false, PROJECT_NAME);
