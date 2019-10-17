@@ -17,13 +17,13 @@
 		},
 		{
 			"name": "firstname",
-			"label": "Firstname",
+			"label": "First name",
 			"required": true,
 			"type": "string"
 		},
 		{
 			"name": "lastname",
-			"label": "Lastname",
+			"label": "Last name",
 			"required": true,
 			"type": "string"
 		},

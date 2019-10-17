@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { getExhibitions, filterExhibitions } from '../api';
+import { getExhibits, filterExhibits } from '../api';
 import Navigation from '../components/Navigation';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -24,7 +24,7 @@ const i18n = {
     }
 }
 
-export default function ExhibitionsList({ match, location }) {
+export default function ExhibitsList({ match, location }) {
 
     let lang = useContext(LanguageContext);
     let trans = i18n[lang];
@@ -78,17 +78,17 @@ function SearchForm({ location }) {
     // Register event callback to update the state when content gets changed in Gentics Mesh    
     useWebsocketBridge(() => {
         if (searchInput && searchInput.query !== "") {
-            filterExhibitions(lang, searchInput.query).then(setNodeResponse);
+            filterExhibits(lang, searchInput.query).then(setNodeResponse);
         } else {
-            getExhibitions(lang, 1).then(setNodeResponse);
+            getExhibits(lang, 1).then(setNodeResponse);
         }
     });
 
     useEffect(() => {
         if (searchInput && searchInput.query !== "") {
-            filterExhibitions(lang, searchInput.query).then(setNodeResponse);
+            filterExhibits(lang, searchInput.query).then(setNodeResponse);
         } else {
-            getExhibitions(lang, 1).then(setNodeResponse);
+            getExhibits(lang, 1).then(setNodeResponse);
         }
     }, [lang, searchInput]);
 
@@ -110,8 +110,8 @@ function SearchForm({ location }) {
 
     const resultList = results.length ? (results.filter(ex => {
         return ex.fields.title_image != null;
-    }).map(exhibition => (
-        <Exhibition exhibition={exhibition} key={exhibition.uuid} />
+    }).map(exhibit => (
+        <Exhibit exhibit={exhibit} key={exhibit.uuid} />
     ))) : emptyPlaceholder
 
 
@@ -134,14 +134,14 @@ function SearchForm({ location }) {
 
 }
 
-function Exhibition({ exhibition }) {
+function Exhibit({ exhibit }) {
     let lang = useContext(LanguageContext);
-    let attribution = exhibition.fields.title_image.fields.attribution;
-    let image = exhibition.fields.title_image;
+    let attribution = exhibit.fields.title_image.fields.attribution;
+    let image = exhibit.fields.title_image;
     let color = image.fields.binary.dominantColor;
     return (
         <Col md={3} className="exhibit-item">
-            <Link to={`/${lang}/exhibitions/${exhibition.fields.public_number}`} className="exhibit-link">
+            <Link to={`/${lang}/exhibits/${exhibit.fields.public_number}`} className="exhibit-link">
                 <div className="exhibit-hover">
                     <div className="exhibit-hover-content">
                         <FontAwesomeIcon icon={faSearchPlus} className="fas fa-3x" />
@@ -151,14 +151,14 @@ function Exhibition({ exhibition }) {
                     <source media="(min-width: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=500&mode=smart&crop=fp`}></source>
                     <source media="(min-width: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=400&w=500&mode=smart&crop=fp`}></source>
                     <source media="(min-width: 1280px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=500&w=500&mode=smart&crop=fp`}></source>
-                    <img alt={exhibition.fields.name} srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=300&mode=smart&crop=fp`} className="img-responsive img-fluid" />
+                    <img alt={exhibit.fields.name} srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=300&mode=smart&crop=fp`} className="img-responsive img-fluid" />
                 </picture>
                 <div className="image-attribution">
                     <p>{attribution}</p>
                 </div>
             </Link>
             <div className="exhibit-caption">
-                <p>{exhibition.fields.name}</p>
+                <p>{exhibit.fields.name}</p>
             </div>
         </Col>
     )

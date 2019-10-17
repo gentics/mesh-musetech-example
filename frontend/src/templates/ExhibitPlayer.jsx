@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getExhibition } from '../api';
+import { getExhibit } from '../api';
 import useWebsocketBridge from '../eventbus';
 import { Col, Row } from 'react-bootstrap';
 import { Route } from 'react-router-dom';
@@ -21,12 +21,12 @@ export default function ExhibitPlayer({ match }) {
 
     // Register event callback to update the state when content gets changed in Gentics Mesh
     useWebsocketBridge(() => {
-        getExhibition(id, lang).then(setExhibit);
+        getExhibit(id, lang).then(setExhibit);
     });
 
     // Use effect hook to set the content when the path changes
     useEffect(() => {
-        getExhibition(id, lang).then(setExhibit);
+        getExhibit(id, lang).then(setExhibit);
     }, [id, lang]);
 
     if (!exhibit) {

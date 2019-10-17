@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import config from './config.json';
 
-export async function filterExhibitions(lang, term) {
+export async function filterExhibits(lang, term) {
   let query = JSON.stringify(createESQuery(term));
   return graphQl(`
-  query Exhibitions($lang: [String], $query: String) {
+  query Exhibits($lang: [String], $query: String) {
     nodes(lang: $lang, query: $query) {
       elements {
         uuid
         path
-        ... on Exhibition {
+        ... on Exhibit {
           fields {
             id
             name
@@ -61,7 +61,7 @@ function createESQuery(term) {
         "must": [
           {
             "match": {
-              "schema.name.raw": "Exhibition"
+              "schema.name.raw": "Exhibit"
             }
           },
           {
@@ -170,13 +170,13 @@ export async function loadContentByPath(path) {
   `, { "path": "/" + path }).then(response => response.node);
 }
 
-export async function getExhibition(id, lang) {
+export async function getExhibit(id, lang) {
   return graphQl(`
-  query Exhibition($path: String) {
+  query Exhibit($path: String) {
     node(path: $path) {
       uuid
       path
-      ... on Exhibition {
+      ... on Exhibit {
         fields {
           id
           name
@@ -214,7 +214,7 @@ export async function getExhibition(id, lang) {
       }
     }
   }  
-  `, { "path": "/exhibitions/" + id + ":" + lang }).then(response => response.node);
+  `, { "path": "/exhibits/" + id + ":" + lang }).then(response => response.node);
 }
 
 export async function getScreen(id) {
@@ -251,7 +251,7 @@ export async function getScreen(id) {
                 }
               }
             }
-            ... on ScreenExhibitionPromo {
+            ... on ScreenExhibitPromo {
               fields {
                 title
                 teaser
@@ -301,10 +301,10 @@ export async function loadAdmissionInfo(lang) {
   `, { lang }).then(response => response.node);
 }
 
-export async function getExhibitions(lang, page) {
+export async function getExhibits(lang, page) {
   return graphQl(`
-  query Exhibitions($lang: [String], $page: Long) {
-    node(path: "/exhibitions") {
+  query Exhibits($lang: [String], $page: Long) {
+    node(path: "/exhibits") {
       children(lang: $lang, page: $page) {
         hasPreviousPage
         hasNextPage
@@ -312,7 +312,7 @@ export async function getExhibitions(lang, page) {
         elements {
           uuid
           path
-          ... on Exhibition {
+          ... on Exhibit {
             fields {
               id
               name

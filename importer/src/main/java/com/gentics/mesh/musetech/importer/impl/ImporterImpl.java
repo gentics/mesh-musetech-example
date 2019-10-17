@@ -56,7 +56,7 @@ public class ImporterImpl extends AbstractImporter {
 	private static final String EXHIBIT_LOCATION_NAME = "Location";
 
 	private final String projectName;
-	private final ExhibitList exhibitionList;
+	private final ExhibitList exhibitList;
 	private final ImageList imageList;
 	private final VideoList videoList;
 	private final ScreenList screenList;
@@ -67,7 +67,7 @@ public class ImporterImpl extends AbstractImporter {
 	public ImporterImpl(String hostname, int port, boolean ssl, String projectName) throws IOException {
 		super(hostname, port, ssl);
 		this.projectName = projectName;
-		this.exhibitionList = ExhibitList.load();
+		this.exhibitList = ExhibitList.load();
 		this.imageList = ImageList.load();
 		this.videoList = VideoList.load();
 		this.screenList = ScreenList.load();
@@ -86,15 +86,15 @@ public class ImporterImpl extends AbstractImporter {
 
 	private Completable importContents(NodeResponse folder) throws FileNotFoundException, IOException {
 		Set<Completable> operations = new HashSet<>();
-		for (Exhibit ex : exhibitionList.getExhibits()) {
-			operations.add(createExhibition(folder.getUuid(), ex, ex.getEnglish()).flatMapCompletable(tupl -> {
-				return translateExhibition(tupl.getA(), tupl.getB(), ex, ex.getGerman());
+		for (Exhibit ex : exhibitList.getExhibits()) {
+			operations.add(createExhibit(folder.getUuid(), ex, ex.getEnglish()).flatMapCompletable(tupl -> {
+				return translateExhibit(tupl.getA(), tupl.getB(), ex, ex.getGerman());
 			}));
 		}
 		return Completable.merge(operations);
 	}
 
-	private Completable translateExhibition(NodeResponse node, String audioFolderUuid, Exhibit ex, ExhibitContent content) {
+	private Completable translateExhibit(NodeResponse node, String audioFolderUuid, Exhibit ex, ExhibitContent content) {
 		return Single.just(new NodeUpdateRequest()).flatMapCompletable(request -> {
 			request.setLanguage("de");
 
@@ -124,17 +124,17 @@ public class ImporterImpl extends AbstractImporter {
 					.toCompletable();
 			})
 				.doOnComplete(() -> {
-					log.info("Updated exhibition {" + node.getUuid() + "/en}");
+					log.info("Updated exhibit {" + node.getUuid() + "/en}");
 				}).doOnError(err -> {
-					log.info("Error while translating exhibition {" + node.getUuid() + "/en}");
+					log.info("Error while translating exhibit {" + node.getUuid() + "/en}");
 				}));
 		});
 	}
 
-	private Single<Tuple<NodeResponse, String>> createExhibition(String folderUuid, Exhibit exhibit, ExhibitContent content) {
+	private Single<Tuple<NodeResponse, String>> createExhibit(String folderUuid, Exhibit exhibit, ExhibitContent content) {
 		NodeCreateRequest request = new NodeCreateRequest();
 		request.setLanguage("en");
-		request.setSchemaName("Exhibition");
+		request.setSchemaName("Exhibit");
 		request.setParentNodeUuid(folderUuid);
 
 		String description = content.getDescription();
@@ -151,10 +151,10 @@ public class ImporterImpl extends AbstractImporter {
 		return client.createNode(projectName, request, new NodeParametersImpl().setLanguages("en"))
 			.toSingle()
 			.doOnSuccess(node -> {
-				log.info("Created exhibition {" + publicNumber + "} with uuid" + node.getUuid());
+				log.info("Created exhibit {" + publicNumber + "} with uuid" + node.getUuid());
 			})
 			.doOnError(err -> {
-				log.error("Error while creating exhibition {" + publicNumber + "}", err);
+				log.error("Error while creating exhibit {" + publicNumber + "}", err);
 			})
 			.flatMap(node -> {
 
@@ -244,7 +244,7 @@ public class ImporterImpl extends AbstractImporter {
 			}
 			return Completable.merge(contents).andThen(Single.just(request));
 		}).flatMap(request -> {
-			return updateExhibition(uuid, lang, version, request);
+			return updateExhibit(uuid, lang, version, request);
 		});
 	}
 
@@ -258,16 +258,16 @@ public class ImporterImpl extends AbstractImporter {
 		return null;
 	}
 
-	private Single<NodeResponse> updateExhibition(String uuid, String lang, String version, NodeUpdateRequest request) {
-		log.info("Update exhibition {" + uuid + "}");
+	private Single<NodeResponse> updateExhibit(String uuid, String lang, String version, NodeUpdateRequest request) {
+		log.info("Update exhibit {" + uuid + "}");
 		request.setLanguage(lang);
 		request.setVersion(version);
 		return client.updateNode(projectName, uuid, request, new NodeParametersImpl().setLanguages(lang)).toSingle()
 			.doOnError(err -> {
-				log.error("Error while updating exhibition {" + uuid + "}", err);
+				log.error("Error while updating exhibit {" + uuid + "}", err);
 			})
 			.doOnSuccess(node -> {
-				log.info("Exhibition {" + uuid + "} updated.");
+				log.info("Exhibit {" + uuid + "} updated.");
 			});
 	}
 
@@ -384,9 +384,9 @@ public class ImporterImpl extends AbstractImporter {
 	public Completable createFolders(ProjectResponse project) {
 		String uuid = project.getRootNode().getUuid();
 		Set<Completable> operations = new HashSet<>();
-		operations.add(createFolder(uuid, "image", "Bilder").flatMapCompletable(this::importImages));
+		operations.add(createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages));
 		operations.add(createFolder(uuid, "video", "Videos").flatMapCompletable(this::importVideos));
-		operations.add(createFolder(uuid, "exhibitions", "Exhibitions").flatMapCompletable(this::importContents)
+		operations.add(createFolder(uuid, "exhibits", "Exhibits").flatMapCompletable(this::importContents)
 			.andThen(createFolder(uuid, "screens", "Screens").flatMapCompletable(this::importScreens)));
 		return Completable.merge(operations);
 	}
@@ -510,7 +510,7 @@ public class ImporterImpl extends AbstractImporter {
 	}
 
 	public MicronodeResponse createScreenPromo(ScreenContent content) {
-		MicronodeResponse micronode = new MicronodeResponse().setMicroschema(new MicroschemaReferenceImpl().setName("ScreenExhibitionPromo"));
+		MicronodeResponse micronode = new MicronodeResponse().setMicroschema(new MicroschemaReferenceImpl().setName("ScreenExhibitPromo"));
 		micronode.getFields().put("title", new StringFieldImpl().setString(content.getTitle()));
 		if (content.getTeaser() != null) {
 			micronode.getFields().put("teaser", new StringFieldImpl().setString(content.getTeaser()));

@@ -60,7 +60,7 @@ function SimpleSlider({ node }) {
 
 function InfoSelector({ content }) {
     const type = content.type;
-    if (type === "ScreenExhibitionPromo") {
+    if (type === "ScreenExhibitPromo") {
         return (
             <div className="image-label"><h2>{content.fields.title}</h2></div>
         );

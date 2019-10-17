@@ -16,8 +16,8 @@ const trans = {
     price: "Preise",
     price_path: "/de/preise",
 
-    exhibitions: "Austellung",
-    exhibitions_path: "/de/exhibitions",
+    exhibits: "Austellung",
+    exhibits_path: "/de/exhibits",
     
     about: "Über uns",
     about_path: "/de/über",
@@ -32,8 +32,8 @@ const trans = {
     price: "Pricing",
     price_path: "/en/pricing",
 
-    exhibitions: "Exhibitions",
-    exhibitions_path: "/en/exhibitions",
+    exhibits: "Exhibits",
+    exhibits_path: "/en/exhibits",
 
     about: "About",
     about_path: "/en/about",
@@ -78,8 +78,8 @@ export default function Navigation({ languages }) {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" className="navbar-toggler-right" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ml-auto text-uppercase">
-              <LinkContainer to={i18n.exhibitions_path}>
-                <Nav.Link>{i18n.exhibitions}</Nav.Link>
+              <LinkContainer to={i18n.exhibits_path}>
+                <Nav.Link>{i18n.exhibits}</Nav.Link>
               </LinkContainer>
               <LinkContainer to={i18n.price_path}>
                 <Nav.Link>{i18n.price}</Nav.Link>

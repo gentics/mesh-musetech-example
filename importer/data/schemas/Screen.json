@@ -30,13 +30,13 @@
 		},
 		{
 			"name": "contents",
-			"label": "Inhalt",
+			"label": "Content",
 			"required": false,
 			"listType": "micronode",
 			"type": "list",
 			"allow": [
 				"ScreenEvent",
-				"ScreenExhibitionPromo"
+				"ScreenExhibitPromo"
 			]
 		}
 	]

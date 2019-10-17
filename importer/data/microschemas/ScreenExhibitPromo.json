@@ -1,9 +1,9 @@
 {
-	"name": "ScreenExhibitionPromo",
+	"name": "ScreenExhibitPromo",
 	"fields": [
 		{
 			"name": "title",
-			"label": "Exhibition Titel",
+			"label": "Exhibit Title",
 			"required": false,
 			"type": "string"
 		},

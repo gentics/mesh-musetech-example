@@ -1,5 +1,5 @@
 {
-	"name": "Exhibition",
+	"name": "Exhibit",
 	"displayField": "name",
 	"segmentField": "slug",
 	"urlFields": [],
@@ -39,20 +39,29 @@
 			"name": "title_image",
 			"label": "Titel Image",
 			"required": false,
-			"type": "node"
+			"type": "node",
+			"allow": [
+				"Image"
+			]
 		},
 		{
 			"name": "images",
 			"label": "Images",
 			"required": false,
 			"listType": "node",
-			"type": "list"
+			"type": "list",
+			"allow": [
+				"Image"
+			]
 		},
 		{
 			"name": "audio",
-			"label": "Audioguide",
+			"label": "Audio guide",
 			"required": false,
-			"type": "node"
+			"type": "node",
+			"allow": [
+				"binary_content"
+			]
 		},
 		{
 			"name": "location",

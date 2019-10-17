@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { getExhibition } from '../api';
+import { getExhibit } from '../api';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import useWebsocketBridge from '../eventbus';
@@ -20,7 +20,7 @@ const trans = {
         section: "Section"
     }
 }
-export default function ExhibitionView({ match }) {
+export default function ExhibitView({ match }) {
     // Create state for the component
     const [exhibit, setExhibit] = useState();
     const id = match.params.id;
@@ -28,12 +28,12 @@ export default function ExhibitionView({ match }) {
 
     // Register event callback to update the state when content gets changed in Gentics Mesh
     useWebsocketBridge(() => {
-        getExhibition(id, lang).then(setExhibit);
+        getExhibit(id, lang).then(setExhibit);
     });
 
     // Use effect hook to set the content when the path changes
     useEffect(() => {
-        getExhibition(id, lang).then(setExhibit);
+        getExhibit(id, lang).then(setExhibit);
     }, [id, lang]);
 
     if (!exhibit) {
@@ -53,7 +53,7 @@ export default function ExhibitionView({ match }) {
                         <Row>
                             <Col lg={12} className="text-center">
                                 <div className="exhibit-title">
-                                    <h2 className="section-heading"><Link to={`/${lang}/exhibitions`}>&lt;&lt;</Link>&nbsp;{exhibit.fields.name}</h2>
+                                    <h2 className="section-heading"><Link to={`/${lang}/exhibits`}>&lt;&lt;</Link>&nbsp;{exhibit.fields.name}</h2>
                                 </div>
                             </Col>
                         </Row>
