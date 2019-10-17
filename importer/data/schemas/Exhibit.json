@@ -37,7 +37,7 @@
 		},
 		{
 			"name": "title_image",
-			"label": "Titel Image",
+			"label": "Title Image",
 			"required": false,
 			"type": "node",
 			"allow": [
