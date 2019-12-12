@@ -2,7 +2,7 @@ version: "3"
 services:
 
   mesh:
-    image: gentics/mesh:1.3.1
+    image: gentics/mesh:1.3.2
     environment:
       - MESH_ELASTICSEARCH_URL=http://elasticsearch:9200
       - MESH_ELASTICSEARCH_START_EMBEDDED=false
@@ -12,7 +12,7 @@ services:
       - MESH_HTTP_CORS_ENABLE=true
       - MESH_INITIAL_ADMIN_PASSWORD=admin
       - MESH_INITIAL_ADMIN_PASSWORD_FORCE_RESET=false
-      - MESH_HTTP_CORS_ORIGIN_PATTERN=http://localhost:3000|http://localhost:3010
+      - MESH_HTTP_CORS_ORIGIN_PATTERN=http://localhost:3000|http://localhost:8080
       - MESH_HTTP_CORS_ALLOW_CREDENTIALS=true
     ports:
       - '8080:8080'

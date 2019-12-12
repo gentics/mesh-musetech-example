@@ -1,0 +1,65 @@
+{
+  "name": "Curator",
+  "displayField": "title",
+  "container": true,
+  "fields": [
+    {
+      "name": "title",
+      "label": "Title",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "label": "Description",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "duration",
+      "label": "Duration (min)",
+      "required": true,
+      "type": "number"
+    },
+    {
+      "name": "size",
+      "label": "Size",
+      "required": true,
+      "type": "number"
+    },
+    {
+      "name": "price",
+      "label": "Price",
+      "required": true,
+      "type": "number"
+    },
+    {
+      "name": "guides",
+      "label": "guides",
+      "required": false,
+      "type": "node",
+      "allow": [
+        "Curator"
+      ]
+    },
+    {
+      "name": "image",
+      "label": "Image",
+      "required": false,
+      "type": "node",
+      "allow": [
+        "Image"
+      ]
+    },
+		{
+			"name": "dates",
+			"label": "dates",
+			"type": "list",
+			"required": false,
+			"listType": "micronode",
+			"allow": [
+				"TourDate"
+      ]
+    }
+  ]
+}

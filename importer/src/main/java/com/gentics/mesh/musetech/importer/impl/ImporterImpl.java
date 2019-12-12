@@ -28,7 +28,9 @@ import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListItemImpl;
 import com.gentics.mesh.core.rest.project.ProjectResponse;
 import com.gentics.mesh.core.rest.schema.impl.MicroschemaReferenceImpl;
 import com.gentics.mesh.core.rest.schema.impl.SchemaCreateRequest;
+import com.gentics.mesh.core.rest.user.NodeReference;
 import com.gentics.mesh.importer.helper.ImportUtils;
+import com.gentics.mesh.json.JsonUtil;
 import com.gentics.mesh.musetech.model.exhibit.Exhibit;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitContent;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitList;
@@ -41,9 +43,11 @@ import com.gentics.mesh.musetech.model.screen.ScreenList;
 import com.gentics.mesh.musetech.model.video.Video;
 import com.gentics.mesh.musetech.model.video.VideoList;
 import com.gentics.mesh.parameter.client.NodeParametersImpl;
+import com.gentics.mesh.rest.client.MeshRestClient;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.vertx.core.http.impl.MimeMapping;
 import io.vertx.core.logging.Logger;
@@ -63,6 +67,8 @@ public class ImporterImpl extends AbstractImporter {
 	private final List<SchemaCreateRequest> schemas;
 	private final List<MicroschemaCreateRequest> microschemas;
 	private final List<NodeResponse> nodes;
+	private final List<NodeResponse> curators;
+	private final List<NodeResponse> tours;
 
 	public ImporterImpl(String hostname, int port, boolean ssl, String projectName) throws IOException {
 		super(hostname, port, ssl);
@@ -74,6 +80,8 @@ public class ImporterImpl extends AbstractImporter {
 		this.schemas = ImportUtils.loadSchemas("data/schemas");
 		this.microschemas = ImportUtils.loadMicroschemas("data/microschemas");
 		this.nodes = ImportUtils.loadNodes("data/nodes");
+		this.curators = ImportUtils.loadNodes("data/curators");
+		this.tours = ImportUtils.loadNodes("data/tours");
 	}
 
 	private Completable importScreens(NodeResponse folder) {
@@ -384,6 +392,8 @@ public class ImporterImpl extends AbstractImporter {
 	public Completable createFolders(ProjectResponse project) {
 		String uuid = project.getRootNode().getUuid();
 		Set<Completable> operations = new HashSet<>();
+		operations.add(createFolder(uuid, "tours", "Tours").flatMapCompletable(this::importTours));
+		operations.add(createFolder(uuid, "curators", "Curators").flatMapCompletable(this::importCurators));
 		operations.add(createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages));
 		operations.add(createFolder(uuid, "video", "Videos").flatMapCompletable(this::importVideos));
 		operations.add(createFolder(uuid, "exhibits", "Exhibits").flatMapCompletable(this::importContents)
@@ -405,6 +415,14 @@ public class ImporterImpl extends AbstractImporter {
 		return Completable.merge(operations);
 	}
 
+	private Completable importCurators(NodeResponse folder) {
+		return importNodes(client, folder.getUuid(), curators, projectName);
+	}
+
+	private Completable importTours(NodeResponse folder) {
+		return importNodes(client, folder.getUuid(), tours, projectName);
+	}
+
 	/**
 	 * Import videos - Create a new node for each video in the given folder node.
 	 * 
@@ -421,9 +439,9 @@ public class ImporterImpl extends AbstractImporter {
 		return Completable.merge(operations);
 	}
 
-	private Single<NodeResponse> createFolder(String uuid, String slug, String name) {
+	private Single<NodeResponse> createFolder(String parentUuid, String slug, String name) {
 		NodeCreateRequest request = new NodeCreateRequest();
-		request.setParentNodeUuid(uuid);
+		request.setParentNodeUuid(parentUuid);
 		request.setLanguage("en");
 		request.setSchemaName("folder");
 		request.getFields().put("name", new StringFieldImpl().setString(name));
@@ -533,4 +551,20 @@ public class ImporterImpl extends AbstractImporter {
 	public Completable importNodes(ProjectResponse project) {
 		return ImportUtils.importNodes(client, nodes, project);
 	}
+
+	public static Completable importNodes(MeshRestClient client, String parentNodeUuid, List<NodeResponse> nodes, String projectName) {
+		return Observable.fromIterable(nodes)
+			.map(node -> {
+				NodeReference nodeRef = new NodeReference();
+				nodeRef.setUuid(parentNodeUuid);
+				node.setParentNode(nodeRef);
+				return node;
+			})
+			.flatMapCompletable(node -> {
+				String uuid = node.getUuid();
+				NodeCreateRequest request = JsonUtil.readValue(node.toJson(), NodeCreateRequest.class);
+				return client.createNode(uuid, projectName, request).toCompletable();
+			});
+	}
+
 }
