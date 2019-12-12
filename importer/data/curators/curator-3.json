@@ -1,5 +1,5 @@
 {
-  "uuid": "217f8c981ada4642bf8c981adaa642c3",
+  "uuid": "860496dfe05f43858496dfe05fc385c3",
   "language": "en",
   "schema": {
     "name": "Curator"
@@ -8,6 +8,9 @@
     "title": "Dr.",
     "firstname": "Ellie",
     "lastname": "Sattler",
-    "email": "e.sattler@bmh.demo"
+    "email": "e.sattler@bmh.demo",
+    "image": {
+      "uuid": "21ffc92da9c94c58bfc92da9c92c587f"
+    }
   }
 }

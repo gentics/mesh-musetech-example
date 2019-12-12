@@ -297,21 +297,28 @@ public class ImporterImpl extends AbstractImporter {
 		request.getFields().put("license", new StringFieldImpl().setString(license));
 		request.getFields().put("source", new StringFieldImpl().setString(source));
 		request.getFields().put("attribution", new StringFieldImpl().setString(attr));
-		return client.createNode(projectName, request).toSingle().flatMap(node -> {
+		return client.createNode(image.getUuid(), projectName, request).toSingle().flatMap(node -> {
 			fileIdMap.put(filename, node.getUuid());
 			InputStream ins = new FileInputStream(imageFile);
 			long size = imageFile.length();
+			String version = node.getVersion();
+			// TODO: Somehow some nodes get version 0.2 after creation - wtf?
+			version = "draft";
 			Single<NodeResponse> upload = client
-				.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", ins, size, filename,
+				.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), version, "binary", ins, size, filename,
 					"image/jpeg")
-				.toSingle();
+				.toSingle().doOnError(err -> {
+					log.error("Got error on upload for node {" + node.getUuid() + "} on version {" + node.getVersion() + "}");
+				});
 			return upload.flatMap(updatedNode -> {
 				// Check whether the image contains focal point info
 				if (image.getFpx() != null && image.getFpy() != null) {
 					BinaryField binField = updatedNode.getFields().getBinaryField("binary");
 					binField.setFocalPoint(image.getFpx(), image.getFpy());
 					NodeUpdateRequest nodeUpdateRequest = new NodeUpdateRequest();
-					nodeUpdateRequest.setVersion(updatedNode.getVersion());
+					String version2 = updatedNode.getVersion();
+					version2 = "draft";
+					nodeUpdateRequest.setVersion(version2);
 					nodeUpdateRequest.setLanguage("en");
 					nodeUpdateRequest.getFields().put("binary", binField);
 					return client.updateNode(projectName, node.getUuid(), nodeUpdateRequest).toSingle();
@@ -320,7 +327,7 @@ public class ImporterImpl extends AbstractImporter {
 				}
 			});
 		}).doOnError(err -> {
-			log.error("Error while creating image {" + name + "} for node {" + parentNodeUuid + "}");
+			log.error("Error while creating image {" + name + "/" + image.getUuid() + "} for node {" + parentNodeUuid + "}");
 		}).doOnSuccess(node -> {
 			log.info("Created image {" + name + "} with id {" + node.getUuid() + "}");
 		});
@@ -392,9 +399,10 @@ public class ImporterImpl extends AbstractImporter {
 	public Completable createFolders(ProjectResponse project) {
 		String uuid = project.getRootNode().getUuid();
 		Set<Completable> operations = new HashSet<>();
-		operations.add(createFolder(uuid, "tours", "Tours").flatMapCompletable(this::importTours));
-		operations.add(createFolder(uuid, "curators", "Curators").flatMapCompletable(this::importCurators));
-		operations.add(createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages));
+		Completable importImages = createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages);
+		Completable importCurators = createFolder(uuid, "curators", "Curators").flatMapCompletable(this::importCurators);
+		Completable importTours = createFolder(uuid, "tours", "Tours").flatMapCompletable(this::importTours);
+		operations.add(importImages.andThen(importCurators).andThen(importTours));
 		operations.add(createFolder(uuid, "video", "Videos").flatMapCompletable(this::importVideos));
 		operations.add(createFolder(uuid, "exhibits", "Exhibits").flatMapCompletable(this::importContents)
 			.andThen(createFolder(uuid, "screens", "Screens").flatMapCompletable(this::importScreens)));

@@ -1,7 +1,7 @@
 {
-  "name": "Curator",
+  "name": "Tour",
   "displayField": "title",
-  "container": true,
+  "container": false,
   "fields": [
     {
       "name": "title",
@@ -37,7 +37,8 @@
       "name": "guides",
       "label": "guides",
       "required": false,
-      "type": "node",
+      "type": "list",
+      "listType": "node",
       "allow": [
         "Curator"
       ]

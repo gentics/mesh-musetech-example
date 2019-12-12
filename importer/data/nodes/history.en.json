@@ -14,7 +14,10 @@
                 "fields": {
                     "time": "1608-1725",
                     "subheading": "Our Humble Beginnings",
-                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+                    "image": {
+                        "uuid": "4b2663b5db3f437da663b5db3f237d00"
+                    }
                 },
                 "microschema": {
                     "name": "HistoryEpisode"
@@ -24,7 +27,10 @@
                 "fields": {
                     "time": "1810-1863",
                     "subheading": "Early days",
-                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+                    "image": {
+                        "uuid": "6dbdac8a7c46431cbdac8a7c46631ce1"
+                    }
                 },
                 "microschema": {
                     "name": "HistoryEpisode"
@@ -34,7 +40,10 @@
                 "fields": {
                     "time": "1871-1912",
                     "subheading": "Public service",
-                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+                    "image": {
+                        "uuid": "a9d3498bcb454f5093498bcb45ef506f"
+                    }
                 },
                 "microschema": {
                     "name": "HistoryEpisode"
@@ -44,7 +53,10 @@
                 "fields": {
                     "time": "1912-1953",
                     "subheading": "Expansion",
-                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!"
+                    "text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!",
+                    "image": {
+                        "uuid": "41aa48fa120540dfaa48fa120570df1f"
+                    }
                 },
                 "microschema": {
                     "name": "HistoryEpisode"

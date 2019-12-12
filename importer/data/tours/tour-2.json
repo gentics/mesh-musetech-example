@@ -1,20 +1,22 @@
 {
-  "uuid": "d63310fbf16b4344b310fbf16bd34478",
+  "uuid": "c40ddd7a2257493a8ddd7a2257e93a0b",
   "language": "en",
   "schema": {
     "name": "Tour"
   },
   "fields": {
-    "title": "",
-    "description": "",
+    "title": "Tour 2",
+    "description": "TBD",
     "size": 25,
     "duration": 45,
     "price": 6.0,
-    "image": "ABC",
+    "image": {
+      "uuid": "868bfa8104ea42ed8bfa8104ea32edec"
+    },
     "dates": [
       {
         "fields": {
-          "date": "Fr, 27.12.2019 15:30 – 16:15 Uhr",
+          "date": "2019-12-09T14:14:39.599Z",
           "seats": 22
         },
         "microschema": {
@@ -23,7 +25,7 @@
       },
       {
         "fields": {
-          "date": "Mo, 31.12.2019 15:30 – 16:15 Uhr",
+          "date": "2019-12-09T14:14:39.599Z",
           "seats": 10
         },
         "microschema": {
@@ -32,7 +34,7 @@
       },
       {
         "fields": {
-          "date": "Sa, 28.12.2019 15:30 – 16:15 Uhr",
+          "date": "2019-12-09T14:14:39.599Z",
           "seats": 4
         },
         "microschema": {

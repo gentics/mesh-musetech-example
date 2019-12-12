@@ -4,6 +4,7 @@ import com.gentics.mesh.core.rest.common.RestModel;
 
 public class Image implements RestModel {
 
+	private String uuid;
 	private String name;
 	private String attribution;
 	private String license;
@@ -12,6 +13,10 @@ public class Image implements RestModel {
 	private Float fpy;
 
 	public Image() {
+	}
+
+	public String getUuid() {
+		return uuid;
 	}
 
 	public String getAttribution() {
