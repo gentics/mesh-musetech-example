@@ -224,7 +224,7 @@ public class ImporterImpl extends AbstractImporter {
 					return Single.error(new RuntimeException("Could not find image with name {" + imageName + "}"));
 				}
 				contents.add(
-					createImage(imgFolder.getUuid(), image)
+					createImage(imgFolder.getUuid(), image, false)
 						.doOnSuccess(imageResp -> {
 							// Now add node references for images to the exhibit fields
 
@@ -279,7 +279,7 @@ public class ImporterImpl extends AbstractImporter {
 			});
 	}
 
-	private Single<NodeResponse> createImage(String parentNodeUuid, Image image) {
+	private Single<NodeResponse> createImage(String parentNodeUuid, Image image, boolean useUuid) {
 		String name = image.getName();
 		String attr = image.getAttribution();
 		String license = image.getLicense();
@@ -297,13 +297,22 @@ public class ImporterImpl extends AbstractImporter {
 		request.getFields().put("license", new StringFieldImpl().setString(license));
 		request.getFields().put("source", new StringFieldImpl().setString(source));
 		request.getFields().put("attribution", new StringFieldImpl().setString(attr));
-		return client.createNode(image.getUuid(), projectName, request).toSingle().flatMap(node -> {
-			fileIdMap.put(filename, node.getUuid());
+
+		Single<NodeResponse> resp = null;
+		if (useUuid) {
+			resp = client.createNode(image.getUuid(), projectName, request).toSingle();
+		} else {
+			resp = client.createNode(projectName, request).toSingle();
+		}
+		return resp.flatMap(node -> {
+			if (useUuid) {
+				fileIdMap.put(filename, node.getUuid());
+			}
 			InputStream ins = new FileInputStream(imageFile);
 			long size = imageFile.length();
 			String version = node.getVersion();
 			// TODO: Somehow some nodes get version 0.2 after creation - wtf?
-			version = "draft";
+			// version = "draft";
 			Single<NodeResponse> upload = client
 				.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), version, "binary", ins, size, filename,
 					"image/jpeg")
@@ -317,7 +326,7 @@ public class ImporterImpl extends AbstractImporter {
 					binField.setFocalPoint(image.getFpx(), image.getFpy());
 					NodeUpdateRequest nodeUpdateRequest = new NodeUpdateRequest();
 					String version2 = updatedNode.getVersion();
-					version2 = "draft";
+					// version2 = "draft";
 					nodeUpdateRequest.setVersion(version2);
 					nodeUpdateRequest.setLanguage("en");
 					nodeUpdateRequest.getFields().put("binary", binField);
@@ -327,7 +336,7 @@ public class ImporterImpl extends AbstractImporter {
 				}
 			});
 		}).doOnError(err -> {
-			log.error("Error while creating image {" + name + "/" + image.getUuid() + "} for node {" + parentNodeUuid + "}");
+			log.error("Error while creating image {" + name + "} for node {" + parentNodeUuid + "}");
 		}).doOnSuccess(node -> {
 			log.info("Created image {" + name + "} with id {" + node.getUuid() + "}");
 		});
@@ -402,11 +411,11 @@ public class ImporterImpl extends AbstractImporter {
 		Completable importImages = createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages);
 		Completable importCurators = createFolder(uuid, "curators", "Curators").flatMapCompletable(this::importCurators);
 		Completable importTours = createFolder(uuid, "tours", "Tours").flatMapCompletable(this::importTours);
-		operations.add(importImages.andThen(importCurators).andThen(importTours));
+
 		operations.add(createFolder(uuid, "video", "Videos").flatMapCompletable(this::importVideos));
 		operations.add(createFolder(uuid, "exhibits", "Exhibits").flatMapCompletable(this::importContents)
 			.andThen(createFolder(uuid, "screens", "Screens").flatMapCompletable(this::importScreens)));
-		return Completable.merge(operations);
+		return importImages.andThen(importCurators).andThen(importTours).andThen(Completable.merge(operations));
 	}
 
 	/**
@@ -418,7 +427,7 @@ public class ImporterImpl extends AbstractImporter {
 	private Completable importImages(NodeResponse folder) {
 		Set<Completable> operations = new HashSet<>();
 		for (Image image : imageList.getImages()) {
-			operations.add(createImage(folder.getUuid(), image).ignoreElement());
+			operations.add(createImage(folder.getUuid(), image, true).ignoreElement());
 		}
 		return Completable.merge(operations);
 	}
@@ -508,7 +517,6 @@ public class ImporterImpl extends AbstractImporter {
 		micronode.getFields().put("start", new StringFieldImpl().setString(content.getStart()));
 		micronode.getFields().put("duration", new NumberFieldImpl().setNumber(content.getDuration()));
 		micronode.getFields().put("location", new StringFieldImpl().setString(content.getLocation()));
-
 		addMedia(micronode, content);
 		return micronode;
 	}
