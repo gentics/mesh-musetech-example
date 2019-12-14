@@ -67,7 +67,7 @@ public class ImporterImpl extends AbstractImporter {
 	private final List<SchemaCreateRequest> schemas;
 	private final List<MicroschemaCreateRequest> microschemas;
 	private final List<NodeResponse> nodes;
-	private final List<NodeResponse> curators;
+	private final List<NodeResponse> persons;
 	private final List<NodeResponse> tours;
 
 	public ImporterImpl(String hostname, int port, boolean ssl, String projectName) throws IOException {
@@ -80,7 +80,7 @@ public class ImporterImpl extends AbstractImporter {
 		this.schemas = ImportUtils.loadSchemas("data/schemas");
 		this.microschemas = ImportUtils.loadMicroschemas("data/microschemas");
 		this.nodes = ImportUtils.loadNodes("data/nodes");
-		this.curators = ImportUtils.loadNodes("data/curators");
+		this.persons = ImportUtils.loadNodes("data/persons");
 		this.tours = ImportUtils.loadNodes("data/tours");
 	}
 
@@ -409,13 +409,13 @@ public class ImporterImpl extends AbstractImporter {
 		String uuid = project.getRootNode().getUuid();
 		Set<Completable> operations = new HashSet<>();
 		Completable importImages = createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages);
-		Completable importCurators = createFolder(uuid, "curators", "Curators").flatMapCompletable(this::importCurators);
+		Completable importPersons = createFolder(uuid, "persons", "Persons").flatMapCompletable(this::importPersons);
 		Completable importTours = createFolder(uuid, "tours", "Tours").flatMapCompletable(this::importTours);
 
 		operations.add(createFolder(uuid, "video", "Videos").flatMapCompletable(this::importVideos));
 		operations.add(createFolder(uuid, "exhibits", "Exhibits").flatMapCompletable(this::importContents)
 			.andThen(createFolder(uuid, "screens", "Screens").flatMapCompletable(this::importScreens)));
-		return importImages.andThen(importCurators).andThen(importTours).andThen(Completable.merge(operations));
+		return importImages.andThen(importPersons).andThen(importTours).andThen(Completable.merge(operations));
 	}
 
 	/**
@@ -432,8 +432,8 @@ public class ImporterImpl extends AbstractImporter {
 		return Completable.merge(operations);
 	}
 
-	private Completable importCurators(NodeResponse folder) {
-		return importNodes(client, folder.getUuid(), curators, projectName);
+	private Completable importPersons(NodeResponse folder) {
+		return importNodes(client, folder.getUuid(), persons, projectName);
 	}
 
 	private Completable importTours(NodeResponse folder) {

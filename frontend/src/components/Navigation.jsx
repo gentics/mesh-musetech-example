@@ -21,6 +21,9 @@ const trans = {
     
     about: "Über uns",
     about_path: "/de/über",
+
+    tours: "Führungen",
+    tours_path: "/de/führungen",
     
     history: "Geschichte",
     history_path: "/de/geschichte",
@@ -37,6 +40,9 @@ const trans = {
 
     about: "About",
     about_path: "/en/about",
+
+    tours: "Tours",
+    tours_path: "/en/tours",
 
     history: "History",
     history_path: "/en/history",
@@ -83,6 +89,9 @@ export default function Navigation({ languages }) {
               </LinkContainer>
               <LinkContainer to={i18n.price_path}>
                 <Nav.Link>{i18n.price}</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to={i18n.tours_path}>
+                <Nav.Link>{i18n.tours}</Nav.Link>
               </LinkContainer>
               <LinkContainer to={i18n.history_path}>
                 <Nav.Link>{i18n.history}</Nav.Link>

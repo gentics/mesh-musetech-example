@@ -1,5 +1,5 @@
 {
-	"name": "Curator",
+	"name": "Person",
 	"displayField": "email",
 	"container": false,
 	"fields": [

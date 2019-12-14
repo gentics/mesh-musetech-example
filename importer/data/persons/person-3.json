@@ -2,7 +2,7 @@
   "uuid": "860496dfe05f43858496dfe05fc385c3",
   "language": "en",
   "schema": {
-    "name": "Curator"
+    "name": "Person"
   },
   "fields": {
     "title": "Dr.",

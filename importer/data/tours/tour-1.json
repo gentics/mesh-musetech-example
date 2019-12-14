@@ -5,6 +5,7 @@
     "name": "Tour"
   },
   "fields": {
+    "id": "tour-1:en",
     "title": "Tour 1",
     "description": "TBD",
     "size": 45,

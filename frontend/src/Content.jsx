@@ -5,6 +5,8 @@ import ScreenView from './screens/ScreenView';
 import DynamicContent from './DynamicContent';
 import ExhibitsList from './exhibits/ExhibitsList';
 import ExhibitView from './exhibits/ExhibitView';
+import TourList from './tours/TourList';
+import TourView from './tours/TourView';
 import LanguageContext from './languageContext';
 import ExhibitPlayer from './templates/ExhibitPlayer';
 import Imprint from './templates/Imprint';
@@ -31,6 +33,10 @@ function LanguageContent({ match }) {
       <Switch>
         <Route exact path="/:lang(en|de)/exhibits" component={ExhibitsList} />
         <Route exact path="/:lang(en|de)/exhibits/:id" component={ExhibitView} />
+
+        <Route exact path="/:lang(en|de)/tours" component={TourList} />
+        <Route exact path="/:lang(en|de)/tours/:id" component={TourView} />
+
         <Route exact path="/:lang(en|de)/player/:id" component={ExhibitPlayer} />
 
         <Route path="/:lang(en|de)/screens/" exact component={ScreenList} />
