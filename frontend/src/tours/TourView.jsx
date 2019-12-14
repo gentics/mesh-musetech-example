@@ -99,19 +99,3 @@ export default function TourView({ match }) {
         </>
     );
 }
-
-
-function Player({ data }) {
-    if (data == null || data.path === null) {
-        return "";
-    }
-
-    return (
-        <>
-            <audio controls key={data.path}>
-                <source src={`${config.meshUrl}/musetech/webroot${data.path}`} type="audio/mp3" />
-                Your browser does not support the audio element.
-            </audio>
-        </>
-    );
-}
