@@ -23,9 +23,12 @@ export default function SSOTest({ match }) {
                         )}
 
                         {!!keycloak.authenticated && (
-                            <button type="button" onClick={() => keycloak.logout()}>
-                                Logout
+                            <>
+                                <div> {` Token: ${keycloak.token}`}</div>
+                                <button type="button" onClick={() => keycloak.logout()}>
+                                    Logout
         </button>
+                            </>
                         )}
                     </div>
                     <div>Initialized: {` ${initialized} `}</div>
