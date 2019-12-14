@@ -102,6 +102,9 @@ export default function Navigation({ languages }) {
               <LinkContainer to={i18n.about_path}>
                 <Nav.Link>{i18n.about}</Nav.Link>
               </LinkContainer>
+              <LinkContainer to="/en/ssotest">
+                <Nav.Link>SSOTest</Nav.Link>
+              </LinkContainer>
               <div className="nav-divider d-none d-lg-block" />
               <Route languages={languages} render={(routeProps) =>
                 <LanguageToggle {...routeProps} languages={languages} />}

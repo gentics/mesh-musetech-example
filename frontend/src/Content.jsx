@@ -10,7 +10,7 @@ import TourView from './tours/TourView';
 import LanguageContext from './languageContext';
 import ExhibitPlayer from './templates/ExhibitPlayer';
 import Imprint from './templates/Imprint';
-
+import SSOTest from './sso/SSOTest'
 export default function Content() {
   return (
     <Switch>
@@ -43,6 +43,7 @@ function LanguageContent({ match }) {
         <Route path="/:lang(en|de)/screens/:id" exact component={ScreenView} />
 
         <Route path="/:lang(en|de)/imprint/" component={Imprint} />
+        <Route path="/:lang(en|de)/ssotest" component={SSOTest} />
         {/* 
           All other requests will be handled by the DynamicContent component.
           It will try to load the content for the given path from Mesh and use
