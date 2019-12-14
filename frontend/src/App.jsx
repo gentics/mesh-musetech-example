@@ -4,7 +4,11 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Keycloak from 'keycloak-js';
 import { KeycloakProvider } from 'react-keycloak';
 
-const keycloak = new Keycloak();
+const keycloak = new Keycloak({
+  url: 'http://localhost:8082/auth',
+  realm: 'master-test',
+  clientId: 'react'
+});
 
 
 export default class App extends React.Component {
