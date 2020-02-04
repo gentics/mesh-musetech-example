@@ -7,7 +7,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "bootstrap": "^4.3.1",
-    "dompurify": "^1.0.11",
+    "dompurify": "^2.0.8",
     "lorem-ipsum": "^2.0.3",
     "react": "^16.7.0-alpha.0",
     "react-bootstrap": "^1.0.0-beta.12",
@@ -17,7 +17,7 @@
     "react-hook-shared-state": "^0.0.2",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1",
+    "react-scripts": "^3.3.1",
     "react-slick": "^0.25.2",
     "slick-carousel": "^1.8.1",
     "vertx3-eventbus-client": "^3.5.4"
