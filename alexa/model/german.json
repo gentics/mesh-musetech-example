@@ -1,0 +1,185 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "jentiks",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "GetStockLevel",
+                    "slots": [
+                        {
+                            "name": "vehicle",
+                            "type": "VEHICLES"
+                        }
+                    ],
+                    "samples": [
+                        "wieviele {vehicle} es noch gibt",
+                        "sind {vehicle} noch verfügbar",
+                        "wieviele {vehicle} gibt es",
+                        "wieviele {vehicle} gibt es noch",
+                        "wieviele {vehicle} noch verfügbar sind",
+                        "wieviele {vehicle} sind noch verfügbar",
+                        "wieviele {vehicle}  gibt es noch"
+                    ]
+                },
+                {
+                    "name": "GetVehiclePrice",
+                    "slots": [
+                        {
+                            "name": "vehicle",
+                            "type": "VEHICLES"
+                        }
+                    ],
+                    "samples": [
+                        "wieviel eine {vehicle} kostet",
+                        "wieviel ein {vehicle} kostet",
+                        "preis von einem {vehicle}",
+                        "preis von {vehicle}",
+                        "wie teuer ist eine {vehicle}",
+                        "wie teuer ist ein {vehicle}",
+                        "wie ist der preis von einem {vehicle}",
+                        "wie ist der preis von {vehicle}",
+                        "was kostet ein {vehicle}",
+                        "was ist der preis von {vehicle}"
+                    ]
+                },
+                {
+                    "name": "ReserveVehicle",
+                    "slots": [
+                        {
+                            "name": "vehicle",
+                            "type": "VEHICLES"
+                        }
+                    ],
+                    "samples": [
+                        "{vehicle} reservieren",
+                        "reservier {vehicle}",
+                        "kaufe einen {vehicle}",
+                        "kaufe ein {vehicle}",
+                        "reservier ein {vehicle}",
+                        "reservier einen {vehicle}",
+                        "einen {vehicle} reservieren",
+                        "reserviere einen {vehicle}",
+                        "bestelle ein {vehicle}",
+                        "bestelle einen {vehicle}",
+                        "bestelle {vehicle}",
+                        "reservice ein {vehicle}",
+                        "reserviere {vehicle}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "VEHICLES",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "maize blue",
+                                "synonyms": [
+                                    "Solar Car"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ford GT",
+                                "synonyms": [
+                                    "ford"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Indian Empress"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gulfstream G550",
+                                "synonyms": [
+                                    "Golfstrom",
+                                    "Gulfstream"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "trabi",
+                                "synonyms": [
+                                    "trabant"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "space shuttle",
+                                "synonyms": [
+                                    "shuttle"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tesla"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "CATEGORIES",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "schiffe",
+                                "synonyms": [
+                                    "yachten",
+                                    "yacht"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "flugzeuge",
+                                "synonyms": [
+                                    "flugzeug",
+                                    "planes",
+                                    "plane"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "autos",
+                                "synonyms": [
+                                    "jeeps",
+                                    "yeeps",
+                                    "yeep",
+                                    "car"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

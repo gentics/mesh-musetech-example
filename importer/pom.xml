@@ -7,7 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<mesh.version>1.0.0</mesh.version>
+		<mesh.version>1.4.0</mesh.version>
 	</properties>
 
 	<dependencies>

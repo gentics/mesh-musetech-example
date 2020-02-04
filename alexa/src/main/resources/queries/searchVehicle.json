@@ -1,0 +1,18 @@
+{
+	"query": {
+		"bool": {
+			"must": [
+				{
+					"match": {
+						"schema.name.raw": "vehicle"
+					}
+				},
+				{
+					"match": {
+						"fields.name": ""
+					}
+				}
+			]
+		}
+	}
+}
