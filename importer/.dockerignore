@@ -3,7 +3,7 @@ data/music
 
 # Only include header video & intro
 data/video
-!data/video/video.json
+!data/video/videos.json
 !data/video/header.webm
 !data/video/intro.webm
 
