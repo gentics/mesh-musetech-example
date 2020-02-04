@@ -1,0 +1,12 @@
+# Exclude audio sources
+data/music
+
+# Only include header video & intro
+data/video
+!data/video/video.json
+!data/video/header.webm
+!data/video/intro.webm
+
+# Exclude audioguide wav files
+**/*.wav
+**/*.au

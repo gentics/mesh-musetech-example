@@ -29,6 +29,7 @@ import com.gentics.mesh.core.rest.project.ProjectResponse;
 import com.gentics.mesh.core.rest.schema.impl.MicroschemaReferenceImpl;
 import com.gentics.mesh.core.rest.schema.impl.SchemaCreateRequest;
 import com.gentics.mesh.importer.helper.ImportUtils;
+import com.gentics.mesh.musetech.ImporterConfig;
 import com.gentics.mesh.musetech.model.exhibit.Exhibit;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitContent;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitList;
@@ -64,9 +65,9 @@ public class ImporterImpl extends AbstractImporter {
 	private final List<MicroschemaCreateRequest> microschemas;
 	private final List<NodeResponse> nodes;
 
-	public ImporterImpl(String hostname, int port, boolean ssl, String projectName) throws IOException {
-		super(hostname, port, ssl);
-		this.projectName = projectName;
+	public ImporterImpl(ImporterConfig config) throws IOException {
+		super(config);
+		this.projectName = config.getProjectName();
 		this.exhibitList = ExhibitList.load();
 		this.imageList = ImageList.load();
 		this.videoList = VideoList.load();

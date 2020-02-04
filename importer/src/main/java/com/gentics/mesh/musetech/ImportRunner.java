@@ -11,42 +11,38 @@ import com.gentics.mesh.musetech.importer.impl.ImporterImpl;
  */
 public class ImportRunner {
 
-	private static final String PROJECT_NAME = "musetech";
-
-	public final Importer importer;
+	public static Importer importer;
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		new ImportRunner(args).run();
-	}
-
-	public ImportRunner(String[] args) throws IOException {
-		boolean local = checkLocalArg(args);
-		if (local) {
-			System.out.println("Running on localhost");
-			importer = new ImporterImpl("localhost", 8080, false, PROJECT_NAME);
-		} else {
-			System.out.println("Running on cms.musetech.getmesh.io");
-			importer = new ImporterImpl("cms.musetech.getmesh.io", 443, true, PROJECT_NAME);
-		}
+		ImporterConfig config = new ImporterConfig();
+		applyEnvs(config);
+		importer = new ImporterImpl(config);
 		importer.login("admin", "admin");
+		run();
 	}
 
-	private boolean checkLocalArg(String[] args) {
-		// TODO use command line library to parse args
-		if (args.length == 1) {
-			String modeArg = args[0];
-			if (modeArg.equalsIgnoreCase("--local")) {
-				return true;
-			} else if (modeArg.equalsIgnoreCase("--prod")) {
-				return false;
-			}
-			return true;
-		} else {
-			return true;
+	private static void applyEnvs(ImporterConfig config) {
+		String hostStr = System.getenv("MUSETECH_MESH_HOST");
+		if (hostStr != null) {
+			config.setHostname(hostStr);
+		}
+		String portStr = System.getenv("MUSETECH_MESH_PORT");
+		if (portStr != null) {
+			config.setPort(Integer.valueOf(portStr));
+		}
+		String sslStr = System.getenv("MUSETECH_MESH_SSL");
+		if (sslStr != null) {
+			config.setSsl(Boolean.valueOf(sslStr));
+		}
+		String projectNameStr = System.getenv("MUSETECH_PROJECT_NAME");
+		if (projectNameStr != null) {
+			config.setProjectName(projectNameStr);
 		}
 	}
 
-	private void run() {
+
+
+	public static void run() {
 		importer.purge();
 		long start = System.currentTimeMillis();
 		importer.loadOrCreateProject()

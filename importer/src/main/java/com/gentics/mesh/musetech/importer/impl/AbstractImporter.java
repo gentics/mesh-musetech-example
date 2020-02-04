@@ -6,6 +6,7 @@ import java.util.Map;
 import com.gentics.mesh.core.rest.project.ProjectResponse;
 import com.gentics.mesh.core.rest.role.RolePermissionRequest;
 import com.gentics.mesh.importer.helper.ImportUtils;
+import com.gentics.mesh.musetech.ImporterConfig;
 import com.gentics.mesh.musetech.importer.Importer;
 import com.gentics.mesh.rest.client.MeshRestClient;
 
@@ -18,8 +19,11 @@ public abstract class AbstractImporter implements Importer {
 
 	protected Map<String, String> fileIdMap = new HashMap<>();
 
-	public AbstractImporter(String hostname, int port, boolean ssl) {
-		client = MeshRestClient.create(hostname, port, ssl);
+	protected ImporterConfig config;
+
+	public AbstractImporter(ImporterConfig config) {
+		this.config = config;
+		client = MeshRestClient.create(config.getHostname(), config.getPort(),config.isSsl());
 	}
 
 	@Override
