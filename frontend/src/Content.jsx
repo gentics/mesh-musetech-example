@@ -5,10 +5,12 @@ import ScreenView from './screens/ScreenView';
 import DynamicContent from './DynamicContent';
 import ExhibitsList from './exhibits/ExhibitsList';
 import ExhibitView from './exhibits/ExhibitView';
+import TourList from './tours/TourList';
+import TourView from './tours/TourView';
 import LanguageContext from './languageContext';
 import ExhibitPlayer from './templates/ExhibitPlayer';
 import Imprint from './templates/Imprint';
-
+import SSOTest from './sso/SSOTest'
 export default function Content() {
   return (
     <Switch>
@@ -31,12 +33,17 @@ function LanguageContent({ match }) {
       <Switch>
         <Route exact path="/:lang(en|de)/exhibits" component={ExhibitsList} />
         <Route exact path="/:lang(en|de)/exhibits/:id" component={ExhibitView} />
+
+        <Route exact path="/:lang(en|de)/tours" component={TourList} />
+        <Route exact path="/:lang(en|de)/tours/:id" component={TourView} />
+
         <Route exact path="/:lang(en|de)/player/:id" component={ExhibitPlayer} />
 
         <Route path="/:lang(en|de)/screens/" exact component={ScreenList} />
         <Route path="/:lang(en|de)/screens/:id" exact component={ScreenView} />
 
         <Route path="/:lang(en|de)/imprint/" component={Imprint} />
+        <Route path="/:lang(en|de)/ssotest" component={SSOTest} />
         {/* 
           All other requests will be handled by the DynamicContent component.
           It will try to load the content for the given path from Mesh and use

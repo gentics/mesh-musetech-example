@@ -28,7 +28,9 @@ import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListItemImpl;
 import com.gentics.mesh.core.rest.project.ProjectResponse;
 import com.gentics.mesh.core.rest.schema.impl.MicroschemaReferenceImpl;
 import com.gentics.mesh.core.rest.schema.impl.SchemaCreateRequest;
+import com.gentics.mesh.core.rest.user.NodeReference;
 import com.gentics.mesh.importer.helper.ImportUtils;
+import com.gentics.mesh.json.JsonUtil;
 import com.gentics.mesh.musetech.ImporterConfig;
 import com.gentics.mesh.musetech.model.exhibit.Exhibit;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitContent;
@@ -42,9 +44,11 @@ import com.gentics.mesh.musetech.model.screen.ScreenList;
 import com.gentics.mesh.musetech.model.video.Video;
 import com.gentics.mesh.musetech.model.video.VideoList;
 import com.gentics.mesh.parameter.client.NodeParametersImpl;
+import com.gentics.mesh.rest.client.MeshRestClient;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.vertx.core.http.impl.MimeMapping;
 import io.vertx.core.logging.Logger;
@@ -64,6 +68,8 @@ public class ImporterImpl extends AbstractImporter {
 	private final List<SchemaCreateRequest> schemas;
 	private final List<MicroschemaCreateRequest> microschemas;
 	private final List<NodeResponse> nodes;
+	private final List<NodeResponse> persons;
+	private final List<NodeResponse> tours;
 
 	public ImporterImpl(ImporterConfig config) throws IOException {
 		super(config);
@@ -75,6 +81,8 @@ public class ImporterImpl extends AbstractImporter {
 		this.schemas = ImportUtils.loadSchemas("data/schemas");
 		this.microschemas = ImportUtils.loadMicroschemas("data/microschemas");
 		this.nodes = ImportUtils.loadNodes("data/nodes");
+		this.persons = ImportUtils.loadNodes("data/persons");
+		this.tours = ImportUtils.loadNodes("data/tours");
 	}
 
 	private Completable importScreens(NodeResponse folder) {
@@ -217,7 +225,7 @@ public class ImporterImpl extends AbstractImporter {
 					return Single.error(new RuntimeException("Could not find image with name {" + imageName + "}"));
 				}
 				contents.add(
-					createImage(imgFolder.getUuid(), image)
+					createImage(imgFolder.getUuid(), image, false)
 						.doOnSuccess(imageResp -> {
 							// Now add node references for images to the exhibit fields
 
@@ -272,7 +280,7 @@ public class ImporterImpl extends AbstractImporter {
 			});
 	}
 
-	private Single<NodeResponse> createImage(String parentNodeUuid, Image image) {
+	private Single<NodeResponse> createImage(String parentNodeUuid, Image image, boolean useUuid) {
 		String name = image.getName();
 		String attr = image.getAttribution();
 		String license = image.getLicense();
@@ -290,21 +298,37 @@ public class ImporterImpl extends AbstractImporter {
 		request.getFields().put("license", new StringFieldImpl().setString(license));
 		request.getFields().put("source", new StringFieldImpl().setString(source));
 		request.getFields().put("attribution", new StringFieldImpl().setString(attr));
-		return client.createNode(projectName, request).toSingle().flatMap(node -> {
-			fileIdMap.put(filename, node.getUuid());
+
+		Single<NodeResponse> resp = null;
+		if (useUuid) {
+			resp = client.createNode(image.getUuid(), projectName, request).toSingle();
+		} else {
+			resp = client.createNode(projectName, request).toSingle();
+		}
+		return resp.flatMap(node -> {
+			if (useUuid) {
+				fileIdMap.put(filename, node.getUuid());
+			}
 			InputStream ins = new FileInputStream(imageFile);
 			long size = imageFile.length();
+			String version = node.getVersion();
+			// TODO: Somehow some nodes get version 0.2 after creation - wtf?
+			// version = "draft";
 			Single<NodeResponse> upload = client
-				.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), node.getVersion(), "binary", ins, size, filename,
+				.updateNodeBinaryField(projectName, node.getUuid(), node.getLanguage(), version, "binary", ins, size, filename,
 					"image/jpeg")
-				.toSingle();
+				.toSingle().doOnError(err -> {
+					log.error("Got error on upload for node {" + node.getUuid() + "} on version {" + node.getVersion() + "}");
+				});
 			return upload.flatMap(updatedNode -> {
 				// Check whether the image contains focal point info
 				if (image.getFpx() != null && image.getFpy() != null) {
 					BinaryField binField = updatedNode.getFields().getBinaryField("binary");
 					binField.setFocalPoint(image.getFpx(), image.getFpy());
 					NodeUpdateRequest nodeUpdateRequest = new NodeUpdateRequest();
-					nodeUpdateRequest.setVersion(updatedNode.getVersion());
+					String version2 = updatedNode.getVersion();
+					// version2 = "draft";
+					nodeUpdateRequest.setVersion(version2);
 					nodeUpdateRequest.setLanguage("en");
 					nodeUpdateRequest.getFields().put("binary", binField);
 					return client.updateNode(projectName, node.getUuid(), nodeUpdateRequest).toSingle();
@@ -385,11 +409,14 @@ public class ImporterImpl extends AbstractImporter {
 	public Completable createFolders(ProjectResponse project) {
 		String uuid = project.getRootNode().getUuid();
 		Set<Completable> operations = new HashSet<>();
-		operations.add(createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages));
+		Completable importImages = createFolder(uuid, "image", "Images").flatMapCompletable(this::importImages);
+		Completable importPersons = createFolder(uuid, "persons", "Persons").flatMapCompletable(this::importPersons);
+		Completable importTours = createFolder(uuid, "tours", "Tours").flatMapCompletable(this::importTours);
+
 		operations.add(createFolder(uuid, "video", "Videos").flatMapCompletable(this::importVideos));
 		operations.add(createFolder(uuid, "exhibits", "Exhibits").flatMapCompletable(this::importContents)
 			.andThen(createFolder(uuid, "screens", "Screens").flatMapCompletable(this::importScreens)));
-		return Completable.merge(operations);
+		return importImages.andThen(importPersons).andThen(importTours).andThen(Completable.merge(operations));
 	}
 
 	/**
@@ -401,9 +428,17 @@ public class ImporterImpl extends AbstractImporter {
 	private Completable importImages(NodeResponse folder) {
 		Set<Completable> operations = new HashSet<>();
 		for (Image image : imageList.getImages()) {
-			operations.add(createImage(folder.getUuid(), image).ignoreElement());
+			operations.add(createImage(folder.getUuid(), image, true).ignoreElement());
 		}
 		return Completable.merge(operations);
+	}
+
+	private Completable importPersons(NodeResponse folder) {
+		return importNodes(client, folder.getUuid(), persons, projectName);
+	}
+
+	private Completable importTours(NodeResponse folder) {
+		return importNodes(client, folder.getUuid(), tours, projectName);
 	}
 
 	/**
@@ -422,9 +457,9 @@ public class ImporterImpl extends AbstractImporter {
 		return Completable.merge(operations);
 	}
 
-	private Single<NodeResponse> createFolder(String uuid, String slug, String name) {
+	private Single<NodeResponse> createFolder(String parentUuid, String slug, String name) {
 		NodeCreateRequest request = new NodeCreateRequest();
-		request.setParentNodeUuid(uuid);
+		request.setParentNodeUuid(parentUuid);
 		request.setLanguage("en");
 		request.setSchemaName("folder");
 		request.getFields().put("name", new StringFieldImpl().setString(name));
@@ -483,7 +518,6 @@ public class ImporterImpl extends AbstractImporter {
 		micronode.getFields().put("start", new StringFieldImpl().setString(content.getStart()));
 		micronode.getFields().put("duration", new NumberFieldImpl().setNumber(content.getDuration()));
 		micronode.getFields().put("location", new StringFieldImpl().setString(content.getLocation()));
-
 		addMedia(micronode, content);
 		return micronode;
 	}
@@ -534,4 +568,20 @@ public class ImporterImpl extends AbstractImporter {
 	public Completable importNodes(ProjectResponse project) {
 		return ImportUtils.importNodes(client, nodes, project);
 	}
+
+	public static Completable importNodes(MeshRestClient client, String parentNodeUuid, List<NodeResponse> nodes, String projectName) {
+		return Observable.fromIterable(nodes)
+			.map(node -> {
+				NodeReference nodeRef = new NodeReference();
+				nodeRef.setUuid(parentNodeUuid);
+				node.setParentNode(nodeRef);
+				return node;
+			})
+			.flatMapCompletable(node -> {
+				String uuid = node.getUuid();
+				NodeCreateRequest request = JsonUtil.readValue(node.toJson(), NodeCreateRequest.class);
+				return client.createNode(uuid, projectName, request).toCompletable();
+			});
+	}
+
 }

@@ -1,0 +1,16 @@
+{
+  "uuid": "860496dfe05f43858496dfe05fc385c3",
+  "language": "en",
+  "schema": {
+    "name": "Person"
+  },
+  "fields": {
+    "title": "Dr.",
+    "firstname": "Ellie",
+    "lastname": "Sattler",
+    "email": "e.sattler@bmh.demo",
+    "image": {
+      "uuid": "21ffc92da9c94c58bfc92da9c92c587f"
+    }
+  }
+}

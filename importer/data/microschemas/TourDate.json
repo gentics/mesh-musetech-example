@@ -1,0 +1,17 @@
+{
+	"name": "TourDate",
+	"fields": [
+		{
+			"name": "date",
+			"label": "Date",
+			"required": false,
+			"type": "date"
+		},
+		{
+			"name": "seats",
+			"label": "Free seats",
+			"required": false,
+			"type": "number"
+		}
+	]
+}

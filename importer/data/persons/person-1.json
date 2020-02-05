@@ -1,0 +1,16 @@
+{
+  "uuid": "05f9e0049eab4022b9e0049eab0022a2",
+  "language": "en",
+  "schema": {
+    "name": "Person"
+  },
+  "fields": {
+    "title": "Dr.",
+    "firstname": "Peter",
+    "lastname": "Shaw",
+    "email": "p.shaw@bmh.demo",
+    "image": {
+      "uuid": "19a7af9b0ef64a0aa7af9b0ef6ca0a91"
+    }
+  }
+}

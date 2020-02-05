@@ -1,0 +1,51 @@
+{
+  "uuid": "8ef019cc5bd144dab019cc5bd184da21",
+  "language": "en",
+  "schema": {
+    "name": "Tour"
+  },
+  "fields": {
+    "id": "tour-3:en",
+    "title": "History of the steam engine",
+    "description": "TBD",
+    "size": 25,
+    "duration": 45,
+    "price": 6.0,
+    "image": {
+      "uuid": "4a72a22103bc436cb2a22103bc936cc3"
+    },
+    "guides": [
+      "05f9e0049eab4022b9e0049eab0022a2",
+      "4a22c333d71e44dfa2c333d71e54dfbb"
+    ],
+    "dates": [
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 22
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      },
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 10
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      },
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 4
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      }
+    ]
+  }
+}

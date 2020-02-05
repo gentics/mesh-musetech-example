@@ -170,6 +170,105 @@ export async function loadContentByPath(path) {
   `, { "path": "/" + path }).then(response => response.node);
 }
 
+
+export async function getTour(id, lang) {
+  return graphQl(`
+  query Tour($path: String) {
+    node(path: $path) {
+      uuid
+      path
+      ... on Tour {
+        fields {
+          id
+          title
+          price
+          size
+          description
+          guides {
+            ... on Person {
+              fields {
+                title
+                firstname
+                lastname
+                email
+              }
+            }
+          }
+          image(lang: "en") {
+            path
+            ... on Image {
+              fields {
+                attribution
+                binary {
+                  dominantColor
+                }
+              }
+            }
+          }
+          dates {
+            ... on TourDate {
+              fields {
+                date
+                seats
+              }
+            }
+          }
+        }
+      }
+    }
+  }  
+  `, { "path": "/tours/" + id + ":" + lang }).then(response => response.node);
+}
+
+
+export async function getTours(lang, page) {
+  return graphQl(`
+  query Tours($lang: [String], $page: Long) {
+    node(path: "/tours") {
+      children(lang: $lang, page: $page) {
+        hasPreviousPage
+        hasNextPage
+        pageCount
+        elements {
+          uuid
+          path
+          ... on Tour {
+            fields {
+              id
+              title
+              description
+              size
+              price
+              guides {
+                ... on Person {
+                  fields {
+                    title
+                    firstname
+                    lastname
+                    email
+                  }
+                }
+              }
+              image(lang: "en") {
+                path
+                ... on Image {
+                  fields {
+                    attribution
+                    binary {
+                      dominantColor
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }   
+  `, { lang, page }).then(response => response.node);
+}
+
 export async function getExhibit(id, lang) {
   return graphQl(`
   query Exhibit($path: String) {

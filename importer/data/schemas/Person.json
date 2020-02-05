@@ -1,7 +1,7 @@
 {
-	"name": "Curator",
+	"name": "Person",
 	"displayField": "email",
-	"container": true,
+	"container": false,
 	"fields": [
 		{
 			"name": "email",
