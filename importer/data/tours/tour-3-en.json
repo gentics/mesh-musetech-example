@@ -5,9 +5,10 @@
     "name": "Tour"
   },
   "fields": {
-    "id": "tour-3:en",
+    "public_number": "tour-3",
+    "slug": "tour-3:en",
     "title": "History of the steam engine",
-    "description": "TBD",
+    "description": "Follow through time and interactively discover our steam engine exhibits. Experiment with the one first steam engines the Hero's engine which was invented in the year 800 BC and see how it is similar to steam turbines which are used in nuclear power plants.",
     "size": 25,
     "duration": 45,
     "price": 6.0,

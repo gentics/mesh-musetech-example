@@ -2,10 +2,9 @@ version: "3"
 services:
 
   mesh:
-    image: gentics/mesh:1.3.2
+    image: gentics/mesh:1.4.0
     environment:
       - MESH_ELASTICSEARCH_URL=http://elasticsearch:9200
-      - MESH_ELASTICSEARCH_START_EMBEDDED=false
       - MESH_AUTH_KEYSTORE_PASS=changeme
       - MESH_GRAPH_DB_DIRECTORY=null
       - MESH_MONITORING_ENABLED=false

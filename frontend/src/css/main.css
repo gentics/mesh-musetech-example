@@ -849,6 +849,15 @@ audio {
   padding-top: 1em;
 }
 
+/** Tour **/
+.tour-detail-caption {
+  /*max-width: 650px;*/
+  margin: 0 auto;
+  padding: 25px;
+  text-align: center;
+}
+
+
 .info-left {
   text-align: center;
 }

@@ -103,7 +103,7 @@ function Tour({ tour }) {
     let color = image.fields.binary.dominantColor;
     return (
         <Col md={3} className="tour-item">
-            <Link to={`/${lang}/tours/${tour.fields.id}`} className="tour-link">
+            <Link to={`/${lang}/tours/${tour.fields.public_number}`} className="tour-link">
                 <picture style={{ background: color }}>
                     <source media="(min-width: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=500&mode=smart&crop=fp`}></source>
                     <source media="(min-width: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=400&w=500&mode=smart&crop=fp`}></source>

@@ -1,12 +1,18 @@
 {
   "name": "Tour",
   "displayField": "title",
-  "segmentField": "id",
+  "segmentField": "slug",
   "container": false,
   "fields": [
     {
-      "name": "id",
-      "label": "Id",
+      "name": "public_number",
+      "label": "Public Number",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "slug",
+      "label": "Slug",
       "required": true,
       "type": "string"
     },

@@ -1,0 +1,52 @@
+{
+  "uuid": "8ef019cc5bd144dab019cc5bd184da21",
+  "language": "de",
+  "schema": {
+    "name": "Tour"
+  },
+  "fields": {
+    "public_number": "tour-3",
+    "slug": "tour-3:de",
+    "title": "Die Geschichte der Dampfmaschine",
+    "description": "Wandern Sie mit uns durch die Zeit und entdecken Sie unser interaktiven Dampfmaschinen. Experimentieren Sie mit eine der ersten Dampfmaschinen, dem Heronsball welcher im Jahr 800 v. Chr. erfunden wurde.",
+    "size": 25,
+    "duration": 45,
+    "price": 6.0,
+    "image": {
+      "uuid": "4a72a22103bc436cb2a22103bc936cc3"
+    },
+    "guides": [
+      "05f9e0049eab4022b9e0049eab0022a2",
+      "4a22c333d71e44dfa2c333d71e54dfbb"
+    ],
+    "dates": [
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 22
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      },
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 10
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      },
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 4
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      }
+    ]
+  }
+}

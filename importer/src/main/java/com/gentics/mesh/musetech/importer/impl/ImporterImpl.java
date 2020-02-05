@@ -584,4 +584,23 @@ public class ImporterImpl extends AbstractImporter {
 			});
 	}
 
+	public void run() {
+		purge();
+		long start = System.currentTimeMillis();
+		loadOrCreateProject()
+			.flatMapCompletable(project -> {
+				return createMicroschemas().andThen(createSchemas())
+					.andThen(createFolders(project))
+					.andThen(importNodes(project))
+					.andThen(publishNodes(project))
+					.andThen(grantPermissions(project));
+			})
+			.subscribe(() -> {
+				long dur = System.currentTimeMillis() - start;
+				System.out.println("Import done. Took: " + dur + "[ms]");
+			}, err -> {
+				err.printStackTrace();
+			});
+	}
+
 }

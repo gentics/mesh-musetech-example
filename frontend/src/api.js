@@ -179,7 +179,8 @@ export async function getTour(id, lang) {
       path
       ... on Tour {
         fields {
-          id
+          public_number
+          slug
           title
           price
           size
@@ -234,7 +235,8 @@ export async function getTours(lang, page) {
           path
           ... on Tour {
             fields {
-              id
+              public_number
+              slug
               title
               description
               size

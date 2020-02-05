@@ -1,0 +1,48 @@
+{
+  "uuid": "d63310fbf16b4344b310fbf16bd34478",
+  "language": "en",
+  "schema": {
+    "name": "Tour"
+  },
+  "fields": {
+    "public_number": "tour-1",
+    "slug": "tour-1:en",
+    "title": "Tour 1 - The Assyrian Empire",
+    "description": "The Assyrian kings ruled from the ninth to seventh century BC. During this time they decorated their palaces with great monuments and masterful relief art which vividly depict warfare, rituals, mythology and hunting. Follow in the footsteps of these masterworks and learn more about the importance of these ancient treasures.",
+    "size": 45,
+    "duration": 30,
+    "price": 4.0,
+    "image": {
+      "uuid": "868bfa8104ea42ed8bfa8104ea32edec"
+    },
+    "dates": [
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 22
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      },
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 10
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      },
+      {
+        "fields": {
+          "date": "2019-12-09T14:14:39.599Z",
+          "seats": 4
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      }
+    ]
+  }
+}

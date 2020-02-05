@@ -11,14 +11,12 @@ import com.gentics.mesh.musetech.importer.impl.ImporterImpl;
  */
 public class ImportRunner {
 
-	public static Importer importer;
-
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		ImporterConfig config = new ImporterConfig();
 		applyEnvs(config);
-		importer = new ImporterImpl(config);
+		Importer importer = new ImporterImpl(config);
 		importer.login("admin", "admin");
-		run();
+		importer.run();
 	}
 
 	private static void applyEnvs(ImporterConfig config) {
@@ -38,27 +36,6 @@ public class ImportRunner {
 		if (projectNameStr != null) {
 			config.setProjectName(projectNameStr);
 		}
-	}
-
-
-
-	public static void run() {
-		importer.purge();
-		long start = System.currentTimeMillis();
-		importer.loadOrCreateProject()
-			.flatMapCompletable(project -> {
-				return importer.createMicroschemas().andThen(importer.createSchemas())
-					.andThen(importer.createFolders(project))
-					.andThen(importer.importNodes(project))
-					.andThen(importer.publishNodes(project))
-					.andThen(importer.grantPermissions(project));
-			})
-			.subscribe(() -> {
-				long dur = System.currentTimeMillis() - start;
-				System.out.println("Import done. Took: " + dur + "[ms]");
-			}, err -> {
-				err.printStackTrace();
-			});
 	}
 
 }

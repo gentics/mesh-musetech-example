@@ -70,19 +70,9 @@ export default function TourView({ match }) {
                         <Row>
                             <Col lg={12} className="tour-location text-muted">
                                 <div>
-                                    <b>{i18n.seats}:</b> {tour.fields.size} &nbsp;&nbsp;                                
-                                    <b>{i18n.price}:</b> {tour.fields.price}
+                                    <b>{i18n.seats}:</b> {tour.fields.size} &nbsp;&nbsp;
+                                    <b>{i18n.price}:</b> {tour.fields.price} €
                                 </div>
-                            </Col>
-                        </Row>
-                        <Row> 
-                            <Col lg={{ span: 6, offset: 3 }} className="text-left text-muted">
-                                <b>Description</b>
-                            </Col>
-                        </Row>
-                        <Row> 
-                            <Col lg={{ span: 6, offset: 3 }} className="text-left">
-                                <b>{tour.fields.description}</b>
                             </Col>
                         </Row>
                         <Row>
