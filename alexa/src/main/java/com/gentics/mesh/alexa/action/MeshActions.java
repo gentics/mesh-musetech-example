@@ -36,7 +36,7 @@ public class MeshActions {
 
 	@Inject
 	public MeshActions(SkillConfig config) {
-		client = MeshRestClient.create(config.getHost(), config.getPort(), config.isSsl());
+		client = MeshRestClient.create(config.getMeshServerHost(), config.getMeshServerPort(), config.isMeshServerSslFlag());
 		String apiKey = config.getMeshApiKey();
 		if (apiKey != null) {
 			client.setAPIKey(apiKey);

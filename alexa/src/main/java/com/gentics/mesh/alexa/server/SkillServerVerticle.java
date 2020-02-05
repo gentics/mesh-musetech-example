@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gentics.mesh.alexa.GenticsSkill;
+import com.gentics.mesh.alexa.dagger.config.SkillConfig;
 import com.gentics.mesh.alexa.intent.SkillIntentHandler;
 
 import io.vertx.core.AbstractVerticle;
@@ -28,8 +29,11 @@ public class SkillServerVerticle extends AbstractVerticle {
 	private HttpServer server;
 	private SkillIntentHandler intentHandler;
 
+	private SkillConfig config;
+
 	@Inject
-	public SkillServerVerticle(SkillIntentHandler intentHandler) {
+	public SkillServerVerticle(SkillConfig config, SkillIntentHandler intentHandler) {
+		this.config = config;
 		this.intentHandler = intentHandler;
 	}
 
@@ -39,7 +43,7 @@ public class SkillServerVerticle extends AbstractVerticle {
 
 		addRoutes(router);
 
-		int port = 4445;
+		int port = config.getServerPort();
 		server = vertx.createHttpServer()
 			.requestHandler(router::handle)
 			.listen(port, lh -> {

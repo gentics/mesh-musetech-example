@@ -8,8 +8,8 @@
 
 	<properties>
 		<vertx.version>3.7.0</vertx.version>
-		<mesh.version>0.32.0</mesh.version>
-		<dagger.version>2.22.1</dagger.version>
+		<mesh.version>1.4.0</mesh.version>
+		<dagger.version>2.24</dagger.version>
 		<mainClass>com.gentics.mesh.alexa.GenticsSkill</mainClass>
 	</properties>
 

@@ -7,11 +7,13 @@ public class SkillConfig {
 
 	private String meshApiKey;
 
-	private String host = "demo.getmesh.io";
+	private String meshHost = "demo.getmesh.io";
 
-	private int port = 443;
+	private int serverPort = 4445;
 
-	private boolean ssl = true;
+	private int meshPort = 443;
+
+	private boolean meshSsl = true;
 
 	public String getMeshApiKey() {
 		return meshApiKey;
@@ -22,30 +24,38 @@ public class SkillConfig {
 		return this;
 	}
 
-	public String getHost() {
-		return host;
+	public String getMeshServerHost() {
+		return meshHost;
 	}
 
-	public SkillConfig setHost(String host) {
-		this.host = host;
+	public SkillConfig setMeshHost(String host) {
+		this.meshHost = host;
 		return this;
 	}
 
-	public int getPort() {
-		return port;
+	public int getMeshServerPort() {
+		return meshPort;
 	}
 
-	public SkillConfig setPort(int port) {
-		this.port = port;
+	public SkillConfig setMeshPort(int meshPort) {
+		this.meshPort = meshPort;
 		return this;
 	}
 
-	public boolean isSsl() {
-		return ssl;
+	public boolean isMeshServerSslFlag() {
+		return meshSsl;
 	}
 
-	public SkillConfig setSsl(boolean ssl) {
-		this.ssl = ssl;
+	public SkillConfig setMeshSsl(boolean ssl) {
+		this.meshSsl = ssl;
 		return this;
+	}
+
+	public int getServerPort() {
+		return serverPort;
+	}
+
+	public void setServerPort(int serverPort) {
+		this.serverPort = serverPort;
 	}
 }

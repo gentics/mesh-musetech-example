@@ -51,17 +51,17 @@ public class GenticsSkill {
 	private static void applyEnv(SkillConfig config) {
 		String host = System.getenv("MESH_HOST");
 		if (host != null) {
-			config.setHost(host);
+			config.setMeshHost(host);
 		}
 
 		String port = System.getenv("MESH_PORT");
 		if (port != null) {
-			config.setPort(Integer.parseInt(port));
+			config.setMeshPort(Integer.parseInt(port));
 		}
 
 		String ssl = System.getenv("MESH_SSL");
 		if (ssl != null) {
-			config.setSsl(Boolean.parseBoolean(ssl));
+			config.setMeshSsl(Boolean.parseBoolean(ssl));
 		}
 
 		String key = System.getenv("MESH_APIKEY");
