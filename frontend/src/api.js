@@ -186,12 +186,18 @@ export async function getTour(id, lang) {
           size
           description
           guides {
+            uuid
             ... on Person {
               fields {
                 title
                 firstname
                 lastname
                 email
+                image {
+                  ... on Image {
+                    path
+                  }
+                }
               }
             }
           }
@@ -241,16 +247,6 @@ export async function getTours(lang, page) {
               description
               size
               price
-              guides {
-                ... on Person {
-                  fields {
-                    title
-                    firstname
-                    lastname
-                    email
-                  }
-                }
-              }
               image(lang: "en") {
                 path
                 ... on Image {

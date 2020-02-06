@@ -11,12 +11,12 @@ import config from '../config.json';
 
 const i18n = {
     en: {
-        heading: "Discover new worlds",
-        tours: "Tours"
+        heading: "Tours",
+        tours: "Discover new worlds"
     },
     de: {
-        heading: "Entdecke neue Welten",
-        tours: "Führungen"
+        heading: "Führungen",
+        tours: "Entdecke neue Welten"
     }
 }
 
@@ -31,7 +31,7 @@ export default function TourList({ match, location }) {
             <Header lead={trans.tours} heading={trans.heading} className="tourhead" />
 
             <section className="page-section bg-light">
-                <SearchForm location={location} />
+                <TourListElement />
                 <Container>
                     <Row>
                         <Col md={12} className="text-center">
@@ -46,13 +46,12 @@ export default function TourList({ match, location }) {
     );
 }
 
-function SearchForm({ location }) {
+function TourListElement() {
 
     // Create state for the component
     const [nodeResponse, setNodeResponse] = useState();
 
     let lang = useContext(LanguageContext);
-    let trans = i18n[lang];
 
     // Register event callback to update the state when content gets changed in Gentics Mesh    
     useWebsocketBridge(() => {
@@ -73,18 +72,12 @@ function SearchForm({ location }) {
         results = nodeResponse.nodes.elements;
     }
 
-    const emptyPlaceholder = (
-        <Col md={12} className="text-center text-muted">
-            <Container>{trans.not_found}</Container>
-        </Col>
-    );
 
-    const resultList = results.length ? (results.filter(tour => {
+    const resultList = results.filter(tour => {
         return tour.fields.image != null;
     }).map(tour => (
         <Tour tour={tour} key={tour.uuid} />
-    ))) : emptyPlaceholder
-
+    ));
 
     return (
         <div className="search-area">
@@ -102,21 +95,29 @@ function Tour({ tour }) {
     let image = tour.fields.image;
     let color = image.fields.binary.dominantColor;
     return (
-        <Col md={3} className="tour-item">
-            <Link to={`/${lang}/tours/${tour.fields.public_number}`} className="tour-link">
-                <picture style={{ background: color }}>
-                    <source media="(min-width: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=500&mode=smart&crop=fp`}></source>
-                    <source media="(min-width: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=400&w=500&mode=smart&crop=fp`}></source>
-                    <source media="(min-width: 1280px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=500&w=500&mode=smart&crop=fp`}></source>
-                    <img alt={tour.fields.name} srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=300&mode=smart&crop=fp`} className="img-responsive img-fluid" />
-                </picture>
-                <div className="image-attribution">
-                    <p>{attribution}</p>
-                </div>
-            </Link>
-            <div className="tour-caption">
-                <p>{tour.fields.name}</p>
-            </div>
+        <Col md={4} className="tour-item">
+            <Row>
+                <Col lg={12} className="text-center tour-title" >
+                    <div className="tour-caption">
+                        <h3>{tour.fields.title}</h3>
+                    </div>
+                </Col>
+            </Row>
+            <Row>
+                <Col lg={12} className="text-center">
+                    <Link to={`/${lang}/tours/${tour.fields.public_number}`} className="tour-link">
+                        <picture style={{ background: color }}>
+                            <source media="(min-width: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=500&mode=smart&crop=fp`}></source>
+                            <source media="(min-width: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=400&w=500&mode=smart&crop=fp`}></source>
+                            <source media="(min-width: 1280px)" srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=500&w=500&mode=smart&crop=fp`}></source>
+                            <img alt={tour.fields.name} srcSet={`${config.meshUrl}/musetech/webroot${image.path}?h=300&w=300&mode=smart&crop=fp`} className="img-responsive img-fluid" />
+                        </picture>
+                        <div className="image-attribution">
+                            <p>{attribution}</p>
+                        </div>
+                    </Link>
+                </Col>
+            </Row>
         </Col>
     )
 }

@@ -9,3 +9,4 @@ node_modules
 .settings
 .classpath
 *.orig
+.vscode

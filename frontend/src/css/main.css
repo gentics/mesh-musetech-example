@@ -280,8 +280,7 @@
     background-image: url("../img/exhibit-bg.jpg");
     background-color: rgb(36, 36, 36);
   }
-
-
+  
   .fade-in {
     opacity: 1;
     animation-name: fadeInOpacity;
@@ -850,6 +849,7 @@ audio {
 }
 
 /** Tour **/
+
 .tour-detail-caption {
   /*max-width: 650px;*/
   margin: 0 auto;
@@ -857,6 +857,20 @@ audio {
   text-align: center;
 }
 
+header.tourhead {
+  background-image: url("../img/tour-bg.jpg");
+  background-color: rgb(36, 36, 36);
+}
+
+.tour-item {
+  right: 0;
+  padding: 10px;
+  margin: 0 0 15px;
+}
+
+.tour-title {
+  min-height: 75px;
+}
 
 .info-left {
   text-align: center;

@@ -7,7 +7,7 @@
   "fields": {
     "public_number": "tour-1",
     "slug": "tour-1:de",
-    "title": "Tour 1 - Das Assyrisches Reich",
+    "title": "Das Assyrisches Reich",
     "description": "Die Könige im Assyrisches Reich herschten vom neunten bis zum siebten Jahrhundert v. Chr. Während dieser Zeit haben Sie ihre Paläste mit einzigartigen Monumenten und meisterhafter Relief Kunst, welche lebhaft Krieg, Ritualien, Mythologie und die Jagt veranschaulicht, verziert. Folgen Sie in den Fußstapfen dieser Meisterweke und lernen Sie mehr über die diese altertümlichen Schätze.",
     "size": 45,
     "duration": 30,
@@ -15,6 +15,12 @@
     "image": {
       "uuid": "868bfa8104ea42ed8bfa8104ea32edec"
     },
+    "guides": [
+      "a9cc082bebaa4e608c082bebaa7e6093",
+      "860496dfe05f43858496dfe05fc385c3",
+      "05f9e0049eab4022b9e0049eab0022a2",
+      "4a22c333d71e44dfa2c333d71e54dfbb"
+    ],
     "dates": [
       {
         "fields": {

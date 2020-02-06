@@ -41,6 +41,18 @@ export default function TourView({ match }) {
 
     let i18n = trans[lang];
 
+    const guides = tour.fields.guides.filter(guide => {
+        return guide != null;
+    }).map(guide => (
+        <Guide guide={guide} key={guide.uuid} />
+    ));
+
+    const dates = tour.fields.dates.filter(date => {
+        return date != null;
+    }).map(date => (
+        <TourDate date={date} key={date.uuid} />
+    ));
+
     return (
         <>
             <Navigation />
@@ -82,10 +94,60 @@ export default function TourView({ match }) {
                                 </div>
                             </Col>
                         </Row>
+                        <Row>
+                            <Col lg={{ span: 8, offset: 2 }} className="text-center">
+                                <div className="exhibit-detail-caption">
+                                    <p className="text-muted">Guides</p>
+                                    {guides}
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col lg={{ span: 8, offset: 2 }} className="text-center">
+                                <div className="exhibit-detail-caption">
+                                    <p className="text-muted">Dates</p>
+                                    {dates}
+                                </div>
+                            </Col>
+                        </Row>
                     </div>
                 </Container>
             </section>
             <Footer />
         </>
     );
+}
+
+function TourDate({ date }) {
+    return (
+        <Container>
+            <Row>
+                <Col lg={{ span: 8, offset: 2 }} className="text-center">
+                    Date: {date.fields.date}
+                    Seats: {date.fields.seats}
+                </Col>
+            </Row>
+        </Container>
+    )
+}
+
+function Guide({ guide }) {
+    return (
+        <Container>
+            <Row>
+                <Col lg={{ span: 8, offset: 2 }} className="text-center">
+                    <p>{guide.fields.title} {guide.fields.firstname} {guide.fields.lastname}</p>
+                    <p>{guide.fields.email}</p>
+
+                    <picture>
+                        <source media="(min-height: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=200&mode=smart`}></source>
+                        <source media="(min-height: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=300&mode=smart`}></source>
+                        <source media="(min-height: 1280px)" srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=300&mode=smart`}></source>
+                        <img alt={guide.fields.firstname} srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=300&mode=smart`} className="img-responsive img-fluid" />
+                    </picture>
+
+                </Col>
+            </Row>
+        </Container>
+    )
 }

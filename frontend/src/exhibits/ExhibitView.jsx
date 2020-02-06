@@ -73,18 +73,18 @@ export default function ExhibitView({ match }) {
                         <Row>
                             <Col lg={12} className="exhibit-location text-muted">
                                 <div>
-                                    <b>{i18n.building}:</b> {location.fields.building} &nbsp;&nbsp;                            
-                                    <b>{i18n.level}:</b> {location.fields.level} &nbsp;&nbsp;                                
+                                    <b>{i18n.building}:</b> {location.fields.building} &nbsp;&nbsp;
+                                    <b>{i18n.level}:</b> {location.fields.level} &nbsp;&nbsp;
                                     <b>{i18n.section}:</b> {location.fields.section}
                                 </div>
                             </Col>
                         </Row>
-                        <Row> 
+                        <Row>
                             <Col lg={{ span: 6, offset: 3 }} className="text-left text-muted">
                                 <b>Audio Guide</b>
                             </Col>
                         </Row>
-                        <Row> 
+                        <Row>
                             <Col lg={{ span: 6, offset: 3 }} className="text-left">
                                 <Player data={exhibit.fields.audio} />
                             </Col>
