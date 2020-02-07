@@ -12,6 +12,7 @@
     "size": 25,
     "duration": 45,
     "price": 6.0,
+    "location": "Main Hall",
     "image": {
       "uuid": "f1fcc4aa981148a1bcc4aa981108a1be"
     },

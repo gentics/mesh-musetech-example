@@ -1,0 +1,33 @@
+{
+    "uuid": "03569950b1a04d9e82202c2c3a0baf17",
+    "parentNode": {
+        "uuid": "484718f6f8884a90b49d5d020809e038"
+    },
+    "schema": {
+        "name": "Screen"
+    },
+    "language": "en",
+    "fields": {
+        "id": "screen-2",
+        "name": "Grand Hall Screen 1",
+        "description": "Promo screen",
+        "location": "Grand Hall",
+        "contents": [
+            {
+                "microschema": {
+                    "name": "ScreenEvent"
+                },
+                "fields": {
+                    "title": "Discover",
+                    "teaser": "New exhibition tour",
+                    "video": {
+                        "uuid": "e988d8c38e1a4a22895835a2424dd72d"
+                    },
+                    "tour": {
+                        "uuid": "8ef019cc5bd144dab019cc5bd184da21"
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -51,11 +51,13 @@
             "source": "https://pixabay.com/de/videos/feuer-teilchen-brillantine-2248/"
         },
         {
+            "uuid": "e0ceada4f9d84b9f9a3e9a1bb9e3c27b",
             "import": true,
             "name": "intro.webm",
             "source": "mixin"
         },
         {
+            "uuid": "e988d8c38e1a4a22895835a2424dd72d",
             "import": true,
             "name": "header.webm",
             "source": "mixin"

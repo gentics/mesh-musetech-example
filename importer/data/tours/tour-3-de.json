@@ -12,6 +12,7 @@
     "size": 25,
     "duration": 45,
     "price": 6.0,
+    "location": "Hauptsaal",
     "image": {
       "uuid": "4a72a22103bc436cb2a22103bc936cc3"
     },

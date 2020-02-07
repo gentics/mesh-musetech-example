@@ -47,6 +47,12 @@
       "type": "number"
     },
     {
+			"name": "location",
+			"label": "Ort",
+			"required": false,
+			"type": "string"
+		},
+    {
       "name": "guides",
       "label": "guides",
       "required": false,

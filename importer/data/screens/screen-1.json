@@ -1,0 +1,57 @@
+{
+    "uuid": "99f71cd042db4073949f68065af46fb3",
+    "parentNode": {
+        "uuid": "484718f6f8884a90b49d5d020809e038"
+    },
+    "schema": {
+        "name": "Screen"
+    },
+    "language": "en",
+    "fields": {
+        "id": "screen-1",
+        "name": "Main Screen",
+        "description": "Screen for events",
+        "location": "Main Hall",
+        "contents": [
+            {
+                "microschema": {
+                    "name": "ScreenExhibitPromo"
+                },
+                "fields": {
+                    "title": "Cuneiform",
+                    "teaser": "Visit our new cuneiform collection",
+                    "image": {
+                        "uuid": "066c1efbac0f4b6cac1efbac0f5b6c46"
+                    }
+                }
+            },
+            {
+                "microschema": {
+                    "name": "ScreenEvent"
+                },
+                "fields": {
+                    "title": "Discover",
+                    "teaser": "New exhibition tour",
+                    "tour": {
+                        "uuid": "d63310fbf16b4344b310fbf16bd34478"
+                    },
+                    "video": {
+                        "uuid": "e988d8c38e1a4a22895835a2424dd72d"
+                    }
+                }
+            },
+            {
+                "microschema": {
+                    "name": "ScreenExhibitPromo"
+                },
+                "fields": {
+                    "title": "History of photography",
+                    "teaser": "Visit our new exhibition",
+                    "image": {
+                        "uuid": "d98113396c0b4b6f8113396c0b9b6f7b"
+                    }
+                }
+            }
+        ]
+    }
+}

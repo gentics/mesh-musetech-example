@@ -5,11 +5,21 @@ import com.gentics.mesh.core.rest.common.RestModel;
 
 public class Video implements RestModel {
 
+	private String uuid;
+
 	@JsonProperty("import")
 	private Boolean importFlag;
 
 	private String name;
 	private String description;
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 
 	public String getName() {
 		return name;

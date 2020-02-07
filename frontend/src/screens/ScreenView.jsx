@@ -68,11 +68,13 @@ function InfoSelector({ content }) {
         return (
             <div className="image-label">
                 <h2>{content.fields.title}</h2>
-                <p className="label label-default">Start: {content.fields.start}</p>
+                <p className="label label-default">Start: {content.fields.tour.fields.dates[0].fields.date}</p>
                 <br />
-                <p className="label label-default">Duration: {content.fields.duration}min</p>
+                <p className="label label-default">Seats: {content.fields.tour.fields.dates[0].fields.seats}</p>
                 <br />
-                <p className="label label-default">Location: {content.fields.location}</p>
+                <p className="label label-default">Duration: {content.fields.tour.fields.duration}min</p>
+                <br />
+                <p className="label label-default">Location: {content.fields.tour.fields.location}</p>
             </div>
         );
     } else {

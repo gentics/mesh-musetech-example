@@ -22,7 +22,6 @@ import com.gentics.mesh.core.rest.node.field.impl.NodeFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.NumberFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.StringFieldImpl;
 import com.gentics.mesh.core.rest.node.field.list.NodeFieldList;
-import com.gentics.mesh.core.rest.node.field.list.impl.MicronodeFieldListImpl;
 import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListImpl;
 import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListItemImpl;
 import com.gentics.mesh.core.rest.project.ProjectResponse;
@@ -38,9 +37,6 @@ import com.gentics.mesh.musetech.model.exhibit.ExhibitList;
 import com.gentics.mesh.musetech.model.exhibit.ExhibitLocation;
 import com.gentics.mesh.musetech.model.image.Image;
 import com.gentics.mesh.musetech.model.image.ImageList;
-import com.gentics.mesh.musetech.model.screen.Screen;
-import com.gentics.mesh.musetech.model.screen.ScreenContent;
-import com.gentics.mesh.musetech.model.screen.ScreenList;
 import com.gentics.mesh.musetech.model.video.Video;
 import com.gentics.mesh.musetech.model.video.VideoList;
 import com.gentics.mesh.parameter.client.NodeParametersImpl;
@@ -64,12 +60,12 @@ public class ImporterImpl extends AbstractImporter {
 	private final ExhibitList exhibitList;
 	private final ImageList imageList;
 	private final VideoList videoList;
-	private final ScreenList screenList;
 	private final List<SchemaCreateRequest> schemas;
 	private final List<MicroschemaCreateRequest> microschemas;
 	private final List<NodeResponse> nodes;
 	private final List<NodeResponse> persons;
 	private final List<NodeResponse> tours;
+	private final List<NodeResponse> screens;
 
 	public ImporterImpl(ImporterConfig config) throws IOException {
 		super(config);
@@ -77,20 +73,12 @@ public class ImporterImpl extends AbstractImporter {
 		this.exhibitList = ExhibitList.load();
 		this.imageList = ImageList.load();
 		this.videoList = VideoList.load();
-		this.screenList = ScreenList.load();
 		this.schemas = ImportUtils.loadSchemas("data/schemas");
 		this.microschemas = ImportUtils.loadMicroschemas("data/microschemas");
 		this.nodes = ImportUtils.loadNodes("data/nodes");
 		this.persons = ImportUtils.loadNodes("data/persons");
 		this.tours = ImportUtils.loadNodes("data/tours");
-	}
-
-	private Completable importScreens(NodeResponse folder) {
-		Set<Completable> operations = new HashSet<>();
-		for (Screen screen : screenList.getScreens()) {
-			operations.add(createScreen(folder, screen));
-		}
-		return Completable.merge(operations);
+		this.screens = ImportUtils.loadNodes("data/screens");
 	}
 
 	private Completable importContents(NodeResponse folder) throws FileNotFoundException, IOException {
@@ -354,7 +342,7 @@ public class ImporterImpl extends AbstractImporter {
 		request.getFields().put("filename", new StringFieldImpl().setString(filename));
 		request.getFields().put("description", new StringFieldImpl().setString(description));
 
-		return client.createNode(projectName, request).toSingle().flatMap(node -> {
+		return client.createNode(video.getUuid(), projectName, request).toSingle().flatMap(node -> {
 			fileIdMap.put(filename, node.getUuid());
 			File file = new File("data/video/" + filename);
 			InputStream ins = new FileInputStream(file);
@@ -441,6 +429,10 @@ public class ImporterImpl extends AbstractImporter {
 		return importNodes(client, folder.getUuid(), tours, projectName);
 	}
 
+	private Completable importScreens(NodeResponse folder) {
+		return importNodes(client, folder.getUuid(), screens, projectName);
+	}
+
 	/**
 	 * Import videos - Create a new node for each video in the given folder node.
 	 * 
@@ -477,81 +469,6 @@ public class ImporterImpl extends AbstractImporter {
 	@Override
 	public Completable createMicroschemas() {
 		return ImportUtils.createMicroschemas(client, microschemas, projectName);
-	}
-
-	private Completable createScreen(NodeResponse folder, Screen screen) {
-		NodeCreateRequest request = new NodeCreateRequest();
-		request.setLanguage("en");
-		request.setParentNodeUuid(folder.getUuid());
-		request.setSchemaName("Screen");
-		request.getFields().put("id", new StringFieldImpl().setString(screen.getId()));
-		request.getFields().put("name", new StringFieldImpl().setString(screen.getName()));
-		request.getFields().put("description", new StringFieldImpl().setString(screen.getDescription()));
-		request.getFields().put("location", new StringFieldImpl().setString(screen.getLocation()));
-
-		MicronodeFieldListImpl contents = new MicronodeFieldListImpl();
-		for (ScreenContent content : screen.getContents()) {
-			switch (content.getType()) {
-			case EVENT:
-				contents.getItems().add(createScreenEvent(content));
-				break;
-			case PROMO:
-				contents.getItems().add(createScreenPromo(content));
-				break;
-			default:
-				throw new RuntimeException("Unknown type {" + content.getType() + "}");
-			}
-		}
-		request.getFields().put("contents", contents);
-
-		return client.createNode(projectName, request).toCompletable().doOnComplete(() -> {
-			log.info("Created screen " + screen.getId());
-		}).doOnError(err -> {
-			log.error("Error while creating screen " + screen.getId(), err);
-		});
-	}
-
-	private MicronodeResponse createScreenEvent(ScreenContent content) {
-		MicronodeResponse micronode = new MicronodeResponse().setMicroschema(new MicroschemaReferenceImpl().setName("ScreenEvent"));
-		micronode.getFields().put("title", new StringFieldImpl().setString(content.getTitle()));
-		micronode.getFields().put("teaser", new StringFieldImpl().setString(content.getTeaser()));
-		micronode.getFields().put("start", new StringFieldImpl().setString(content.getStart()));
-		micronode.getFields().put("duration", new NumberFieldImpl().setNumber(content.getDuration()));
-		micronode.getFields().put("location", new StringFieldImpl().setString(content.getLocation()));
-		addMedia(micronode, content);
-		return micronode;
-	}
-
-	private void addMedia(MicronodeResponse micronode, ScreenContent content) {
-		String image = content.getImage();
-		if (image != null) {
-			String mappedImage = fileIdMap.get(content.getImage());
-			if (mappedImage != null) {
-				micronode.getFields().put("image", new NodeFieldImpl().setUuid(mappedImage));
-			} else {
-				log.error("Could not find image {" + image + "} Omitting image..");
-			}
-		}
-
-		String video = content.getVideo();
-		if (video != null) {
-			String mappedVideo = fileIdMap.get(content.getVideo());
-			if (mappedVideo != null) {
-				micronode.getFields().put("video", new NodeFieldImpl().setUuid(mappedVideo));
-			} else {
-				log.error("Could not find video {" + video + "} Omitting video..");
-			}
-		}
-	}
-
-	public MicronodeResponse createScreenPromo(ScreenContent content) {
-		MicronodeResponse micronode = new MicronodeResponse().setMicroschema(new MicroschemaReferenceImpl().setName("ScreenExhibitPromo"));
-		micronode.getFields().put("title", new StringFieldImpl().setString(content.getTitle()));
-		if (content.getTeaser() != null) {
-			micronode.getFields().put("teaser", new StringFieldImpl().setString(content.getTeaser()));
-		}
-		addMedia(micronode, content);
-		return micronode;
 	}
 
 	@Override

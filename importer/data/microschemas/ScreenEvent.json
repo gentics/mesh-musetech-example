@@ -14,22 +14,13 @@
 			"type": "string"
 		},
 		{
-			"name": "start",
-			"label": "Start",
+			"name": "tour",
+			"label":  "Tour",
 			"required": false,
-			"type": "string"
-		},
-		{
-			"name": "duration",
-			"label": "Dauer (min)",
-			"required": false,
-			"type": "number"
-		},
-		{
-			"name": "location",
-			"label": "Ort",
-			"required": false,
-			"type": "string"
+			"type": "node",
+			"allow": [
+				"Tour"
+			]
 		},
 		{
 			"name": "image",

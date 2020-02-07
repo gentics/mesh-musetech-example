@@ -7,11 +7,9 @@ public class ScreenContent implements RestModel {
 	private ScreenContentType type;
 	private String title;
 	private String teaser;
-	private String start;
-	private Long duration;
-	private String location;
 	private String image;
 	private String video;
+	private String tour;
 
 	public ScreenContent() {
 		// TODO Auto-generated constructor stub
@@ -41,30 +39,6 @@ public class ScreenContent implements RestModel {
 		this.teaser = teaser;
 	}
 
-	public Long getDuration() {
-		return duration;
-	}
-
-	public void setDuration(Long duration) {
-		this.duration = duration;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getStart() {
-		return start;
-	}
-
-	public void setStart(String start) {
-		this.start = start;
-	}
-
 	public String getImage() {
 		return image;
 	}
@@ -79,6 +53,14 @@ public class ScreenContent implements RestModel {
 
 	public void setVideo(String video) {
 		this.video = video;
+	}
+
+	public String getTour() {
+		return tour;
+	}
+
+	public void setTour(String tour) {
+		this.tour = tour;
 	}
 
 	@Override

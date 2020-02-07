@@ -337,9 +337,26 @@ export async function getScreen(id) {
               fields {
                 title
                 teaser
-                start
-                duration
-                location
+                tour {
+                  uuid
+                  ... on Tour {
+                    fields {
+                      public_number
+                      size
+                      duration
+                      location
+                      dates {
+                        uuid
+                        ... on TourDate {
+                          fields {
+                            date
+                            seats
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
                 image {
                   node {
                     path
@@ -372,7 +389,7 @@ export async function getScreen(id) {
         }
       }
     }
-  }    
+  }     
   `, { "path": "/screens/" + id });
 }
 
