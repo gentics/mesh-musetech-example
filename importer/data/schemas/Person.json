@@ -35,6 +35,12 @@
 			"allow": [
 				"Image"
 			]
+		},
+		{
+			"name": "quote",
+			"label": "Quote",
+			"required": false,
+			"type": "string"
 		}
 	]
 }

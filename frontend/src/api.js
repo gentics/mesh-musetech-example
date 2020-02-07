@@ -199,6 +199,7 @@ export async function getTour(id, lang) {
                       path
                     }
                   }
+                  quote
                 }
               }
             }
