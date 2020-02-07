@@ -1,21 +1,37 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { getTour } from '../api';
+import { Link } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import useWebsocketBridge from '../eventbus';
 import { Col, Row, Container } from 'react-bootstrap';
 import LanguageContext from '../languageContext';
 import config from '../config.json';
+import { format, parseISO, isToday, isTomorrow, formatDistanceToNow, lightFormat } from 'date-fns';
+import { enGB, de } from 'date-fns/locale';
+
+const locales = { "en": enGB, "de": de }
 
 const trans = {
     de: {
         seats: "Plätze",
-        price: "Preis"
+        price: "Preis",
+        your: "Deine",
+        today: "Heute",
+        tomorrow: "Morgen",
+        notToday: "Am",
+        free: "frei",
+        dates: "Termine"
     },
     en: {
         seats: "Seats",
-        price: "Price"
+        price: "Price",
+        your: "Your",
+        today: "Today",
+        tomorrow: "Tomorrow",
+        notToday: "On",
+        free: "free",
+        dates: "Dates"
     }
 }
 export default function TourView({ match }) {
@@ -23,6 +39,7 @@ export default function TourView({ match }) {
     const [tour, setTour] = useState();
     const id = match.params.id;
     let lang = useContext(LanguageContext);
+    const i18n = useI18n();
 
     // Register event callback to update the state when content gets changed in Gentics Mesh
     useWebsocketBridge(() => {
@@ -38,13 +55,10 @@ export default function TourView({ match }) {
         return null;
     }
 
-
-    let i18n = trans[lang];
-
     const guides = tour.fields.guides.filter(guide => {
         return guide != null;
     }).map(guide => (
-        <Guide guide={guide} key={guide.uuid} />
+        <Guide guide={guide.node} key={guide.uuid} />
     ));
 
     const dates = tour.fields.dates.filter(date => {
@@ -59,6 +73,7 @@ export default function TourView({ match }) {
             <section className="page-section without-header">
                 <Container>
                     <div className="content tour-detail-caption bg-light" >
+
                         <Row>
                             <Col lg={12} className="text-center">
                                 <div className="tour-title">
@@ -97,15 +112,16 @@ export default function TourView({ match }) {
                         <Row>
                             <Col lg={{ span: 8, offset: 2 }} className="text-center">
                                 <div className="exhibit-detail-caption">
-                                    <p className="text-muted">Guides</p>
+                                    <h2 className="text-muted">{i18n.your} Guides</h2>
                                     {guides}
                                 </div>
                             </Col>
                         </Row>
+
                         <Row>
                             <Col lg={{ span: 8, offset: 2 }} className="text-center">
                                 <div className="exhibit-detail-caption">
-                                    <p className="text-muted">Dates</p>
+                                    <h2 className="text-muted">{i18n.dates}</h2>
                                     {dates}
                                 </div>
                             </Col>
@@ -119,12 +135,20 @@ export default function TourView({ match }) {
 }
 
 function TourDate({ date }) {
+    let tourDate = parseISO(date.fields.date);
+    let lang = useContext(LanguageContext);
+    const i18n = useI18n();
+    let prefix = datePrefix(tourDate, i18n);
+
     return (
-        <Container>
+        <Container className="border rounded tour-date">
             <Row>
-                <Col lg={{ span: 8, offset: 2 }} className="text-center">
-                    Date: {date.fields.date}
-                    Seats: {date.fields.seats}
+                <Col lg={{ span: 8, offset: 0 }} className="text-center">
+                    {/* - In {formatDistanceToNow(tourDate, { locale: locales[lang] })} */}
+                    {prefix} {lightFormat(tourDate, "dd.MM.yyyy HH:mm")}
+                </Col>
+                <Col lg={{ span: 4, offset: 0 }} className="text-center">
+                    {i18n.seats}: {date.fields.seats} {i18n.free}
                 </Col>
             </Row>
         </Container>
@@ -133,21 +157,40 @@ function TourDate({ date }) {
 
 function Guide({ guide }) {
     return (
-        <Container>
+        <Container className="tour-guide border rounded">
             <Row>
-                <Col lg={{ span: 8, offset: 2 }} className="text-center">
-                    <p>{guide.fields.title} {guide.fields.firstname} {guide.fields.lastname}</p>
-                    <p>{guide.fields.email}</p>
-
+                <Col lg={{ span: 4, offset: 0 }}>
                     <picture>
                         <source media="(min-height: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=200&mode=smart`}></source>
                         <source media="(min-height: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=300&mode=smart`}></source>
                         <source media="(min-height: 1280px)" srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=300&mode=smart`}></source>
                         <img alt={guide.fields.firstname} srcSet={`${config.meshUrl}/musetech/webroot${guide.fields.image.path}?w=300&mode=smart`} className="img-responsive img-fluid" />
                     </picture>
-
+                </Col>
+                <Col lg={{ span: 8, offset: 0 }} className="text-center">
+                    <p className="text-muted">{guide.fields.firstname} {guide.fields.lastname}</p>
+                    <p><a href={`mailto:${guide.fields.email}`}>{guide.fields.email}</a></p>
                 </Col>
             </Row>
         </Container>
     )
 }
+
+function useI18n() {
+    let lang = useContext(LanguageContext);
+    let i18n = trans[lang];
+    return i18n;
+}
+
+function datePrefix(tourDate, i18n) {
+    let today = isToday(tourDate);
+    let tomorrow = isTomorrow(tourDate);
+    if (today) {
+        return i18n.today;
+    }
+    if (tomorrow) {
+        return i18n.tomorrow;
+    }
+    return i18n.notToday;
+}
+

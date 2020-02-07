@@ -23,7 +23,7 @@ const trans = {
     about_path: "/de/über",
 
     tours: "Führungen",
-    tours_path: "/de/führungen",
+    tours_path: "/de/tours",
     
     history: "Geschichte",
     history_path: "/de/geschichte",

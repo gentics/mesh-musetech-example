@@ -8,7 +8,7 @@
     "public_number": "tour-2",
     "slug": "tour-2:de",
     "title": "Raumfahrt",
-    "description": "Entdecken Sie die Meilensteine der Raumfahrt. Diese Tour führt Sie durch die Anfänge beginnend mit dem ersten Flug von Juri Gagarin bis hin zu den neuesten Entwicklungen der Raumfahrt. Während dieser Tour werden Sie viele spannende Details run um unsere Raumfahr Ausstellungsstücke erfahren.",
+    "description": "Entdecken Sie die Meilensteine der Raumfahrt. Diese Tour führt Sie durch die Anfänge beginnend mit dem ersten Flug von Juri Gagarin bis hin zu den neuesten Entwicklungen der Raumfahrt. Während dieser Tour werden Sie viele spannende Details rund um unsere Raumfahrt Ausstellungsstücke erfahren.",
     "size": 25,
     "duration": 45,
     "price": 6.0,
@@ -16,24 +16,13 @@
       "uuid": "f1fcc4aa981148a1bcc4aa981108a1be"
     },
     "guides": [
-      "a9cc082bebaa4e608c082bebaa7e6093",
       "860496dfe05f43858496dfe05fc385c3",
-      "05f9e0049eab4022b9e0049eab0022a2",
-      "4a22c333d71e44dfa2c333d71e54dfbb"
+      "05f9e0049eab4022b9e0049eab0022a2"
     ],
     "dates": [
       {
         "fields": {
-          "date": "2019-12-09T14:14:39.599Z",
-          "seats": 22
-        },
-        "microschema": {
-          "name": "TourDate"
-        }
-      },
-      {
-        "fields": {
-          "date": "2019-12-09T14:14:39.599Z",
+          "date": "2020-02-07T14:14:39.599Z",
           "seats": 10
         },
         "microschema": {
@@ -42,8 +31,17 @@
       },
       {
         "fields": {
-          "date": "2019-12-09T14:14:39.599Z",
+          "date": "2020-02-08T14:14:39.599Z",
           "seats": 4
+        },
+        "microschema": {
+          "name": "TourDate"
+        }
+      },
+      {
+        "fields": {
+          "date": "2020-02-09T14:14:39.599Z",
+          "seats": 22
         },
         "microschema": {
           "name": "TourDate"

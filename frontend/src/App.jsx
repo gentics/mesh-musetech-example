@@ -5,8 +5,8 @@ import Keycloak from 'keycloak-js';
 import { KeycloakProvider } from 'react-keycloak';
 
 const keycloak = new Keycloak({
-  url: 'http://localhost:8082/auth',
-  realm: 'master-test',
+  url: 'https://sso.musetech.getmesh.io/auth',
+  realm: 'master',
   clientId: 'react'
 });
 

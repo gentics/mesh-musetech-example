@@ -187,15 +187,17 @@ export async function getTour(id, lang) {
           description
           guides {
             uuid
-            ... on Person {
-              fields {
-                title
-                firstname
-                lastname
-                email
-                image {
-                  ... on Image {
-                    path
+            node(lang: "en") {
+              ... on Person {
+                fields {
+                  title
+                  firstname
+                  lastname
+                  email
+                  image {
+                    ... on Image {
+                      path
+                    }
                   }
                 }
               }
@@ -213,6 +215,7 @@ export async function getTour(id, lang) {
             }
           }
           dates {
+            uuid
             ... on TourDate {
               fields {
                 date
