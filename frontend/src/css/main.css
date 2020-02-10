@@ -886,6 +886,22 @@ header.tourhead {
   margin: 10px;
 }
 
+.guide-quote {
+  font-size: 1.3em;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.guide-quote:before {
+  position: absolute;
+  font-family: 'FontAwesome';
+  top: 50px;
+  left: 10px;
+  content:"\f10d";
+  font-size: 1.6em;
+  color: rgba(0,0,0,0.05);
+}
+
 @media (min-width: 992px) {
   .info-left {
     text-align: left;

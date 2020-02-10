@@ -5,6 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,9 +24,14 @@ import com.gentics.mesh.core.rest.node.NodeCreateRequest;
 import com.gentics.mesh.core.rest.node.NodeResponse;
 import com.gentics.mesh.core.rest.node.NodeUpdateRequest;
 import com.gentics.mesh.core.rest.node.field.BinaryField;
+import com.gentics.mesh.core.rest.node.field.DateField;
+import com.gentics.mesh.core.rest.node.field.MicronodeField;
+import com.gentics.mesh.core.rest.node.field.NumberField;
+import com.gentics.mesh.core.rest.node.field.impl.DateFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.NodeFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.NumberFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.StringFieldImpl;
+import com.gentics.mesh.core.rest.node.field.list.MicronodeFieldList;
 import com.gentics.mesh.core.rest.node.field.list.NodeFieldList;
 import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListImpl;
 import com.gentics.mesh.core.rest.node.field.list.impl.NodeFieldListItemImpl;
@@ -426,7 +437,36 @@ public class ImporterImpl extends AbstractImporter {
 	}
 
 	private Completable importTours(NodeResponse folder) {
-		return importNodes(client, folder.getUuid(), tours, projectName);
+		return importNodes(client, folder.getUuid(), tours, projectName, node -> {
+			MicronodeFieldList list = node.getFields().getMicronodeFieldList("dates");
+			LocalDateTime today = LocalDate.now().atTime(17, 30);
+			LocalDateTime todayPlus1 = today.plusDays(1).minusHours(2);
+			LocalDateTime todayPlus2 = todayPlus1.plusDays(1).minusHours(3);
+
+			list.getItems().clear();
+			list.add(createTourDate(today, 3));
+			list.add(createTourDate(todayPlus1, 21));
+			list.add(createTourDate(todayPlus2, 1));
+
+			node.getFields().put("dates", list);
+			return node;
+		});
+	}
+
+	private MicronodeField createTourDate(LocalDateTime date, int freeSeats) {
+		MicronodeResponse field = new MicronodeResponse();
+		field.setMicroschema(new MicroschemaReferenceImpl().setName("TourDate"));
+
+		OffsetDateTime odt = OffsetDateTime.now(ZoneId.systemDefault());
+		ZoneOffset zoneOffset = odt.getOffset();
+
+		DateField dateField = new DateFieldImpl().setDate(date.atOffset(zoneOffset).format(DateTimeFormatter.ISO_INSTANT));
+		field.getFields().put("date", dateField);
+
+		NumberField seatsField = new NumberFieldImpl().setNumber(freeSeats);
+		field.getFields().put("seats", seatsField);
+
+		return field;
 	}
 
 	private Completable importScreens(NodeResponse folder) {
@@ -486,12 +526,19 @@ public class ImporterImpl extends AbstractImporter {
 		return ImportUtils.importNodes(client, nodes, project);
 	}
 
-	public static Completable importNodes(MeshRestClient client, String parentNodeUuid, List<NodeResponse> nodes, String projectName) {
+	public static Completable importNodes(MeshRestClient client, String parentNodeUuid, List<NodeResponse> nodes, String projectName,
+		NodeMapper... mappers) {
 		return Observable.fromIterable(nodes)
 			.map(node -> {
 				NodeReference nodeRef = new NodeReference();
 				nodeRef.setUuid(parentNodeUuid);
 				node.setParentNode(nodeRef);
+				return node;
+			})
+			.map(node -> {
+				for (NodeMapper mapper : mappers) {
+					node = mapper.apply(node);
+				}
 				return node;
 			})
 			.flatMapCompletable(node -> {

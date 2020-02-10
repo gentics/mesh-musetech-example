@@ -170,7 +170,7 @@ function Guide({ guide }) {
                 <Col lg={{ span: 8, offset: 0 }} className="text-center">
                     <p className="text-muted">{guide.fields.firstname} {guide.fields.lastname}</p>
                     <p><a href={`mailto:${guide.fields.email}`}>{guide.fields.email}</a></p>
-                    <p className="text-muted"><i><h4>"{guide.fields.quote}"</h4></i></p>
+                    <p className="text-muted guide-quote">"{guide.fields.quote}"</p>
 
                 </Col>
             </Row>
