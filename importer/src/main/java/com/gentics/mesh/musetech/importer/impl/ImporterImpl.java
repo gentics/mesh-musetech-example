@@ -449,6 +449,7 @@ public class ImporterImpl extends AbstractImporter {
 			list.add(createTourDate(todayPlus2, 1));
 
 			node.getFields().put("dates", list);
+
 			return node;
 		});
 	}
