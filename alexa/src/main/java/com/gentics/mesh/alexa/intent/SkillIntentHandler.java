@@ -12,12 +12,14 @@ import com.amazon.ask.request.impl.BaseSkillRequest;
 import com.amazon.ask.response.SkillResponse;
 import com.gentics.mesh.alexa.intent.impl.CancelandStopIntentHandler;
 import com.gentics.mesh.alexa.intent.impl.FallbackIntentHandler;
-import com.gentics.mesh.alexa.intent.impl.GetVehiclePriceIntent;
+import com.gentics.mesh.alexa.intent.impl.GetNextTourIntent;
+import com.gentics.mesh.alexa.intent.impl.GetTourPriceIntent;
+import com.gentics.mesh.alexa.intent.impl.GetToursInfoIntent;
 import com.gentics.mesh.alexa.intent.impl.HelpIntentHandler;
 import com.gentics.mesh.alexa.intent.impl.LaunchRequestHandler;
-import com.gentics.mesh.alexa.intent.impl.ReserveVehicleIntent;
+import com.gentics.mesh.alexa.intent.impl.ReserveTourIntent;
 import com.gentics.mesh.alexa.intent.impl.SessionEndedRequestHandler;
-import com.gentics.mesh.alexa.intent.impl.StockLevelIntentHandler;
+import com.gentics.mesh.alexa.intent.impl.TourInfoIntentHandler;
 
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -25,19 +27,27 @@ import io.vertx.core.json.JsonObject;
 @Singleton
 public class SkillIntentHandler {
 
-	public static final String VEHICLE_SLOT = "vehicle";
+	public static final String TOUR_SLOT = "tour";
 	public static final String CATEGORY_SLOT = "category";
 
 	private final Skill skill;
 
 	@Inject
-	public SkillIntentHandler(GetVehiclePriceIntent priceIntent, StockLevelIntentHandler stockLevelIntent, ReserveVehicleIntent reserveIntent) {
+	public SkillIntentHandler(
+		GetTourPriceIntent priceIntent, 
+		TourInfoIntentHandler stockLevelIntent, 
+		ReserveTourIntent reserveIntent,
+		GetToursInfoIntent toursInfo,
+		GetNextTourIntent nextTour
+		) {
 		this.skill = Skills.custom()
 			.addRequestHandlers(
 				new CancelandStopIntentHandler(),
 				reserveIntent,
 				stockLevelIntent,
 				priceIntent,
+				toursInfo,
+				nextTour,
 				new HelpIntentHandler(), // OK
 				new LaunchRequestHandler(),
 				new SessionEndedRequestHandler(),

@@ -80,7 +80,7 @@ public class GenticsSkill {
 	}
 
 	public void run() {
-		log.info("Deploying Skill Verticle");
+		log.info("Deploying Muse Tech Skill");
 		vertx.deployVerticle(serverVerticle);
 	}
 

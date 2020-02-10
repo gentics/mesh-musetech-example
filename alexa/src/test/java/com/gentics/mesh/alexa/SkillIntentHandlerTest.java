@@ -6,9 +6,11 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.gentics.mesh.alexa.intent.SkillIntentHandler;
-import com.gentics.mesh.alexa.intent.impl.GetVehiclePriceIntent;
-import com.gentics.mesh.alexa.intent.impl.ReserveVehicleIntent;
-import com.gentics.mesh.alexa.intent.impl.StockLevelIntentHandler;
+import com.gentics.mesh.alexa.intent.impl.GetNextTourIntent;
+import com.gentics.mesh.alexa.intent.impl.GetTourPriceIntent;
+import com.gentics.mesh.alexa.intent.impl.GetToursInfoIntent;
+import com.gentics.mesh.alexa.intent.impl.ReserveTourIntent;
+import com.gentics.mesh.alexa.intent.impl.TourInfoIntentHandler;
 
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
@@ -19,11 +21,13 @@ public class SkillIntentHandlerTest extends AbstractSkillTest {
 	public void testStream() throws IOException {
 		JsonObject input = loadJson("open");
 
-		GetVehiclePriceIntent priceIntent = Mockito.mock(GetVehiclePriceIntent.class);
-		StockLevelIntentHandler stockLevelIntent = Mockito.mock(StockLevelIntentHandler.class);
-		ReserveVehicleIntent reserveIntent = Mockito.mock(ReserveVehicleIntent.class);
+		GetTourPriceIntent priceIntent = Mockito.mock(GetTourPriceIntent.class);
+		TourInfoIntentHandler stockLevelIntent = Mockito.mock(TourInfoIntentHandler.class);
+		ReserveTourIntent reserveIntent = Mockito.mock(ReserveTourIntent.class);
+		GetToursInfoIntent toursInfo = Mockito.mock(GetToursInfoIntent.class);
+		GetNextTourIntent nextTourInfo = Mockito.mock(GetNextTourIntent.class);
 
-		SkillIntentHandler handler = new SkillIntentHandler(priceIntent, stockLevelIntent, reserveIntent);
+		SkillIntentHandler handler = new SkillIntentHandler(priceIntent, stockLevelIntent, reserveIntent, toursInfo, nextTourInfo);
 		handler.handleRequest(input, h -> {
 			Buffer buffer = Buffer.buffer(h.getRawResponse());
 			JsonObject output = new JsonObject(buffer);

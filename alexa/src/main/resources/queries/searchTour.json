@@ -4,12 +4,12 @@
 			"must": [
 				{
 					"match": {
-						"schema.name.raw": "vehicle"
+						"schema.name.raw": "Tour"
 					}
 				},
 				{
 					"match": {
-						"fields.name": ""
+						"fields.title": ""
 					}
 				}
 			]

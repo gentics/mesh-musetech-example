@@ -1,0 +1,26 @@
+query Tours($lang: [String]) {
+  schema(name: "Tour") {
+    nodes(lang: $lang) {
+      elements {
+        uuid
+        ... on Tour {
+          fields {
+            title
+            location
+            price
+            size
+            description
+            dates {
+              ... on TourDate {
+                fields {
+                  date
+                  seats
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

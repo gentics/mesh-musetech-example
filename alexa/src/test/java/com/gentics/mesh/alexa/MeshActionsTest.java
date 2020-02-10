@@ -9,8 +9,6 @@ import org.junit.Test;
 import com.gentics.mesh.alexa.action.MeshActions;
 import com.gentics.mesh.alexa.dagger.config.SkillConfig;
 
-import io.reactivex.Single;
-
 public class MeshActionsTest {
 
 	private static MeshActions connector;
@@ -23,31 +21,45 @@ public class MeshActionsTest {
 	@Test
 	public void testStockLevel() {
 		Locale locale = Locale.GERMAN;
-		String stockText = connector.loadStockLevel(locale, "tesla").blockingGet();
+		String stockText = connector.loadStockLevel(locale, "space").blockingGet();
 		System.out.println(stockText);
 
-		String text = connector.reserveVehicle(locale, "tesla").blockingGet();
+		String text = connector.reserveTour(locale, "space").blockingGet();
 		System.out.println(text);
 
-		String stock2 = connector.loadStockLevel(locale, "tesla").blockingGet();
+		String stock2 = connector.loadStockLevel(locale, "space").blockingGet();
 		System.out.println(stock2);
 
 	}
 
 	@Test
+	public void testNextTour() {
+		Locale locale = Locale.GERMAN;
+		String text = connector.loadNextTourInfo(locale).blockingGet();
+		System.out.println(text);
+	}
+
+	@Test
+	public void testLoadTourInfos() {
+		Locale locale = Locale.GERMAN;
+		String text = connector.loadTourInfos(locale).blockingGet();
+		System.out.println(text);
+	}
+
+	@Test
 	public void testPrice() {
 		Locale locale = Locale.GERMAN;
-		String text = connector.loadVehiclePrice(locale, "tesla").blockingGet();
-		
+		String text = connector.loadTourPrice(locale, "space").blockingGet();
+
 		System.out.println("Price: " + text);
-		text = connector.loadVehiclePrice(locale, "space shuttle").blockingGet();
+		text = connector.loadTourPrice(locale, "empire").blockingGet();
 		System.out.println("Price: " + text);
 	}
 
 	@Test
 	public void testBogus() {
 		Locale locale = Locale.GERMAN;
-		String text = connector.loadVehiclePrice(locale, "autowagen").blockingGet();
+		String text = connector.loadTourPrice(locale, "autowagen").blockingGet();
 		System.out.println("Price: " + text);
 	}
 }

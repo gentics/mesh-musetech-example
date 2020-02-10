@@ -7,7 +7,7 @@ public class SkillConfig {
 
 	private String meshApiKey;
 
-	private String meshHost = "demo.getmesh.io";
+	private String meshHost = "cms.musetech.getmesh.io";
 
 	private int serverPort = 4445;
 

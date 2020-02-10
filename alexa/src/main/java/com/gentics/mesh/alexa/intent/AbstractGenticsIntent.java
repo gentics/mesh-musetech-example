@@ -25,11 +25,11 @@ public abstract class AbstractGenticsIntent implements RequestHandler {
 		return locale;
 	}
 
-	protected Slot getVehicleSlot(HandlerInput input) {
+	protected Slot getTourSlot(HandlerInput input) {
 		Request request = input.getRequestEnvelope().getRequest();
 		IntentRequest intentRequest = (IntentRequest) request;
 		Intent intent = intentRequest.getIntent();
 		Map<String, Slot> slots = intent.getSlots();
-		return slots.get(SkillIntentHandler.VEHICLE_SLOT);
+		return slots.get(SkillIntentHandler.TOUR_SLOT);
 	}
 }
