@@ -27,7 +27,9 @@ import com.gentics.mesh.parameter.client.NodeParametersImpl;
 import com.gentics.mesh.rest.client.MeshRestClient;
 import com.gentics.mesh.rest.client.MeshRestClientConfig;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -216,54 +218,47 @@ public class MeshActions {
 
 	public Single<String> reserveNextTour(Locale locale) {
 		// 1. Locate the next tour
-		return loadNextTour(locale).flatMap(tour -> {
-			// 2. Load and update the tour node
-			Maybe<NodeResponse> locatedNode = client
-				.findNodeByUuid(PROJECT, tour.getUuid(), new NodeParametersImpl().setLanguages(locale.getLanguage())).toMaybe();
+		return loadNextTour(locale).flatMapSingle(tour -> {
 
 			if (tour.getSeats() == 0) {
-				return Maybe.just(i18n(locale, "tour_out_of_stock", tour.getTitle()));
+				return Single.just(i18n(locale, "tour_out_of_stock", tour.getTitle()));
 			}
 
-			return locatedNode.flatMapSingle(node -> {
-				NodeUpdateRequest nodeUpdateRequest = node.toRequest();
+			// 2. Load and update the tour node in both languages
+			return Observable.fromArray("de", "en").flatMapCompletable(lang -> {
+				Maybe<NodeResponse> locatedNode = client
+					.findNodeByUuid(PROJECT, tour.getUuid(), new NodeParametersImpl().setLanguages(lang)).toMaybe();
 
-				MicronodeFieldList list = node.getFields().getMicronodeFieldList("dates");
-
-				for (MicronodeField date : list.getItems()) {
-					DateFieldImpl currentDateField = date.getFields().getDateField("date");
-					if (currentDateField != null) {
-						OffsetDateTime odt = OffsetDateTime.parse(currentDateField.getDate());
-
-						// Found the next tour. Lets update the count
-						if (tour.getDate().isEqual(odt)) {
-							int currentSeats = date.getFields().getNumberField("seats").getNumber().intValue();
-							if (currentSeats <= 0) {
-								return Single.just(i18n(locale, "tour_out_of_stock", tour.getTitle()));
-							}
-							int newSeats = currentSeats - 1;
-							date.getFields().put("seats", new NumberFieldImpl().setNumber(newSeats));
-						}
-					}
-
-				}
-
-				// list.getItems().clear();
-				// list.add(createTourDate(today, 3));
-
-				node.getFields().put("dates", list);
-
-				// request.getFields().put("seats", new NumberFieldImpl().setNumber(newLevel));
-				System.out.println(nodeUpdateRequest.toJson());
-
-				Single<NodeResponse> updatedNode = client.updateNode(PROJECT, node.getUuid(), nodeUpdateRequest).toSingle();
-				return updatedNode.map(unode -> {
-					return i18n(locale, "tour_reserved", tour.getTitle());
+				return locatedNode.flatMapCompletable(node -> {
+					NodeUpdateRequest nodeUpdateRequest = node.toRequest();
+					updateRequest(nodeUpdateRequest, tour);
+					System.out.println(nodeUpdateRequest.toJson());
+					Completable update = client.updateNode(PROJECT, node.getUuid(), nodeUpdateRequest).toCompletable();
+					return update;
 				});
-			}).toMaybe();
-		}).onErrorReturnItem(i18n(locale, "tour_reserve_error"))
-			.defaultIfEmpty(i18n(locale, "tour_not_found"))
-			.toSingle();
+			}).andThen(Single.just(i18n(locale, "tour_reserved", tour.getTitle())));
+		}).onErrorReturnItem(i18n(locale, "tour_reserve_error"));
+	}
+
+	private void updateRequest(NodeUpdateRequest nodeUpdateRequest, TourInfo tour) {
+		MicronodeFieldList list = nodeUpdateRequest.getFields().getMicronodeFieldList("dates");
+
+		for (MicronodeField date : list.getItems()) {
+			DateFieldImpl currentDateField = date.getFields().getDateField("date");
+			if (currentDateField != null) {
+				OffsetDateTime odt = OffsetDateTime.parse(currentDateField.getDate());
+
+				// Found the next tour. Lets update the count
+				if (tour.getDate().isEqual(odt)) {
+					int currentSeats = date.getFields().getNumberField("seats").getNumber().intValue();
+					int newSeats = currentSeats - 1;
+					date.getFields().put("seats", new NumberFieldImpl().setNumber(newSeats));
+				}
+			}
+		}
+
+		nodeUpdateRequest.getFields().put("dates", list);
+
 	}
 
 	public Single<String> loadTourPrice(Locale locale, String tourName) {

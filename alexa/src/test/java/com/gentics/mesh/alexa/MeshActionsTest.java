@@ -37,7 +37,7 @@ public class MeshActionsTest {
 	}
 
 	@Test
-	public void testNextTour() {
+	public void testLoadNextTour() {
 		Locale locale = Locale.GERMAN;
 		String text = connector.loadNextTourInfo(locale).blockingGet();
 		System.out.println(text);
