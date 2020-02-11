@@ -16,19 +16,19 @@ import com.gentics.mesh.alexa.action.MeshActions;
 import com.gentics.mesh.alexa.intent.AbstractGenticsIntent;
 
 @Singleton
-public class ReserveTourIntent extends AbstractGenticsIntent {
+public class ReserveNextTourIntent extends AbstractGenticsIntent {
 
 	private final MeshActions mesh;
 
 	@Inject
-	public ReserveTourIntent(MeshActions mesh) {
+	public ReserveNextTourIntent(MeshActions mesh) {
 		this.mesh = mesh;
 
 	}
 
 	@Override
 	public boolean canHandle(HandlerInput input) {
-		return input.matches(intentName("ReserveTour"));
+		return input.matches(intentName("ReserveNextTour"));
 	}
 
 	@Override
@@ -40,8 +40,7 @@ public class ReserveTourIntent extends AbstractGenticsIntent {
 		if (tourSlot == null) {
 			speechText = i18n(locale, "tour_not_found");
 		} else {
-			String name = tourSlot.getValue();
-			speechText = mesh.reserveTour(locale, name).blockingGet();
+			speechText = mesh.reserveNextTour(locale).blockingGet();
 		}
 
 		return input.getResponseBuilder()

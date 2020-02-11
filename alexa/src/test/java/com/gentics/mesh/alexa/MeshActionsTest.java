@@ -24,12 +24,16 @@ public class MeshActionsTest {
 		String stockText = connector.loadStockLevel(locale, "space").blockingGet();
 		System.out.println(stockText);
 
-		String text = connector.reserveTour(locale, "space").blockingGet();
-		System.out.println(text);
-
 		String stock2 = connector.loadStockLevel(locale, "space").blockingGet();
 		System.out.println(stock2);
 
+	}
+
+	@Test
+	public void testReserveNextTour() {
+		Locale locale = Locale.GERMAN;
+		String text = connector.reserveNextTour(locale).blockingGet();
+		System.out.println(text);
 	}
 
 	@Test

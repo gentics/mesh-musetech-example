@@ -20,8 +20,10 @@ import com.gentics.mesh.core.rest.node.NodeListResponse;
 import com.gentics.mesh.core.rest.node.NodeResponse;
 import com.gentics.mesh.core.rest.node.NodeUpdateRequest;
 import com.gentics.mesh.core.rest.node.field.MicronodeField;
+import com.gentics.mesh.core.rest.node.field.impl.DateFieldImpl;
 import com.gentics.mesh.core.rest.node.field.impl.NumberFieldImpl;
 import com.gentics.mesh.core.rest.node.field.list.MicronodeFieldList;
+import com.gentics.mesh.parameter.client.NodeParametersImpl;
 import com.gentics.mesh.rest.client.MeshRestClient;
 import com.gentics.mesh.rest.client.MeshRestClientConfig;
 
@@ -113,22 +115,23 @@ public class MeshActions {
 			.toSingle();
 	}
 
-	public Single<String> loadNextTourInfo(Locale locale) {
+	public Maybe<TourInfo> loadNextTour(Locale locale) {
 		JsonObject vars = new JsonObject();
 		vars.put("lang", locale.getLanguage());
 		GraphQLRequest request = new GraphQLRequest();
 		request.setQuery(loadToursInfoQuery);
 		request.setVariables(vars);
 		return client.graphql(PROJECT, request).toMaybe().map(response -> {
-			System.out.println(response.toJson());
+			// System.out.println(response.toJson());
 			JsonObject json = response.getData();
 			JsonArray tours = json.getJsonObject("schema").getJsonObject("nodes").getJsonArray("elements");
+			return findNextTour(tours);
+		});
+	}
 
-			if (tours.size() == 0) {
-				return i18n(locale, "tours_empty");
-			}
+	public Single<String> loadNextTourInfo(Locale locale) {
 
-			TourInfo tour = findNextTour(tours);
+		return loadNextTour(locale).map(tour -> {
 			if (tour == null) {
 				return i18n(locale, "tours_empty");
 			} else {
@@ -166,6 +169,7 @@ public class MeshActions {
 		for (int i = 0; i < tours.size(); i++) {
 			JsonObject tour = tours.getJsonObject(i);
 			JsonObject tourFields = tour.getJsonObject("fields");
+			String uuid = tour.getString("uuid");
 			String title = tourFields.getString("title");
 			String location = tourFields.getString("location");
 			int size = tourFields.getInteger("size");
@@ -185,8 +189,8 @@ public class MeshActions {
 				} catch (Exception e2) {
 					log.error("Could not parse date {" + dateStr + "}");
 				}
-				if (date != null && (earliestInfo == null || date.isBefore(earliestInfo.getDate()))) {
-					earliestInfo = new TourInfo(title, location, date, price, seats, size);
+				if (date != null && (earliestInfo == null || date.isBefore(earliestInfo.getDate())) && seats != 0) {
+					earliestInfo = new TourInfo(uuid, title, location, date, price, seats, size);
 				}
 			}
 		}
@@ -210,24 +214,55 @@ public class MeshActions {
 			.toSingle();
 	}
 
-	public Single<String> reserveTour(Locale locale, String tourName) {
-		return locateTour(tourName).flatMap(node -> {
-			Long level = getStockLevel(node);
-			String name = node.getFields().getStringField("name").getString();
-			if (level == null || level <= 0) {
-				return Maybe.just(i18n(locale, "tour_out_of_stock", name));
-			}
-			long newLevel = level - 1;
-			NodeUpdateRequest request = node.toRequest();
-			request.getFields().put("seats", new NumberFieldImpl().setNumber(newLevel));
-			System.out.println(request.toJson());
-			return client.updateNode(PROJECT, node.getUuid(), request).toSingle().map(n -> {
-				return i18n(locale, "tour_reserved", name);
-			}).toMaybe();
+	public Single<String> reserveNextTour(Locale locale) {
+		// 1. Locate the next tour
+		return loadNextTour(locale).flatMap(tour -> {
+			// 2. Load and update the tour node
+			Maybe<NodeResponse> locatedNode = client
+				.findNodeByUuid(PROJECT, tour.getUuid(), new NodeParametersImpl().setLanguages(locale.getLanguage())).toMaybe();
 
-		})
+			if (tour.getSeats() == 0) {
+				return Maybe.just(i18n(locale, "tour_out_of_stock", tour.getTitle()));
+			}
+
+			return locatedNode.flatMapSingle(node -> {
+				NodeUpdateRequest nodeUpdateRequest = node.toRequest();
+
+				MicronodeFieldList list = node.getFields().getMicronodeFieldList("dates");
+
+				for (MicronodeField date : list.getItems()) {
+					DateFieldImpl currentDateField = date.getFields().getDateField("date");
+					if (currentDateField != null) {
+						OffsetDateTime odt = OffsetDateTime.parse(currentDateField.getDate());
+
+						// Found the next tour. Lets update the count
+						if (tour.getDate().isEqual(odt)) {
+							int currentSeats = date.getFields().getNumberField("seats").getNumber().intValue();
+							if (currentSeats <= 0) {
+								return Single.just(i18n(locale, "tour_out_of_stock", tour.getTitle()));
+							}
+							int newSeats = currentSeats - 1;
+							date.getFields().put("seats", new NumberFieldImpl().setNumber(newSeats));
+						}
+					}
+
+				}
+
+				// list.getItems().clear();
+				// list.add(createTourDate(today, 3));
+
+				node.getFields().put("dates", list);
+
+				// request.getFields().put("seats", new NumberFieldImpl().setNumber(newLevel));
+				System.out.println(nodeUpdateRequest.toJson());
+
+				Single<NodeResponse> updatedNode = client.updateNode(PROJECT, node.getUuid(), nodeUpdateRequest).toSingle();
+				return updatedNode.map(unode -> {
+					return i18n(locale, "tour_reserved", tour.getTitle());
+				});
+			}).toMaybe();
+		}).onErrorReturnItem(i18n(locale, "tour_reserve_error"))
 			.defaultIfEmpty(i18n(locale, "tour_not_found"))
-			.onErrorReturnItem(i18n(locale, "tour_reserve_error"))
 			.toSingle();
 	}
 
