@@ -8,9 +8,9 @@ cd $PROJECT_DIR
 
 IMAGE=gentics/mesh-musetech-demo-alexa-skill
 
-echo "Building docker image"
+echo -e "\nBuilding docker image"
 docker build -t $IMAGE .
 
-echo "Ready for deployment to docker hub"
+echo -e "\nReady to push. Press any key to continue"
 read
 docker push $IMAGE

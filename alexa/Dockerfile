@@ -19,8 +19,8 @@ ENV MESH_WAIT_TIMEOUT 200
 ENV MUSETECH_MESH_HOST cr
 ENV MUSETECH_MESH_PORT 8080
 RUN mkdir /server
-COPY --from=build-env /server/build/target/mesh-alexa-skill-0.0.1-SNAPSHOT.jar /server/server.jar
-
+COPY --from=build-env /server/build/target/mesh-musetech-alexa-skill-0.0.1-SNAPSHOT.jar /server/server.jar
+ 
 # Add content
 WORKDIR /server
 CMD [ "java", "-jar" , "server.jar"]
