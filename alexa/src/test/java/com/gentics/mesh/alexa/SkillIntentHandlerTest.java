@@ -2,6 +2,7 @@ package com.gentics.mesh.alexa;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -18,6 +19,7 @@ import io.vertx.core.json.JsonObject;
 public class SkillIntentHandlerTest extends AbstractSkillTest {
 
 	@Test
+	@Ignore
 	public void testStream() throws IOException {
 		JsonObject input = loadJson("open");
 

@@ -24,5 +24,4 @@ COPY --from=build-env /importer/build/target/mesh-musetech-importer-0.0.1-SNAPSH
 # Add content
 WORKDIR /importer
 ADD data ./data
-RUN find data
 CMD [ "java", "-jar" , "importer.jar"]
