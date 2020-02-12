@@ -6,9 +6,9 @@ import Title from '../components/Title';
 import { Col, Row, Container } from 'react-bootstrap';
 import config from '../config.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { fa, faClock, faMapMarker, faCalendarDay, faUserFriends, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faMapMarker, faCalendarDay, faUserFriends } from '@fortawesome/free-solid-svg-icons'
 import '../css/screen.css';
-import { format, parseISO, isToday, isTomorrow, formatDistanceToNow, lightFormat } from 'date-fns';
+import { parseISO, isToday, isTomorrow, lightFormat } from 'date-fns';
 
 export default function ScreenView({ match }) {
     const id = match.params.id;
@@ -73,7 +73,7 @@ function InfoSelector({ content }) {
 
         dates = dates.filter(date => {
             let seats = date.fields.seats;
-            return seats != null && seats != 0;
+            return seats !== null && seats !== 0;
         }).sort(function (a, b) {
             return a.fields.date - a.fields.date;
         });

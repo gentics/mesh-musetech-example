@@ -7,10 +7,7 @@ import useWebsocketBridge from '../eventbus';
 import { Col, Row, Container } from 'react-bootstrap';
 import LanguageContext from '../languageContext';
 import config from '../config.json';
-import { format, parseISO, isToday, isTomorrow, formatDistanceToNow, lightFormat } from 'date-fns';
-import { enGB, de } from 'date-fns/locale';
-
-const locales = { "en": enGB, "de": de }
+import { parseISO, isToday, isTomorrow, lightFormat } from 'date-fns';
 
 const trans = {
     de: {
@@ -136,7 +133,6 @@ export default function TourView({ match }) {
 
 function TourDate({ date }) {
     let tourDate = parseISO(date.fields.date);
-    let lang = useContext(LanguageContext);
     const i18n = useI18n();
     let prefix = datePrefix(tourDate, i18n);
 
