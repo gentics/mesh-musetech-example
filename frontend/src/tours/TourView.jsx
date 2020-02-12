@@ -19,17 +19,17 @@ const trans = {
         today: "Heute",
         tomorrow: "Morgen",
         notToday: "Am",
-        free: "frei",
+        free: "Freie",
         dates: "Termine"
     },
     en: {
-        seats: "Seats",
+        seats: "seats",
         price: "Price",
         your: "Your",
         today: "Today",
         tomorrow: "Tomorrow",
         notToday: "On",
-        free: "free",
+        free: "Free",
         dates: "Dates"
     }
 }
@@ -122,7 +122,7 @@ export default function TourView({ match }) {
                                             <FontAwesomeIcon icon={faEuroSign} className="fas fa-1x" />
                                         </Col>
                                         <Col md={{ span: 3, offset: 0 }} className="text-left">
-                                            <p>{tour.fields.price}</p>
+                                            <p>{tour.fields.price} €</p>
                                         </Col>
 
                                         <Col md={{ span: 1, offset: 0 }} className="text-center">
@@ -180,7 +180,7 @@ function TourDate({ date }) {
                     {prefix} {lightFormat(tourDate, "dd.MM.yyyy HH:mm")}
                 </Col>
                 <Col lg={{ span: 4, offset: 0 }} className="text-center">
-                    {i18n.seats}: {date.fields.seats} {i18n.free}
+                {i18n.free} {i18n.seats}: {date.fields.seats} 
                 </Col>
             </Row>
         </Container>
