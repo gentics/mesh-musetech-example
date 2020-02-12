@@ -1,7 +1,6 @@
 package com.gentics.mesh.alexa.intent.impl;
 
 import static com.amazon.ask.request.Predicates.intentName;
-import static com.gentics.mesh.alexa.GenticsSkill.BLACKSPRING_PHONETIC_DE;
 import static com.gentics.mesh.alexa.util.I18NUtil.i18n;
 
 import java.util.Locale;
@@ -15,6 +14,7 @@ import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
 import com.gentics.mesh.alexa.action.MeshActions;
 import com.gentics.mesh.alexa.intent.AbstractGenticsIntent;
+import com.gentics.mesh.alexa.model.AlexaResponse;
 
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -50,7 +50,8 @@ public class TourInfoIntentHandler extends AbstractGenticsIntent {
 			if (name == null) {
 				speechText = i18n(locale, "tour_not_found");
 			} else {
-				speechText = mesh.loadStockLevel(locale, name).blockingGet();
+				AlexaResponse response = mesh.loadStockLevel(locale, name).blockingGet();
+				speechText = response.getSpeech();
 			}
 		}
 

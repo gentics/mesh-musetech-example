@@ -10,7 +10,7 @@ import com.gentics.mesh.alexa.intent.SkillIntentHandler;
 import com.gentics.mesh.alexa.intent.impl.GetNextTourIntent;
 import com.gentics.mesh.alexa.intent.impl.GetTourPriceIntent;
 import com.gentics.mesh.alexa.intent.impl.GetToursInfoIntent;
-import com.gentics.mesh.alexa.intent.impl.ReserveNextTourIntent;
+import com.gentics.mesh.alexa.intent.impl.ReserveTourIntent;
 import com.gentics.mesh.alexa.intent.impl.TourInfoIntentHandler;
 
 import io.vertx.core.buffer.Buffer;
@@ -25,7 +25,7 @@ public class SkillIntentHandlerTest extends AbstractSkillTest {
 
 		GetTourPriceIntent priceIntent = Mockito.mock(GetTourPriceIntent.class);
 		TourInfoIntentHandler stockLevelIntent = Mockito.mock(TourInfoIntentHandler.class);
-		ReserveNextTourIntent reserveIntent = Mockito.mock(ReserveNextTourIntent.class);
+		ReserveTourIntent reserveIntent = Mockito.mock(ReserveTourIntent.class);
 		GetToursInfoIntent toursInfo = Mockito.mock(GetToursInfoIntent.class);
 		GetNextTourIntent nextTourInfo = Mockito.mock(GetNextTourIntent.class);
 

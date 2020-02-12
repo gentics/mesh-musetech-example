@@ -1,7 +1,6 @@
 package com.gentics.mesh.alexa.intent.impl;
 
 import static com.amazon.ask.request.Predicates.intentName;
-import static com.gentics.mesh.alexa.GenticsSkill.BLACKSPRING_PHONETIC_DE;
 import static com.gentics.mesh.alexa.util.I18NUtil.i18n;
 
 import java.util.Locale;
@@ -13,6 +12,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Response;
 import com.gentics.mesh.alexa.action.MeshActions;
 import com.gentics.mesh.alexa.intent.AbstractGenticsIntent;
+import com.gentics.mesh.alexa.model.AlexaResponse;
 
 public class GetToursInfoIntent extends AbstractGenticsIntent {
 
@@ -31,7 +31,8 @@ public class GetToursInfoIntent extends AbstractGenticsIntent {
 	@Override
 	public Optional<Response> handle(HandlerInput input) {
 		Locale locale = getLocale(input);
-		String speechText = mesh.loadTourInfos(locale).blockingGet();
+		AlexaResponse response = mesh.loadTourInfos(locale).blockingGet();
+		String speechText = response.getSpeech();
 
 		return input.getResponseBuilder()
 			.withSpeech(speechText)

@@ -25,6 +25,8 @@ public class GenticsSkill {
 
 	public static final String BLACKSPRING_PHONETIC_DE = "<phoneme alphabet=\"ipa\" ph=\"Blæck sprɪŋ\"></phoneme>";
 
+	public static final String BLACKSPRING_DE = "Black Spring";
+
 	private static Logger log;
 
 	public static void main(String[] args) {

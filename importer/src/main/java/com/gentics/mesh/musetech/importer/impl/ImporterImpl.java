@@ -12,10 +12,13 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gentics.mesh.core.rest.micronode.MicronodeResponse;
 import com.gentics.mesh.core.rest.microschema.impl.MicroschemaCreateRequest;
@@ -437,11 +440,19 @@ public class ImporterImpl extends AbstractImporter {
 	}
 
 	private Completable importTours(NodeResponse folder) {
+
+		AtomicInteger offset = new AtomicInteger();
+		Map<String, Integer> offsetMap = new HashMap<>();
+
 		return importNodes(client, folder.getUuid(), tours, projectName, node -> {
 			MicronodeFieldList list = node.getFields().getMicronodeFieldList("dates");
-			LocalDateTime today = LocalDate.now().atTime(17, 30);
-			LocalDateTime todayPlus1 = today.plusDays(1).minusHours(2);
-			LocalDateTime todayPlus2 = todayPlus1.plusDays(1).minusHours(3);
+
+			int currentOffset = offsetMap.computeIfAbsent(node.getUuid(), uuid -> {
+				return offset.getAndIncrement();
+			});
+			LocalDateTime today = LocalDate.now().atTime(10, 30).plusHours(currentOffset);
+			LocalDateTime todayPlus1 = today.plusDays(1).plusHours(1).plusHours(currentOffset);
+			LocalDateTime todayPlus2 = todayPlus1.plusDays(1).plusHours(1).plusHours(currentOffset);
 
 			list.getItems().clear();
 			list.add(createTourDate(today, 3));

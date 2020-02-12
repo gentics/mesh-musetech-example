@@ -1,0 +1,22 @@
+query Tour($lang: [String], $uuid: String) {
+  node(uuid: $uuid, lang: $lang) {
+    uuid
+    ... on Tour {
+      fields {
+        title
+        location
+        price
+        size
+        description
+        dates {
+          ... on TourDate {
+            fields {
+              date
+              seats
+            }
+          }
+        }
+      }
+    }
+  }
+}

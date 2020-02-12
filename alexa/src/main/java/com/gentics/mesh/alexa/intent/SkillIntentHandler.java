@@ -17,7 +17,7 @@ import com.gentics.mesh.alexa.intent.impl.GetTourPriceIntent;
 import com.gentics.mesh.alexa.intent.impl.GetToursInfoIntent;
 import com.gentics.mesh.alexa.intent.impl.HelpIntentHandler;
 import com.gentics.mesh.alexa.intent.impl.LaunchRequestHandler;
-import com.gentics.mesh.alexa.intent.impl.ReserveNextTourIntent;
+import com.gentics.mesh.alexa.intent.impl.ReserveTourIntent;
 import com.gentics.mesh.alexa.intent.impl.SessionEndedRequestHandler;
 import com.gentics.mesh.alexa.intent.impl.TourInfoIntentHandler;
 
@@ -36,7 +36,7 @@ public class SkillIntentHandler {
 	public SkillIntentHandler(
 		GetTourPriceIntent priceIntent, 
 		TourInfoIntentHandler stockLevelIntent, 
-		ReserveNextTourIntent reserveIntent,
+		ReserveTourIntent reserveIntent,
 		GetToursInfoIntent toursInfo,
 		GetNextTourIntent nextTour
 		) {
