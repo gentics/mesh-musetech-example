@@ -21,7 +21,9 @@ import io.vertx.core.logging.LoggerFactory;
 @Singleton
 public class GenticsSkill {
 
-	public static final String GENTICS_PHONETIC = "<phoneme alphabet=\"ipa\" ph=\"dʒɛˈntɪcs\"></phoneme>";
+	public static final String GENTICS_PHONETIC_DE = "<phoneme alphabet=\"ipa\" ph=\"dʒɛˈntɪcs\"></phoneme>";
+
+	public static final String BLACKSPRING_PHONETIC_DE = "<phoneme alphabet=\"ipa\" ph=\"Blæck sprɪŋ\"></phoneme>";
 
 	private static Logger log;
 

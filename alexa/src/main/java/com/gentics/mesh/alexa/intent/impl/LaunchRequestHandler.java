@@ -1,7 +1,7 @@
 package com.gentics.mesh.alexa.intent.impl;
 
 import static com.amazon.ask.request.Predicates.requestType;
-import static com.gentics.mesh.alexa.GenticsSkill.GENTICS_PHONETIC;
+import static com.gentics.mesh.alexa.GenticsSkill.BLACKSPRING_PHONETIC_DE;
 import static com.gentics.mesh.alexa.util.I18NUtil.i18n;
 
 import java.util.Locale;
@@ -22,11 +22,11 @@ public class LaunchRequestHandler extends AbstractGenticsIntent {
 	@Override
 	public Optional<Response> handle(HandlerInput input) {
 		Locale locale = getLocale(input);
-		String speechText = i18n(locale, "welcome", GENTICS_PHONETIC);
+		String speechText = i18n(locale, "welcome", BLACKSPRING_PHONETIC_DE);
 
 		return input.getResponseBuilder()
 			.withSpeech(speechText)
-			.withSimpleCard(i18n(locale, "shop_name"), speechText)
+			.withSimpleCard(i18n(locale, "museum_name"), speechText)
 			.withReprompt(i18n(locale, "help"))
 			.build();
 	}

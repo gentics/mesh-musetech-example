@@ -2,6 +2,7 @@ package com.gentics.mesh.alexa.intent.impl;
 
 import static com.amazon.ask.request.Predicates.intentName;
 import static com.gentics.mesh.alexa.util.I18NUtil.i18n;
+import static com.gentics.mesh.alexa.GenticsSkill.BLACKSPRING_PHONETIC_DE;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class FallbackIntentHandler extends AbstractGenticsIntent {
 
 		return input.getResponseBuilder()
 			.withSpeech(speechText)
-			.withSimpleCard(i18n(locale, "shop_name"), speechText)
+			.withSimpleCard(i18n(locale, "museum_name"), speechText)
 			.withReprompt(speechText)
 			.build();
 	}
