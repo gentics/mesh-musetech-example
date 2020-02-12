@@ -7,6 +7,8 @@ import useWebsocketBridge from '../eventbus';
 import { Col, Row, Container } from 'react-bootstrap';
 import LanguageContext from '../languageContext';
 import config from '../config.json';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClock, faMapMarker, faUserFriends, faEuroSign } from '@fortawesome/free-solid-svg-icons'
 import { parseISO, isToday, isTomorrow, lightFormat } from 'date-fns';
 
 const trans = {
@@ -70,7 +72,6 @@ export default function TourView({ match }) {
             <section className="page-section without-header">
                 <Container>
                     <div className="content tour-detail-caption bg-light" >
-
                         <Row>
                             <Col lg={12} className="text-center">
                                 <div className="tour-title">
@@ -79,24 +80,59 @@ export default function TourView({ match }) {
                             </Col>
                         </Row>
                         <Row>
-                            <Col lg={12}>
-                                <picture>
-                                    <source media="(min-height: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=500&mode=smart`}></source>
-                                    <source media="(min-height: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=800&mode=smart`}></source>
-                                    <source media="(min-height: 1280px)" srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=1200&mode=smart`}></source>
-                                    <img alt={tour.fields.name} srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=600&mode=smart`} className="img-responsive img-fluid" />
-                                </picture>
-                                <div className="image-attribution">
-                                    <p>{tour.fields.image.fields.attribution}</p>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col lg={12} className="tour-location text-muted">
-                                <div>
-                                    <b>{i18n.seats}:</b> {tour.fields.size} &nbsp;&nbsp;
-                                    <b>{i18n.price}:</b> {tour.fields.price} €
-                                </div>
+                            <Col lg={{ span: 6, offset: 3 }}>
+                                <Container>
+                                    <Row>
+                                        <Col lg={12}>
+                                            <picture>
+                                                <source media="(min-height: 320px)" srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=500&mode=smart`}></source>
+                                                <source media="(min-height: 786px)" srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=800&mode=smart`}></source>
+                                                <source media="(min-height: 1280px)" srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=1200&mode=smart`}></source>
+                                                <img alt={tour.fields.name} srcSet={`${config.meshUrl}/musetech/webroot${tour.fields.image.path}?w=600&mode=smart`} className="img-responsive img-fluid" />
+                                            </picture>
+                                            <div className="image-attribution">
+                                                <p>{tour.fields.image.fields.attribution}</p>
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col lg={12}>
+                                            <br />
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col md={{ span: 1, offset: 3 }} className="text-center">
+                                            <FontAwesomeIcon icon={faUserFriends} className="fas fa-1x" />
+                                        </Col>
+                                        <Col md={{ span: 3, offset: 0 }} className="text-left">
+                                            <p>max. {tour.fields.size}</p>
+                                        </Col>
+
+                                        <Col md={{ span: 1, offset: 0 }} className="text-center">
+                                            <FontAwesomeIcon icon={faClock} className="fas fa-1x" />
+                                        </Col>
+                                        <Col md={{ span: 2, offset: 0 }} className="text-left">
+                                            <p>{tour.fields.duration}min</p>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={{ span: 1, offset: 3 }} className="text-center">
+                                            <FontAwesomeIcon icon={faEuroSign} className="fas fa-1x" />
+                                        </Col>
+                                        <Col md={{ span: 3, offset: 0 }} className="text-left">
+                                            <p>{tour.fields.price}</p>
+                                        </Col>
+
+                                        <Col md={{ span: 1, offset: 0 }} className="text-center">
+                                            <FontAwesomeIcon icon={faMapMarker} className="fas fa-1x" />
+                                        </Col>
+                                        <Col md={{ span: 3, offset: 0 }} className="text-left">
+                                            <p>{tour.fields.location}</p>
+                                        </Col>
+                                    </Row>
+                                </Container>
                             </Col>
                         </Row>
                         <Row>

@@ -183,6 +183,8 @@ export async function getTour(id, lang) {
           slug
           title
           price
+          duration
+          location
           size
           description
           guides {
