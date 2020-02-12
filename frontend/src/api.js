@@ -342,6 +342,7 @@ export async function getScreen(id) {
                   ... on Tour {
                     fields {
                       public_number
+                      title
                       size
                       duration
                       location
