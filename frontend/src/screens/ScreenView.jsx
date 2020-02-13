@@ -10,6 +10,9 @@ import { faClock, faMapMarker, faCalendarDay, faUserFriends } from '@fortawesome
 import '../css/screen.css';
 import { isToday, isTomorrow, lightFormat } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { isBefore } from 'date-fns/esm';
+
+const timeZone = 'Europe/London';
 
 export default function ScreenView({ match }) {
     const id = match.params.id;
@@ -62,6 +65,34 @@ function SimpleSlider({ node }) {
 
 }
 
+function findLatestDate(tourDates) {
+    /*
+    .filter(tourDate => {
+        let seats = tourDate.fields.seats;
+        return seats !== null && seats !== 0;
+    })
+    */
+    let dates = tourDates.map(tourDate => {
+        tourDate.utcDate = utcToZonedTime(tourDate.fields.date, timeZone);
+        return tourDate;
+    }).filter(tourDate => {
+        return isBefore(new Date(), tourDate.utcDate);
+    }).map(tourDate => {
+        let dateStr = lightFormat(tourDate.utcDate, "dd.MM.yyyy HH:mm");
+        if (isToday(tourDate.utcDate)) {
+            dateStr = "Today " + lightFormat(tourDate.utcDate, "HH:mm");
+        } else if (isTomorrow(tourDate.utcDate)) {
+            dateStr = "Tomorrow " + lightFormat(tourDate.utcDate, "HH:mm");
+        }
+        tourDate.dateStr = dateStr;
+        return tourDate;
+    }).sort(function (a, b) {
+        return isBefore(a.utcDate, b.utcDate);
+    });
+
+    return dates[0];
+}
+
 function InfoSelector({ content }) {
     const type = content.type;
     if (type === "ScreenExhibitPromo") {
@@ -70,25 +101,7 @@ function InfoSelector({ content }) {
         );
     } else if (type === "ScreenEvent") {
 
-        let dates = content.fields.tour.fields.dates;
-
-        dates = dates.filter(date => {
-            let seats = date.fields.seats;
-            return seats !== null && seats !== 0;
-        }).sort(function (a, b) {
-            return a.fields.date - b.fields.date;
-        });
-
-        let latest = dates[0];
-        const timeZone = 'Europe/London';
-        let tourDate = utcToZonedTime(latest.fields.date, timeZone);
-
-        let tourStr = lightFormat(tourDate, "dd.MM.yyyy HH:mm");
-        if (isToday(tourDate)) {
-            tourStr = "Today " + lightFormat(tourDate, "HH:mm");
-        } else if (isTomorrow(tourDate)) {
-            tourStr = "Tomorrow " + lightFormat(tourDate, "HH:mm");
-        }
+        let latestDate = findLatestDate(content.fields.tour.fields.dates);
 
         return (
             <div className="image-label">
@@ -104,7 +117,7 @@ function InfoSelector({ content }) {
                             <FontAwesomeIcon icon={faCalendarDay} className="fas fa-2x" />
                         </Col>
                         <Col md={10} className="text-center">
-                            <h4>{tourStr}</h4>
+                            <h4>{latestDate.dateStr}</h4>
                         </Col>
                     </Row>
 
@@ -119,7 +132,7 @@ function InfoSelector({ content }) {
                             <FontAwesomeIcon icon={faUserFriends} className="fas fa-2x" />
                         </Col>
                         <Col md={10} className="text-center">
-                            <h3>{latest.fields.seats} available</h3>
+                            <h3>{latestDate.fields.seats} available</h3>
                         </Col>
                     </Row>
 

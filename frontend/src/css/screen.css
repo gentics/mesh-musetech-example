@@ -153,6 +153,10 @@
       opacity: 0;
     }
   }
+
+  .label {
+    padding-top: 8px;
+  }
   
   .label-default {
     background-color: white;
@@ -168,7 +172,7 @@
   .image-label {
     animation: panlabel 10s infinite;
     background-color: #fed136;
-    max-width: 30%;
+    max-width: 40%;
     overflow: hidden;
     position: absolute;
     padding: 10px;

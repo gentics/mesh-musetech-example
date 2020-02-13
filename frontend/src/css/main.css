@@ -886,6 +886,10 @@ header.tourhead {
   margin: 10px;
 }
 
+.tour-date-faded {
+  opacity: 0.40;
+}
+
 .guide-quote {
   font-size: 1.3em;
   font-weight: bold;

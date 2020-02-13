@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faMapMarker, faUserFriends, faEuroSign } from '@fortawesome/free-solid-svg-icons'
 import { format, isToday, isTomorrow } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { isBefore } from 'date-fns/esm';
 
 
 const trans = {
@@ -174,9 +175,12 @@ function TourDate({ date }) {
     const timeZone = 'Europe/London';
     let zonedDate = utcToZonedTime(date.fields.date, timeZone);
     let prefix = datePrefix(zonedDate, i18n);
+    let inPast = isBefore(zonedDate, new Date());
+    let extraClass = inPast ? "tour-date-faded" : "";
+    let dateClasses = "border rounded tour-date " + extraClass;
 
     return (
-        <Container className="border rounded tour-date">
+        <Container className={dateClasses}>
             <Row>
                 <Col lg={{ span: 8, offset: 0 }} className="text-center">
                     {prefix} {format(zonedDate, "dd.MM.yyyy HH:mm")}
