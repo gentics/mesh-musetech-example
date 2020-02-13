@@ -9,7 +9,9 @@ import LanguageContext from '../languageContext';
 import config from '../config.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faMapMarker, faUserFriends, faEuroSign } from '@fortawesome/free-solid-svg-icons'
-import { parseISO, isToday, isTomorrow, lightFormat } from 'date-fns';
+import { format, isToday, isTomorrow } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
+
 
 const trans = {
     de: {
@@ -168,16 +170,17 @@ export default function TourView({ match }) {
 }
 
 function TourDate({ date }) {
-    let tourDate = parseISO(date.fields.date);
+    let tourDate = new Date(date.fields.date);
     const i18n = useI18n();
-    let prefix = datePrefix(tourDate, i18n);
+    const timeZone = 'Europe/London';
+    let zonedDate = utcToZonedTime(date.fields.date, timeZone);
+    let prefix = datePrefix(zonedDate, i18n);
 
     return (
         <Container className="border rounded tour-date">
             <Row>
                 <Col lg={{ span: 8, offset: 0 }} className="text-center">
-                    {/* - In {formatDistanceToNow(tourDate, { locale: locales[lang] })} */}
-                    {prefix} {lightFormat(tourDate, "dd.MM.yyyy HH:mm")}
+                    {prefix} {format(zonedDate, "dd.MM.yyyy HH:mm")}
                 </Col>
                 <Col lg={{ span: 4, offset: 0 }} className="text-center">
                 {i18n.free} {i18n.seats}: {date.fields.seats} 

@@ -8,7 +8,8 @@ import config from '../config.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faMapMarker, faCalendarDay, faUserFriends } from '@fortawesome/free-solid-svg-icons'
 import '../css/screen.css';
-import { parseISO, isToday, isTomorrow, lightFormat } from 'date-fns';
+import { isToday, isTomorrow, lightFormat } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export default function ScreenView({ match }) {
     const id = match.params.id;
@@ -75,12 +76,13 @@ function InfoSelector({ content }) {
             let seats = date.fields.seats;
             return seats !== null && seats !== 0;
         }).sort(function (a, b) {
-            return a.fields.date - a.fields.date;
+            return a.fields.date - b.fields.date;
         });
 
-        console.dir(dates);
         let latest = dates[0];
-        let tourDate = parseISO(latest.fields.date);
+        const timeZone = 'Europe/London';
+        let tourDate = utcToZonedTime(latest.fields.date, timeZone);
+
         let tourStr = lightFormat(tourDate, "dd.MM.yyyy HH:mm");
         if (isToday(tourDate)) {
             tourStr = "Today " + lightFormat(tourDate, "HH:mm");

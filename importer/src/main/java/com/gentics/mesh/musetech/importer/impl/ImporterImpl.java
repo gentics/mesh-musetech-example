@@ -469,7 +469,7 @@ public class ImporterImpl extends AbstractImporter {
 		MicronodeResponse field = new MicronodeResponse();
 		field.setMicroschema(new MicroschemaReferenceImpl().setName("TourDate"));
 
-		OffsetDateTime odt = OffsetDateTime.now(ZoneId.systemDefault());
+		OffsetDateTime odt = OffsetDateTime.now(ZoneId.of("GMT"));
 		ZoneOffset zoneOffset = odt.getOffset();
 
 		DateField dateField = new DateFieldImpl().setDate(date.atOffset(zoneOffset).format(DateTimeFormatter.ISO_INSTANT));

@@ -8,6 +8,8 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "bootstrap": "^4.3.1",
     "date-fns": "^2.9.0",
+    "date-fns-timezone": "^0.1.4",
+    "date-fns-tz": "^1.0.10",
     "dompurify": "^2.0.8",
     "keycloak-js": "^8.0.1",
     "lorem-ipsum": "^2.0.3",

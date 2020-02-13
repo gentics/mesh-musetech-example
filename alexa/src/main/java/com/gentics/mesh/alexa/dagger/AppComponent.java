@@ -2,7 +2,7 @@ package com.gentics.mesh.alexa.dagger;
 
 import javax.inject.Singleton;
 
-import com.gentics.mesh.alexa.GenticsSkill;
+import com.gentics.mesh.alexa.MuseTechSkill;
 import com.gentics.mesh.alexa.dagger.config.SkillConfig;
 
 import dagger.BindsInstance;
@@ -14,7 +14,7 @@ public interface AppComponent {
 
 	SkillConfig skillConfig();
 	
-	GenticsSkill skill();
+	MuseTechSkill skill();
 
 	@Component.Builder
 	interface Builder {

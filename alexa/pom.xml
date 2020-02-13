@@ -9,7 +9,7 @@
 		<vertx.version>3.7.0</vertx.version>
 		<mesh.version>1.4.0</mesh.version>
 		<dagger.version>2.24</dagger.version>
-		<mainClass>com.gentics.mesh.alexa.GenticsSkill</mainClass>
+		<mainClass>com.gentics.mesh.alexa.MuseTechSkill</mainClass>
 	</properties>
 
 	<dependencyManagement>

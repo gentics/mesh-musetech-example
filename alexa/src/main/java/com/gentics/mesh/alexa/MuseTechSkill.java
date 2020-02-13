@@ -19,7 +19,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
 @Singleton
-public class GenticsSkill {
+public class MuseTechSkill {
 
 	public static final String GENTICS_PHONETIC_DE = "<phoneme alphabet=\"ipa\" ph=\"dʒɛˈntɪcs\"></phoneme>";
 
@@ -32,7 +32,7 @@ public class GenticsSkill {
 	public static void main(String[] args) {
 		initLogger();
 
-		log = LoggerFactory.getLogger(GenticsSkill.class);
+		log = LoggerFactory.getLogger(MuseTechSkill.class);
 		log.info("Logging system initialized");
 
 		SkillConfig config = new SkillConfig();
@@ -78,7 +78,7 @@ public class GenticsSkill {
 	private SkillServerVerticle serverVerticle;
 
 	@Inject
-	public GenticsSkill(Vertx vertx, SkillServerVerticle serverVerticle) {
+	public MuseTechSkill(Vertx vertx, SkillServerVerticle serverVerticle) {
 		this.vertx = vertx;
 		this.serverVerticle = serverVerticle;
 	}

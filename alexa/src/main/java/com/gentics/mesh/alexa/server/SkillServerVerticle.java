@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gentics.mesh.alexa.GenticsSkill;
+import com.gentics.mesh.alexa.MuseTechSkill;
 import com.gentics.mesh.alexa.dagger.config.SkillConfig;
 import com.gentics.mesh.alexa.intent.SkillIntentHandler;
 
@@ -24,7 +24,7 @@ import io.vertx.ext.web.handler.LoggerHandler;
 @Singleton
 public class SkillServerVerticle extends AbstractVerticle {
 
-	public static final Logger log = LoggerFactory.getLogger(GenticsSkill.class);
+	public static final Logger log = LoggerFactory.getLogger(MuseTechSkill.class);
 
 	private HttpServer server;
 	private SkillIntentHandler intentHandler;

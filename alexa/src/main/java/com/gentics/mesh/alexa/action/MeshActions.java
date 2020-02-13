@@ -1,8 +1,10 @@
 package com.gentics.mesh.alexa.action;
 
+import static com.gentics.mesh.alexa.util.DateUtils.now;
 import static com.gentics.mesh.alexa.util.I18NUtil.i18n;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -195,20 +197,22 @@ public class MeshActions {
 			if (tour == null) {
 				return AlexaResponse.create(locale, "tours_empty");
 			} else {
-				// OffsetDateTime.now().
-				OffsetDateTime date = tour.getDate();
-				boolean today = date.toLocalDate().isEqual(OffsetDateTime.now().toLocalDate());
+				OffsetDateTime dateTime = tour.getDate();
+				LocalDate date = dateTime.toLocalDate();
+				LocalDate today = now().toLocalDate();
+				boolean isToday = date.isEqual(today);
+				boolean isTomorrow = date.isEqual(today.plusDays(1));
 				StringBuilder builder = new StringBuilder();
-				String timeStr = date.getHour() + ":" + date.getMinute();
+				String timeStr = dateTime.getHour() + ":" + dateTime.getMinute();
 				String dateStr = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-				if (today) {
+				if (isToday) {
 					builder.append(i18n(locale, "tour_next_info_today", tour.getTitle(), timeStr, tour.getLocation()));
 					builder.append(" ");
-					if (tour.getSeats() == 1) {
-						builder.append(i18n(locale, "tour_next_info_seat"));
-					} else {
-						builder.append(i18n(locale, "tour_next_info_seats", String.valueOf(tour.getSeats())));
-					}
+					builder.append(seatsInfo(locale, tour.getSeats()));
+				} else if (isTomorrow) {
+					builder.append(i18n(locale, "tour_next_info_tomorrow", tour.getTitle(), timeStr, tour.getLocation()));
+					builder.append(" ");
+					builder.append(seatsInfo(locale, tour.getSeats()));
 				} else {
 					// builder.append(i18n(locale, "tour_next_info_tomorrow"));
 					builder.append(i18n(locale, "tour_next_info_on", tour.getTitle(), dateStr, timeStr, tour.getLocation()));
@@ -225,8 +229,15 @@ public class MeshActions {
 			.toSingle();
 	}
 
-	private TourInfo findNextTour(JsonArray tours) {
+	private String seatsInfo(Locale locale, int seats) {
+		if (seats == 1) {
+			return i18n(locale, "tour_next_info_seat");
+		} else {
+			return i18n(locale, "tour_next_info_seats", String.valueOf(seats));
+		}
+	}
 
+	private TourInfo findNextTour(JsonArray tours) {
 		TourInfo earliestInfo = null;
 		for (int i = 0; i < tours.size(); i++) {
 			JsonObject tour = tours.getJsonObject(i);
@@ -248,11 +259,17 @@ public class MeshActions {
 				OffsetDateTime date = null;
 				try {
 					date = OffsetDateTime.parse(dateStr);
+					boolean isInPast = date.isBefore(now());
+					// Skip full and past tours
+					if (isInPast || seats==0) {
+						continue;
+					}
+					// Check whether this is the first tour in the future or whether the tour is earlier compared to the last found tour.
+					if (earliestInfo == null || date.isBefore(earliestInfo.getDate())) {
+						earliestInfo = new TourInfo(uuid, title, location, date, price, seats, size);
+					}
 				} catch (Exception e2) {
-					log.error("Could not parse date {" + dateStr + "}");
-				}
-				if (date != null && (earliestInfo == null || date.isBefore(earliestInfo.getDate())) && seats != 0) {
-					earliestInfo = new TourInfo(uuid, title, location, date, price, seats, size);
+					log.error("Could not parse date {" + dateStr + "}", e2);
 				}
 			}
 		}
