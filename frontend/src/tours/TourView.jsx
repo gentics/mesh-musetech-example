@@ -170,7 +170,6 @@ export default function TourView({ match }) {
 }
 
 function TourDate({ date }) {
-    let tourDate = new Date(date.fields.date);
     const i18n = useI18n();
     const timeZone = 'Europe/London';
     let zonedDate = utcToZonedTime(date.fields.date, timeZone);
