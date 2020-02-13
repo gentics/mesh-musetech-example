@@ -1,10 +1,12 @@
 FROM node:8-stretch as builder
 RUN mkdir /app
+
 # 1. Only add package json and install deps. 
 # This way we can cache those in a build layer
 ADD package.json /app
+ADD package-lock.json /app
 WORKDIR /app
-RUN npm install
+RUN npm ci
 
 # 2. Now add the sources and build the app
 ADD . /app
