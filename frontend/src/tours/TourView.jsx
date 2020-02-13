@@ -106,33 +106,20 @@ export default function TourView({ match }) {
                                     </Row>
 
                                     <Row>
-                                        <Col md={{ span: 1, offset: 3 }} className="text-center">
-                                            <FontAwesomeIcon icon={faUserFriends} className="fas fa-1x" />
-                                        </Col>
-                                        <Col md={{ span: 3, offset: 0 }} className="text-left">
-                                            <p>max. {tour.fields.size}</p>
+                                        <Col md={{ span: 3, offset: 0 }} className="text-center">
+                                            <p><FontAwesomeIcon icon={faUserFriends} className="fas fa-1x" />&nbsp; max. {tour.fields.size}</p>
                                         </Col>
 
-                                        <Col md={{ span: 1, offset: 0 }} className="text-center">
-                                            <FontAwesomeIcon icon={faClock} className="fas fa-1x" />
-                                        </Col>
-                                        <Col md={{ span: 2, offset: 0 }} className="text-left">
-                                            <p>{tour.fields.duration}min</p>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md={{ span: 1, offset: 3 }} className="text-center">
-                                            <FontAwesomeIcon icon={faEuroSign} className="fas fa-1x" />
-                                        </Col>
-                                        <Col md={{ span: 3, offset: 0 }} className="text-left">
-                                            <p>{tour.fields.price} €</p>
+                                        <Col md={{ span: 3, offset: 0 }} className="text-center">
+                                            <p><FontAwesomeIcon icon={faClock} className="fas fa-1x" /> {tour.fields.duration}min</p>
                                         </Col>
 
-                                        <Col md={{ span: 1, offset: 0 }} className="text-center">
-                                            <FontAwesomeIcon icon={faMapMarker} className="fas fa-1x" />
+                                        <Col md={{ span: 3, offset: 0 }} className="text-center">
+                                            <p><FontAwesomeIcon icon={faEuroSign} className="fas fa-1x" /> {tour.fields.price} €</p>
                                         </Col>
-                                        <Col md={{ span: 3, offset: 0 }} className="text-left">
-                                            <p>{tour.fields.location}</p>
+
+                                        <Col md={{ span: 3, offset: 0 }} className="text-center">
+                                            <p><FontAwesomeIcon icon={faMapMarker} className="fas fa-1x" /> {tour.fields.location}</p>
                                         </Col>
                                     </Row>
                                 </Container>
@@ -186,7 +173,7 @@ function TourDate({ date }) {
                     {prefix} {format(zonedDate, "dd.MM.yyyy HH:mm")}
                 </Col>
                 <Col lg={{ span: 4, offset: 0 }} className="text-center">
-                {i18n.free} {i18n.seats}: {date.fields.seats} 
+                    {i18n.free} {i18n.seats}: {date.fields.seats}
                 </Col>
             </Row>
         </Container>

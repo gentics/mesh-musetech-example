@@ -50,7 +50,7 @@ export default function ScreenList() {
 }
 function Screen({ screen }) {
   return (
-    <Col xs={12} sm={6} md={4} className="screen-item border">
+    <Col xs={12} sm={6} md={3} className="screen-item border">
       <Row>
         <Col lg={12} className="text-center">
           <h3>
