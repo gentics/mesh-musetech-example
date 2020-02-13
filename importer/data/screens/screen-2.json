@@ -9,7 +9,7 @@
     "language": "en",
     "fields": {
         "id": "screen-2",
-        "name": "Grand Hall Screen 1",
+        "name": "Screen 1",
         "description": "Promo screen",
         "location": "Grand Hall",
         "contents": [
