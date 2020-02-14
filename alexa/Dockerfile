@@ -20,7 +20,12 @@ ENV MUSETECH_MESH_HOST cr
 ENV MUSETECH_MESH_PORT 8080
 RUN mkdir /server
 COPY --from=build-env /server/build/target/mesh-musetech-alexa-skill-0.0.1-SNAPSHOT.jar /server/server.jar
- 
+
+RUN apk add tzdata && \
+    cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime && \
+    echo "Europe/Brussels" > /etc/timezone && \
+    apk del tzdata
+
 # Add content
 WORKDIR /server
 CMD [ "java", "-jar" , "server.jar"]
