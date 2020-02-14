@@ -1,7 +1,6 @@
 package com.gentics.mesh.alexa.intent.impl;
 
 import static com.amazon.ask.request.Predicates.intentName;
-import static com.gentics.mesh.alexa.MuseTechSkill.BLACKSPRING_PHONETIC_DE;
 import static com.gentics.mesh.alexa.util.I18NUtil.i18n;
 
 import java.util.Locale;
