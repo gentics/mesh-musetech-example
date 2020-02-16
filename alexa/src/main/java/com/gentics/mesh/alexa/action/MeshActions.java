@@ -1,6 +1,5 @@
 package com.gentics.mesh.alexa.action;
 
-import static com.gentics.mesh.alexa.util.DateUtils.now;
 import static com.gentics.mesh.alexa.util.I18NUtil.i18n;
 
 import java.io.IOException;
@@ -18,6 +17,7 @@ import com.gentics.mesh.alexa.dagger.config.SkillConfig;
 import com.gentics.mesh.alexa.intent.impl.TourInfoIntentHandler;
 import com.gentics.mesh.alexa.model.AlexaResponse;
 import com.gentics.mesh.alexa.model.TourInfo;
+import com.gentics.mesh.alexa.util.DateUtils;
 import com.gentics.mesh.core.rest.graphql.GraphQLRequest;
 import com.gentics.mesh.core.rest.node.NodeListResponse;
 import com.gentics.mesh.core.rest.node.NodeResponse;
@@ -159,7 +159,7 @@ public class MeshActions {
 				String dateStr = tourDateFields.getString("date");
 				OffsetDateTime date = null;
 				try {
-					date = OffsetDateTime.parse(dateStr);
+					date = DateUtils.parse(dateStr);
 				} catch (Exception e2) {
 					log.error("Could not parse date {" + dateStr + "}");
 				}
@@ -199,11 +199,11 @@ public class MeshActions {
 			} else {
 				OffsetDateTime dateTime = tour.getDate();
 				LocalDate date = dateTime.toLocalDate();
-				LocalDate today = now().toLocalDate();
+				LocalDate today = DateUtils.now().toLocalDate();
 				boolean isToday = date.isEqual(today);
 				boolean isTomorrow = date.isEqual(today.plusDays(1));
 				StringBuilder builder = new StringBuilder();
-				String timeStr = dateTime.getHour() + ":" + dateTime.getMinute();
+				String timeStr = DateUtils.toTime(dateTime);
 				String dateStr = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 				if (isToday) {
 					builder.append(i18n(locale, "tour_next_info_today", tour.getTitle(), timeStr, tour.getLocation()));
@@ -258,10 +258,12 @@ public class MeshActions {
 				String dateStr = tourDateFields.getString("date");
 				OffsetDateTime date = null;
 				try {
-					date = OffsetDateTime.parse(dateStr);
-					boolean isInPast = date.isBefore(now());
+					System.out.println("Checking tour {"+ dateStr +"} " + title);
+					date = DateUtils.parse(dateStr);
+					boolean isInPast = date.isBefore(DateUtils.now());
 					// Skip full and past tours
 					if (isInPast || seats==0) {
+						System.out.println("Tour date was in past");
 						continue;
 					}
 					// Check whether this is the first tour in the future or whether the tour is earlier compared to the last found tour.
@@ -325,7 +327,7 @@ public class MeshActions {
 		for (MicronodeField date : list.getItems()) {
 			DateFieldImpl currentDateField = date.getFields().getDateField("date");
 			if (currentDateField != null) {
-				OffsetDateTime odt = OffsetDateTime.parse(currentDateField.getDate());
+				OffsetDateTime odt = DateUtils.parse(currentDateField.getDate());
 
 				// Found the next tour. Lets update the count
 				if (tour.getDate().isEqual(odt)) {
