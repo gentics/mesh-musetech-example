@@ -124,7 +124,7 @@ public class MeshActions {
 			.toSingle();
 	}
 
-	public Maybe<TourInfo> loadTourByUuid(Locale locale, String tourUuid) {
+	public Maybe<TourInfo> loadTourByUuid(Locale locale, String tourUuid, String tourDateStr) {
 		JsonObject vars = new JsonObject();
 		vars.put("lang", locale.getLanguage());
 		vars.put("uuid", tourUuid);
@@ -151,7 +151,6 @@ public class MeshActions {
 			if (dates.isEmpty()) {
 				return Maybe.empty();
 			}
-			TourInfo earliestInfo = null;
 			for (int e = 0; e < dates.size(); e++) {
 				JsonObject tourDate = dates.getJsonObject(e);
 				JsonObject tourDateFields = tourDate.getJsonObject("fields");
@@ -163,15 +162,15 @@ public class MeshActions {
 				} catch (Exception e2) {
 					log.error("Could not parse date {" + dateStr + "}");
 				}
-				if (date != null && (earliestInfo == null || date.isBefore(earliestInfo.getDate())) && seats != 0) {
-					earliestInfo = new TourInfo(uuid, title, location, date, price, seats, size);
+
+				if (dateStr.equals(tourDateStr)) {
+					System.out.println("Comparing: " + dateStr + " with " + tourDateStr);
+					return Maybe.just(new TourInfo(uuid, title, location, date, price, seats, size, tourDateStr));
 				}
 			}
-			if (earliestInfo == null) {
-				return Maybe.empty();
-			} else {
-				return Maybe.just(earliestInfo);
-			}
+
+			return Maybe.empty();
+
 		});
 	}
 
@@ -220,6 +219,7 @@ public class MeshActions {
 				builder.append(" ");
 				AlexaResponse response = new AlexaResponse(builder.toString());
 				response.addAttribute(Attributes.TOUR_UUID, tour.getUuid());
+				response.addAttribute(Attributes.TOUR_DATE, tour.getDateStr());
 				return response;
 
 			}
@@ -258,17 +258,17 @@ public class MeshActions {
 				String dateStr = tourDateFields.getString("date");
 				OffsetDateTime date = null;
 				try {
-					System.out.println("Checking tour {"+ dateStr +"} " + title);
+					System.out.println("Checking tour {" + dateStr + "} " + title);
 					date = DateUtils.parse(dateStr);
 					boolean isInPast = date.isBefore(DateUtils.now());
 					// Skip full and past tours
-					if (isInPast || seats==0) {
+					if (isInPast || seats == 0) {
 						System.out.println("Tour date was in past");
 						continue;
 					}
 					// Check whether this is the first tour in the future or whether the tour is earlier compared to the last found tour.
 					if (earliestInfo == null || date.isBefore(earliestInfo.getDate())) {
-						earliestInfo = new TourInfo(uuid, title, location, date, price, seats, size);
+						earliestInfo = new TourInfo(uuid, title, location, date, price, seats, size, dateStr);
 					}
 				} catch (Exception e2) {
 					log.error("Could not parse date {" + dateStr + "}", e2);
@@ -295,8 +295,8 @@ public class MeshActions {
 			.toSingle();
 	}
 
-	public Single<AlexaResponse> reserveTourByUuid(Locale locale, String uuid) {
-		return loadTourByUuid(locale, uuid).flatMapSingle(tour -> {
+	public Single<AlexaResponse> reserveTourByUuid(Locale locale, String uuid, String dateStr) {
+		return loadTourByUuid(locale, uuid, dateStr).flatMapSingle(tour -> {
 
 			if (tour.getSeats() == 0) {
 				return Single.just(AlexaResponse.create(locale, "tour_out_of_stock", tour.getTitle()));

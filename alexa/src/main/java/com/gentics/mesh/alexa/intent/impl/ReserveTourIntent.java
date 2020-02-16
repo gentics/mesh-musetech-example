@@ -44,6 +44,7 @@ public class ReserveTourIntent extends AbstractGenticsIntent {
 		AttributesManager attributesManager = input.getAttributesManager();
 		Map<String, Object> attributes = attributesManager.getSessionAttributes();
 		String tourUuid = (String) attributes.get(Attributes.TOUR_UUID);
+		String tourDate = (String) attributes.get(Attributes.TOUR_DATE);
 
 		// Default
 		speechText = i18n(locale, "tour_not_found");
@@ -53,7 +54,7 @@ public class ReserveTourIntent extends AbstractGenticsIntent {
 			//AlexaResponse response = mesh.locateTourByName(locale, name).blockingGet();
 			//speechText = response.getSpeech();
 		} else if (tourUuid != null) {
-			AlexaResponse response = mesh.reserveTourByUuid(locale, tourUuid).blockingGet();
+			AlexaResponse response = mesh.reserveTourByUuid(locale, tourUuid, tourDate).blockingGet();
 			speechText = response.getSpeech();
 		}
 

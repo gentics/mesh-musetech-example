@@ -12,8 +12,9 @@ public class TourInfo {
 	private double price;
 	private int seats;
 	private int size;
+	private String dateStr;
 
-	public TourInfo(String uuid, String title, String location, OffsetDateTime date, double price, int seats, int size) {
+	public TourInfo(String uuid, String title, String location, OffsetDateTime date, double price, int seats, int size, String dateStr) {
 		this.uuid = uuid;
 		this.title = title;
 		this.location = location;
@@ -21,6 +22,7 @@ public class TourInfo {
 		this.price = price;
 		this.seats = seats;
 		this.size = size;
+		this.dateStr = dateStr;
 	}
 
 	public String getUuid() {
@@ -57,6 +59,10 @@ public class TourInfo {
 
 	public int getSize() {
 		return size;
+	}
+
+	public String getDateStr() {
+		return dateStr;
 	}
 
 }

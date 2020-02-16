@@ -38,16 +38,17 @@ public class MeshActionsTest {
 		Locale locale = Locale.GERMAN;
 		TourInfo tourInfo = connector.loadNextTour(locale).blockingGet();
 
-		TourInfo tourByUuid = connector.loadTourByUuid(locale, tourInfo.getUuid()).blockingGet();
+		TourInfo tourByUuid = connector.loadTourByUuid(locale, tourInfo.getUuid(), tourInfo.getDateStr()).blockingGet();
 		assertEquals(tourByUuid.getUuid(), tourInfo.getUuid());
 	}
 
-	// @Test
-	// public void testReserveNextTour() {
-	// Locale locale = Locale.GERMAN;
-	// String text = connector.reserveNextTour(locale).blockingGet().getSpeech();
-	// System.out.println(text);
-	// }
+	@Test
+	public void testReserveNextTour() {
+		Locale locale = Locale.GERMAN;
+		TourInfo tourInfo = connector.loadNextTour(locale).blockingGet();
+		String text = connector.reserveTourByUuid(locale, tourInfo.getUuid(), tourInfo.getDateStr()).blockingGet().getSpeech();
+		System.out.println(text);
+	}
 
 	@Test
 	public void testLoadNextTour() {
