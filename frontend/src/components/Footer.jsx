@@ -25,7 +25,7 @@ export default function Footer() {
                 <Container>
                     <Row className="align-items-center">
                         <Col md={4}>
-                            <span className="copyright">BMH - 2019</span>
+                            <span className="copyright">BMH - 2020</span>
                         </Col>
                         <Col md={4}>
                             <Container>
