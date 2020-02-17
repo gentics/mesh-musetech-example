@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.gentics.mesh.alexa.intent.SkillIntentHandler;
+import com.gentics.mesh.alexa.intent.impl.DebugIntent;
 import com.gentics.mesh.alexa.intent.impl.GetNextTourIntent;
 import com.gentics.mesh.alexa.intent.impl.GetTourPriceIntent;
 import com.gentics.mesh.alexa.intent.impl.GetToursInfoIntent;
@@ -28,8 +29,9 @@ public class SkillIntentHandlerTest extends AbstractSkillTest {
 		ReserveTourIntent reserveIntent = Mockito.mock(ReserveTourIntent.class);
 		GetToursInfoIntent toursInfo = Mockito.mock(GetToursInfoIntent.class);
 		GetNextTourIntent nextTourInfo = Mockito.mock(GetNextTourIntent.class);
+		DebugIntent debugIntent = Mockito.mock(DebugIntent.class);
 
-		SkillIntentHandler handler = new SkillIntentHandler(priceIntent, stockLevelIntent, reserveIntent, toursInfo, nextTourInfo);
+		SkillIntentHandler handler = new SkillIntentHandler(priceIntent, stockLevelIntent, reserveIntent, toursInfo, nextTourInfo, debugIntent);
 		handler.handleRequest(input, h -> {
 			Buffer buffer = Buffer.buffer(h.getRawResponse());
 			JsonObject output = new JsonObject(buffer);

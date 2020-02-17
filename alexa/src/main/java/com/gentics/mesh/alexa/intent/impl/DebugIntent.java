@@ -7,12 +7,15 @@ import java.time.OffsetDateTime;
 import java.util.Locale;
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Response;
 import com.gentics.mesh.alexa.intent.AbstractGenticsIntent;
 
 public class DebugIntent extends AbstractGenticsIntent {
 
+	@Inject
 	public DebugIntent() {
 	}
 
