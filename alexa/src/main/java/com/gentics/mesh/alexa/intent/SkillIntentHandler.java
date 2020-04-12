@@ -11,6 +11,7 @@ import com.amazon.ask.exception.AskSdkException;
 import com.amazon.ask.request.impl.BaseSkillRequest;
 import com.amazon.ask.response.SkillResponse;
 import com.gentics.mesh.alexa.intent.impl.CancelandStopIntentHandler;
+import com.gentics.mesh.alexa.intent.impl.DebugIntent;
 import com.gentics.mesh.alexa.intent.impl.FallbackIntentHandler;
 import com.gentics.mesh.alexa.intent.impl.GetNextTourIntent;
 import com.gentics.mesh.alexa.intent.impl.GetTourPriceIntent;
@@ -38,7 +39,8 @@ public class SkillIntentHandler {
 		TourInfoIntentHandler stockLevelIntent, 
 		ReserveTourIntent reserveIntent,
 		GetToursInfoIntent toursInfo,
-		GetNextTourIntent nextTour
+		GetNextTourIntent nextTour,
+		DebugIntent debugIntent
 		) {
 		this.skill = Skills.custom()
 			.addRequestHandlers(
@@ -48,6 +50,7 @@ public class SkillIntentHandler {
 				priceIntent,
 				toursInfo,
 				nextTour,
+				debugIntent,
 				new HelpIntentHandler(), // OK
 				new LaunchRequestHandler(),
 				new SessionEndedRequestHandler(),

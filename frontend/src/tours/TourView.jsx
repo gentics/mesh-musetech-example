@@ -13,6 +13,7 @@ import { format, isToday, isTomorrow } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { isBefore } from 'date-fns/esm';
 
+const timeZone = 'Europe/London';
 
 const trans = {
     de: {
@@ -159,7 +160,6 @@ export default function TourView({ match }) {
 
 function TourDate({ date }) {
     const i18n = useI18n();
-    const timeZone = 'Europe/London';
     let zonedDate = utcToZonedTime(date.fields.date, timeZone);
     let prefix = datePrefix(zonedDate, i18n);
     let inPast = isBefore(zonedDate, new Date());

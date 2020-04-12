@@ -87,7 +87,7 @@ function findLatestDate(tourDates) {
         tourDate.dateStr = dateStr;
         return tourDate;
     }).sort(function (a, b) {
-        return isBefore(a.utcDate, b.utcDate);
+        return !isBefore(a.utcDate, b.utcDate);
     });
 
     return dates[0];

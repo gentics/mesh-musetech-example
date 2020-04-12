@@ -183,7 +183,7 @@ public class MeshActions {
 		request.setVariables(vars);
 
 		return client.graphql(PROJECT, request).toMaybe().map(response -> {
-			// System.out.println(response.toJson());
+			System.out.println(response.toJson());
 			JsonObject json = response.getData();
 			JsonArray tours = json.getJsonObject("schema").getJsonObject("nodes").getJsonArray("elements");
 			return findNextTour(tours);
